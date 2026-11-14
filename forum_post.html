@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>发帖 - 职场匿名区</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f0f0f0; margin: 0; padding: 0; }
+  .top { background: #2b579a; color: #fff; padding: 10px 0; }
+  .top-inner { max-width: 760px; margin: 0 auto; }
+  .logo { font-size: 18px; font-weight: bold; }
+  .main { max-width: 760px; margin: 16px auto; background: #fff; border: 1px solid #ddd; padding: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
+  .form-group input, .form-group textarea { width: 100%; padding: 9px 12px; border: 1px solid #d0d0d0; font-size: 14px; font-family: inherit; box-sizing: border-box; }
+  .form-group textarea { height: 260px; line-height: 1.8; resize: vertical; }
+  .send-btn { padding: 9px 36px; background: #2b579a; color: #fff; border: none; font-size: 14px; cursor: pointer; }
+  .send-btn:hover { background: #1a4a8a; }
+  .success { display: none; text-align: center; padding: 40px 0; }
+  .success.show { display: block; }
+  .success h3 { color: #2b579a; margin-bottom: 12px; }
+  .success p { font-size: 13px; color: #888; }
+</style>
+</head>
+<body>
+<div class="top"><div class="top-inner"><div class="logo">职场匿名区</div></div></div>
+
+<div class="main" id="formView">
+  <div class="form-group">
+    <label>标题</label>
+    <input type="text" id="title" value="关于江安医药临床试验中心的一些事">
+  </div>
+  <div class="form-group">
+    <label>正文</label>
+    <textarea id="content">我舅舅周明，工号0471，2022年10月在江安医药临床试验中心工作期间死亡。
+
+官方记录写的是“突发意外”，但我查了旧版系统：原始记录写的是“药物不良反应”。事故报告在2022年10月21日凌晨被修改，操作人是系统临时权限NULL。
+
+周明死后，工号0471没有注销，被标记为“可复用”。2024年1月，这个工号分配给了一个新入职的员工。2024年11月11日，该员工转入受试者名单，账号注销。
+
+江安医药临床试验中心长期以“员工福利体检”名义筛选内部员工参与药物试验。受试者招募不足时，用员工顶上。
+
+我手里有完整的检索记录和系统截图。我不在江安医药工作，我只是一个查了两年的普通人。
+
+希望大家帮忙转发。</textarea>
+  </div>
+  <button class="send-btn" id="sendBtn">发 送</button>
+</div>
+
+<div class="main success" id="successView">
+  <h3>发布成功</h3>
+  <p>你的帖子已发布。正在返回…</p>
+</div>
+
+<script>
+document.getElementById('sendBtn').addEventListener('click', function () {
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').className = 'main success show';
+  setTimeout(function () { window.location.href = 'ending_spread_result.html'; }, 2000);
+});
+</script>
+</body>
+</html>

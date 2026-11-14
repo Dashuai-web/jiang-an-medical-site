@@ -41,7 +41,10 @@
   .tiny { font-size: 11px; color: #b0b8c0; margin-top: 12px; }
   .alert { border: 1px solid #a00; color: #a00; padding: 10px 12px; margin: 12px 0; font-weight: bold; background: #fff5f5; }
   .error { color: #a00; }
-  .back-btn { display: inline-block; margin-top: 28px; padding: 7px 22px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 13px; cursor: pointer; color: #333; text-decoration: none; }
+  .back-btn { display: inline-block; margin-top: 28px; padding: 7px 22px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 13px; cursor: pointer; color: #333; }
+  .back-btn:active { background: #d0d0d0; }
+  .action-btn { padding: 7px 28px; margin-right: 10px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 14px; cursor: pointer; color: #333; }
+  .action-btn:active { background: #d0d0d0; }
 </style>
 </head>
 <body>
@@ -92,56 +95,33 @@ function norm(str) {
     return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0);
   }).replace(/\u3000/g, ' ').replace(/^\s+|\s+$/g, '').toLowerCase();
 }
-function hasFlag(name) { return !!state.flags[name]; }
-function setFlag(name) { state.flags[name] = true; }
+function hasFlag(n) { return !!state.flags[n]; }
+function setFlag(n) { state.flags[n] = true; }
 
 var combos = {
   "0471周": function() {
-    return '<p><strong>隐藏记录（组合检索触发）：</strong></p>' +
-      '<p>工号：0471 / 姓名：周* / 部门：行政部</p>' +
-      '<p>注销类型：<strong>非离职</strong></p>' +
-      '<p>注销时间：2022-10-19 23:47:03</p>' +
-      '<p>备注：死亡注销。家属签字栏：空白（系统代签）。</p>' +
-      '<p class="tiny">该记录未出现在任何常规检索结果中。</p>';
+    return '<p><strong>隐藏记录（组合检索触发）：</strong></p><p>工号：0471 / 姓名：周* / 部门：行政部</p><p>注销类型：<strong>非离职</strong></p><p>注销时间：2022-10-19 23:47:03</p><p>备注：死亡注销。家属签字栏：空白（系统代签）。</p><p class="tiny">该记录未出现在任何常规检索结果中。</p>';
   },
   "周0471": function() { return combos["0471周"](); },
   "0471周*": function() { return combos["0471周"](); },
   "2022事故": function() {
-    return '<p><strong>交叉比对结果：</strong></p>' +
-      '<p>事故编号：AQ-2022-10-19</p>' +
-      '<p>原始版本（2022-10-19）：死亡原因 = 药物不良反应 / 地点 = 临床试验中心观察室</p>' +
-      '<p>修订版本（2022-10-21）：死亡原因 = 突发意外 / 地点 = 办公楼三层</p>' +
-      '<p class="meta">修订操作人：NULL。修订无人工复核记录。</p>';
+    return '<p><strong>交叉比对结果：</strong></p><p>事故编号：AQ-2022-10-19</p><p>原始版本（2022-10-19）：死亡原因 = 药物不良反应 / 地点 = 临床试验中心观察室</p><p>修订版本（2022-10-21）：死亡原因 = 突发意外 / 地点 = 办公楼三层</p><p class="meta">修订操作人：NULL。修订无人工复核记录。</p>';
   },
   "事故2022": function() { return combos["2022事故"](); },
   "2022-10-19": function() {
-    return '<p><strong>时间线汇总（系统自动生成）：</strong></p>' +
-      '<table class="data-table">' +
-      '<tr><th>时间</th><th>事件</th></tr>' +
-      '<tr><td>22:15</td><td>给药（CT-2021-03，受试者0471）</td></tr>' +
-      '<tr><td>22:45</td><td>出现不良反应（过敏性休克）</td></tr>' +
-      '<tr><td>23:47</td><td>抢救无效，宣告死亡</td></tr>' +
-      '<tr><td>23:47:03</td><td>系统自动生成空编号</td></tr>' +
-      '</table>' +
-      '<p class="tiny">给药与死亡之间的92分钟，系统只记录了两条数据。</p>';
+    return '<p><strong>时间线汇总（系统自动生成）：</strong></p><table class="data-table"><tr><th>时间</th><th>事件</th></tr><tr><td>22:15</td><td>给药（CT-2021-03，受试者0471）</td></tr><tr><td>22:45</td><td>出现不良反应（过敏性休克）</td></tr><tr><td>23:47</td><td>抢救无效，宣告死亡</td></tr><tr><td>23:47:03</td><td>系统自动生成空编号</td></tr></table><p class="tiny">给药与死亡之间的92分钟，系统只记录了两条数据。</p>';
   },
   "给药0471": function() {
-    return '<p>给药记录：2022-10-19 22:15，受试者0471，药品批号JA-2021-033。</p>' +
-      '<p>给药后30分钟出现不良反应。</p>' +
-      '<p class="alert">给药时间与死亡时间之间相隔92分钟。在这92分钟里，没有人发起中止试验流程。</p>';
+    return '<p>给药记录：2022-10-19 22:15，受试者0471，药品批号JA-2021-033。</p><p>给药后30分钟出现不良反应。</p><p class="alert">给药时间与死亡时间之间相隔92分钟。在这92分钟里，没有人发起中止试验流程。</p>';
   },
   "c-2024-110471": function() {
-    return '<p>批次 C-2024-11 中的 0471：</p>' +
-      '<p>状态：已完成注销。</p>' +
-      '<p>注销前最后操作：账号于2024-11-11 03:14:07转入受试者名单。</p>' +
-      '<p class="meta">该批次共处理4条记录，0471是唯一被转入受试者名单的。</p>';
+    return '<p>批次 C-2024-11 中的 0471：</p><p>状态：已完成注销。</p><p>注销前最后操作：账号于2024-11-11 03:14:07转入受试者名单。</p><p class="meta">该批次共处理4条记录，0471是唯一被转入受试者名单的。</p>';
   }
 };
 
 var database = {
   "系统升级": '<p>系统将于11月15日02:00-04:00升级，期间检索功能可能不可用。</p><p class="meta">发布部门：信息中心 / 发布时间：2024-11-08</p>',
   "考勤": '<p>2024年度考勤核对已开始，请各部门于11月30日前完成确认。</p><p class="meta">发布部门：行政部 / 发布时间：2024-11-01</p>',
-  "食堂": '<p>本周食堂菜单：</p><p>周一 红烧肉 / 周二 鱼香肉丝 / 周三 番茄鸡蛋 / 周四 土豆牛腩 / 周五 清蒸鱼</p><p class="tiny">本周离岗人员：周*。备注：系统未同步，仅供参考。</p>',
   "培训": '<p>培训通知请关注公告栏。</p>',
   "会议室": '<p>会议室预订功能暂不可用。</p>',
   "班车": '<p>班车时刻表已更新，详见公告栏。</p>',
@@ -204,12 +184,9 @@ var database = {
   "江安医药": '<p>江安医药科技有限公司。</p><p>员工人数：约200人。</p><p>临床试验中心：独立楼层，配备观察室、样本库、给药室。</p>',
   "业务范围": '<p>1. 仿制药研发与生产。</p><p>2. 临床药物试验（I期、II期）。</p><p>3. 健康产品开发与销售。</p><p class="meta">临床试验项目详情请检索：临床试验</p>',
   "临床试验": function() {
-    var html = '<p>在研项目：</p><table class="data-table"><tr><th>项目编号</th><th>名称</th><th>阶段</th><th>状态</th></tr>';
-    html += '<tr><td>CT-2021-03</td><td>XX片耐受性试验</td><td>I期</td><td>已完成</td></tr>';
+    var html = '<p>在研项目：</p><table class="data-table"><tr><th>项目编号</th><th>名称</th><th>阶段</th><th>状态</th></tr><tr><td>CT-2021-03</td><td>XX片耐受性试验</td><td>I期</td><td>已完成</td></tr>';
     if (hasFlag('saw0471')) html += '<tr><td>CT-2021-03</td><td colspan="3" class="meta">↑ 不良事件：1例</td></tr>';
-    html += '<tr><td>CT-2022-07</td><td>XX注射液安全性评价</td><td>I期</td><td>已完成</td></tr>';
-    html += '<tr><td>CT-2024-02</td><td>XX胶囊药代动力学研究</td><td>I期</td><td>招募中</td></tr>';
-    html += '<tr><td>CT-2024-05</td><td>XX片生物等效性研究</td><td>I期</td><td>筹备中</td></tr></table>';
+    html += '<tr><td>CT-2022-07</td><td>XX注射液安全性评价</td><td>I期</td><td>已完成</td></tr><tr><td>CT-2024-02</td><td>XX胶囊药代动力学研究</td><td>I期</td><td>招募中</td></tr><tr><td>CT-2024-05</td><td>XX片生物等效性研究</td><td>I期</td><td>筹备中</td></tr></table>';
     if (hasFlag('sawDrugReaction')) html += '<p class="alert">CT-2021-03 的不良事件受试者编号：0471。</p>';
     html += '<p class="meta">受试者招募进度详见：受试者</p>';
     return html;
@@ -226,13 +203,7 @@ var database = {
   "受试者": '<p>受试者招募状态：</p><table class="data-table"><tr><th>项目编号</th><th>计划人数</th><th>已入组</th><th>状态</th></tr><tr><td>CT-2021-03</td><td>24</td><td>24</td><td>已完成</td></tr><tr><td>CT-2022-07</td><td>30</td><td>30</td><td>已完成</td></tr><tr><td>CT-2024-02</td><td>36</td><td>28</td><td>招募中</td></tr><tr><td>CT-2024-05</td><td>24</td><td>0</td><td>筹备中</td></tr></table><p class="meta">CT-2024-02 招募进度不理想，已启动内部动员。</p>',
   "招募": '<p>CT-2024-02 受试者招募公告：</p><p>项目名称：XX胶囊药代动力学研究。</p><p>参与条件：18-45岁，身体健康，无重大疾病史。</p><p>补贴：完成全部访视可获得相应补贴。</p><p class="tiny">备注：内部员工优先，入职时签署的健康知情同意书已包含参与意向确认。</p>',
   "受试者名单": function() {
-    var html = '<p>CT-2024-02 受试者名单（部分）：</p><table class="data-table"><tr><th>受试者编号</th><th>来源</th><th>入组时间</th><th>状态</th></tr>';
-    html += '<tr><td>S-001</td><td>外部</td><td>2024-09-01</td><td>已完成</td></tr>';
-    html += '<tr><td>S-002</td><td>外部</td><td>2024-09-03</td><td>已完成</td></tr>';
-    html += '<tr><td>S-003</td><td>外部</td><td>2024-09-07</td><td>已完成</td></tr>';
-    html += '<tr><td>S-004</td><td>外部</td><td>2024-09-12</td><td>已完成</td></tr>';
-    html += '<tr><td>0471</td><td>内部</td><td>2024-11-11</td><td>已入组</td></tr></table>';
-    html += '<p class="meta">内部受试者由系统自动分配，来源：员工健康知情同意书。</p>';
+    var html = '<p>CT-2024-02 受试者名单（部分）：</p><table class="data-table"><tr><th>受试者编号</th><th>来源</th><th>入组时间</th><th>状态</th></tr><tr><td>S-001</td><td>外部</td><td>2024-09-01</td><td>已完成</td></tr><tr><td>S-002</td><td>外部</td><td>2024-09-03</td><td>已完成</td></tr><tr><td>S-003</td><td>外部</td><td>2024-09-07</td><td>已完成</td></tr><tr><td>S-004</td><td>外部</td><td>2024-09-12</td><td>已完成</td></tr><tr><td>0471</td><td>内部</td><td>2024-11-11</td><td>已入组</td></tr></table><p class="meta">内部受试者由系统自动分配，来源：员工健康知情同意书。</p>';
     if (hasFlag('sawLock')) html += '<p class="alert">0471 入组时间 2024-11-11 03:14:07，与帖子锁定时间完全一致。</p>';
     return html;
   },
@@ -284,8 +255,7 @@ var database = {
   "事故": function() {
     var html = '<p>安全事故记录（内部）：</p><table class="data-table"><tr><th>字段</th><th>内容</th></tr><tr><td>编号</td><td>AQ-2022-10-19</td></tr><tr><td>时间</td><td>2022年10月19日 23:47</td></tr>';
     if (hasFlag('sawModifyLog')) {
-      html += '<tr><td>地点</td><td>办公楼三层 <span class="meta">（原值：临床试验中心观察室）</span></td></tr>';
-      html += '<tr><td>死亡原因</td><td>突发意外 <span class="meta">（原值：药物不良反应）</span></td></tr>';
+      html += '<tr><td>地点</td><td>办公楼三层 <span class="meta">（原值：临床试验中心观察室）</span></td></tr><tr><td>死亡原因</td><td>突发意外 <span class="meta">（原值：药物不良反应）</span></td></tr>';
     } else {
       html += '<tr><td>地点</td><td>办公楼三层</td></tr><tr><td>死亡原因</td><td>突发意外</td></tr>';
     }
@@ -349,7 +319,7 @@ var database = {
   "封存记录": '<p>因人工干预失败，该记录已从所有业务表中剥离，仅保留于调试日志。</p>',
   "调试日志": '<p>调试日志（片段）：</p><p>「0471 姓名字段为空，无法通过校验。」</p><p>「检测到记录冲突，已执行覆盖操作。源：0471，目标：空编号。结果：源记录姓名字段丢失。」</p><p>「已尝试人工补录，失败。」</p><p>「该记录已封存。」</p><p class="meta">日志末尾签名：NULL</p>',
   "异常输入源": '<p>定义：与封存记录产生关联的访客。</p><p>关联记录：空编号</p>',
-  "访客-0000": '<p>当前会话身份：admin（管理员）。</p><p>权限等级：管理员。</p><p>会话状态：正常（可能已变更）。</p>',
+  "admin": '<p>当前会话身份：admin（管理员）。</p><p>权限等级：管理员。</p><p>会话状态：正常（可能已变更）。</p>',
   "待归类": '<p>当前访问状态：待归类。</p><p>请在会话结束前选择处理方式。</p>',
   "归档": "GO:ending_archive.html",
   "外传": "GO:ending_spread.html",
@@ -358,29 +328,17 @@ var database = {
 
 function checkThresholds() {
   var warn = document.getElementById('warn');
-  if (state.count >= 20 && state.count < 40) {
-    document.getElementById('footer').textContent = '系统版本 1.9.4 / 维护状态：正常 / 会话记录已达阈值';
-  }
-  if (state.count >= 40 && state.count < 60) {
-    warn.textContent = '检测到持续检索行为。本次会话可能被标记。';
-    warn.className = 'warn show';
-  }
-  if (state.count >= 60) {
-    warn.textContent = '检测到持续检索行为。建议处理方式：归档 / 外传 / 退出。';
-    warn.className = 'warn show';
-  }
+  if (state.count >= 20 && state.count < 40) document.getElementById('footer').textContent = '系统版本 1.9.4 / 维护状态：正常 / 会话记录已达阈值';
+  if (state.count >= 40 && state.count < 60) { warn.textContent = '检测到持续检索行为。本次会话可能被标记。'; warn.className = 'warn show'; }
+  if (state.count >= 60) { warn.textContent = '检测到持续检索行为。建议处理方式：归档 / 外传 / 退出。'; warn.className = 'warn show'; }
 }
 
 var flagMap = {
-  "食堂": "sawCanteen", "0471": "saw0471", "2022": "saw2022",
-  "事故": "sawAccident", "安全事故": "sawAccident",
-  "修改日志": "sawModifyLog", "修改记录": "sawModifyLog",
-  "药物不良反应": "sawDrugReaction", "不良反应": "sawDrugReaction",
-  "给药记录": "sawDosage", "sae": "sawSAE", "严重不良事件": "sawSAE",
-  "可复用": "sawReusable", "非离职": "sawNonResign",
-  "入职记录": "sawHireRecord", "分配": "sawHireRecord",
-  "受试者名单": "sawSubjectList", "入组": "sawSubjectList",
-  "锁定": "sawLock", "账号注销": "sawLock", "ct-2021-03": "sawCT2021"
+  "食堂":"sawCanteen","0471":"saw0471","2022":"saw2022","事故":"sawAccident","安全事故":"sawAccident",
+  "修改日志":"sawModifyLog","修改记录":"sawModifyLog","药物不良反应":"sawDrugReaction","不良反应":"sawDrugReaction",
+  "给药记录":"sawDosage","sae":"sawSAE","严重不良事件":"sawSAE","可复用":"sawReusable","非离职":"sawNonResign",
+  "入职记录":"sawHireRecord","分配":"sawHireRecord","受试者名单":"sawSubjectList","入组":"sawSubjectList",
+  "锁定":"sawLock","账号注销":"sawLock","ct-2021-03":"sawCT2021"
 };
 
 function lookup(raw) {
@@ -407,7 +365,12 @@ function buildLog() {
     html += '<tr><td>' + (i + 1) + '</td><td>' + list[i] + '</td><td>已记录</td></tr>';
   }
   html += '</table>';
-  html += '<p>检测到异常输入源。建议处理方式：归档 / 外传 / 退出。</p>';
+  html += '<p>检测到异常输入源。建议处理方式：</p>';
+  html += '<div style="margin-top:14px;">';
+  html += '<button class="action-btn" onclick="location.href=\'ending_archive.html\'">归档</button>';
+  html += '<button class="action-btn" onclick="location.href=\'ending_spread.html\'">外传</button>';
+  html += '<button class="action-btn" onclick="location.href=\'ending_silent.html\'">退出</button>';
+  html += '</div>';
   return html;
 }
 
@@ -434,17 +397,27 @@ function doSearch(raw) {
       return String.fromCharCode(ch.charCodeAt(0) - 0xFEE0);
     }).replace(/\u3000/g, ' ').replace(/^\s+|\s+$/g, '');
     if (raw === '') return;
+
     var n = norm(raw);
     if (!state.searched[n]) state.searched[n] = true;
     state.count++;
     document.getElementById('counter').textContent = '本次会话已检索 ' + state.count + ' 次';
+
+    try {
+      var hist = JSON.parse(localStorage.getItem('jangan_search_history') || '[]');
+      if (hist.indexOf(raw) === -1) hist.push(raw);
+      localStorage.setItem('jangan_search_history', JSON.stringify(hist));
+    } catch(e) {}
+
     var f = flagMap[n];
     if (f) setFlag(f);
     checkThresholds();
+
     if (n === '我的访问记录' || n === '访问记录') {
       showFullscreen(raw, '访问记录', buildLog(), false);
       return;
     }
+
     var content = lookup(raw);
     if (content === null) {
       showFullscreen(raw, '检索结果', '未找到相关记录。请检查输入是否正确。', true);
@@ -467,11 +440,10 @@ document.getElementById('searchInput').addEventListener('keydown', function (e) 
   if (e.key === 'Enter') doSearch(this.value);
 });
 document.getElementById('backBtn').addEventListener('click', backToHome);
+
 var notices = document.querySelectorAll('.notice-list li');
 for (var i = 0; i < notices.length; i++) {
-  notices[i].addEventListener('click', function () {
-    doSearch(this.getAttribute('data-key'));
-  });
+  notices[i].addEventListener('click', function () { doSearch(this.getAttribute('data-key')); });
 }
 </script>
 </body>

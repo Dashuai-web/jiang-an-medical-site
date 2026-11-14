@@ -1,22 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><title>处理完成 - 已归档</title>
+<head>
+<meta charset="UTF-8">
+<title>处理完成 - 归档</title>
 <style>
-  body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;}
-  .c{max-width:780px;margin:0 auto;background:#fff;border:1px solid #999;padding:30px;line-height:2;}
-  .f{margin-top:24px;border-top:1px solid #ccc;padding-top:10px;font-size:11px;color:#aaa;}
-  .alert{color:#a00;border:1px solid #a00;padding:10px;margin:16px 0;background:#fff5f5;}
+  body { font-family: SimSun, 宋体, serif; font-size: 14px; color: #333; background: #e9e9e9; margin: 0; padding: 20px; }
+  .c { max-width: 780px; margin: 0 auto; background: #fff; border: 1px solid #b0b0b0; padding: 30px; line-height: 2; }
+  .f { margin-top: 24px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 11px; color: #aaa; }
+  .alert { color: #a00; border: 1px solid #a00; padding: 10px; margin: 16px 0; background: #fff5f5; }
+  .dl-btn { display: inline-block; margin: 16px 0; padding: 9px 28px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 14px; cursor: pointer; color: #333; }
+  .dl-btn:active { background: #d0d0d0; }
+  .step { display: none; }
+  .step.show { display: block; }
 </style>
 </head>
-<body><div class="c">
-<p>异常记录已归档。</p>
-<p>你的访问编号已纳入维护队列。</p>
-<div class="alert">你的新身份：NULL。</div>
-<p>职责：维护数据清洗队列。</p>
-<p>第一条待处理记录：0471（已封存）。</p>
-<p>第二条待处理记录：admin（你）。</p>
-<p>请确认。</p>
-<div class="f">下次数据清洗时，将由你确认同类记录。</div>
+<body>
+<div class="c">
+  <div id="step1" class="step show">
+    <p>正在生成调查文件…</p>
+    <p id="progress" style="color:#888; font-size:13px;">正在整理检索记录…</p>
+  </div>
+  <div id="step2" class="step">
+    <p>调查文件已生成。</p>
+    <button class="dl-btn" id="dlBtn">下载调查文件（.txt）</button>
+    <p style="font-size:12px; color:#999;">文件包含本次会话的全部检索记录和时间线摘要。</p>
+  </div>
+  <div id="step3" class="step">
+    <p>异常记录已归档。</p>
+    <p>你的访问编号已纳入维护队列。</p>
+    <div class="alert">你的新身份：NULL。</div>
+    <p>职责：维护数据清洗队列。</p>
+    <p>第一条待处理记录：0471（已封存）。</p>
+    <p>第二条待处理记录：访客-0000（你）。</p>
+    <p>请确认。</p>
+    <div class="f">下次数据清洗时，将由你确认同类记录。</div>
+  </div>
 </div>
-<script>setTimeout(function(){var a=document.createElement('a');a.href='index.html';a.textContent='返回入口';a.style.cssText='display:block;margin-top:20px;font-size:12px;color:#0a4a9e;';document.querySelector('.c').appendChild(a);},2000);</script>
-</body></html>
+
+<script>
+var searchHistory = [];
+try {
+  var raw = localStorage.getItem('jangan_search_history');
+  if (raw) searchHistory = JSON.parse(raw);
+} catch(e) {}
+
+setTimeout(function () { document.getElementById('progress').textContent = '正在生成时间线…'; }, 800);
+setTimeout(function () { document.getElementById('progress').textContent = '正在写入文件…'; }, 1600);
+setTimeout(function () {
+  document.getElementById('step1').className = 'step';
+  document.getElementById('step2').className = 'step show';
+}, 2400);
+
+document.getElementById('dlBtn').addEventListener('click', function () {
+  var content = '江安医药内部信息平台 - 调查记录\n';
+  content += '生成时间：' + new Date().toLocaleString() + '\n';
+  content += '访问编号：admin（管理员）\n';
+  content += '=================================\n\n';
+  content += '【检索记录】\n';
+  for (var i = 0; i < searchHistory.length; i++) content += (i + 1) + '. ' + searchHistory[i] + '\n';
+  content += '\n【关键发现】\n';
+  content += '- 工号0471原使用人周明，2022-10-19参与CT-2021-03项目，药物不良反应死亡。\n';
+  content += '- 事故报告于2022-10-21被修改，死亡原因由“药物不良反应”改为“突发意外”。\n';
+  content += '- 工号0471于2024-01-15分配至新入职员工。\n';
+  content += '- 该员工于2024-11-11 03:14:07转入受试者名单，账号注销。\n';
+  content += '- 操作人：NULL（系统临时权限）。\n';
+
+  var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = '调查记录_' + Date.now() + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  document.getElementById('step2').className = 'step';
+  document.getElementById('step3').className = 'step show';
+});
+</script>
+</body>
+</html>

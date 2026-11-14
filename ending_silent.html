@@ -1,5 +1,193 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><title>会话结束</title>
+<head>
+<meta charset="UTF-8">
+<title>会话结束</title>
 <style>
-  body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: SimSun, 宋体, serif; font-size: 14px; background: #e9e9e9; min-height: 100vh; display: flex; align-items: center; justify-content: center; transition: background 2s ease, color 2s ease; }
+  body.dark { background: #0a0a0a; color: #666; }
+  .c { max-width: 780px; width: 90%; background: #fff; border: 1px solid #b0b0b0; padding: 40px; line-height: 2; transition: background 2s ease, border-color 2s ease, color 2s ease; }
+  body.dark .c { background: #111; border-color: #222; color: #888; }
+  .f { margin-top: 24px; border-top: 1px solid #ccc; padding-top: 10px; font-size: 11px; color: #aaa; transition: border-color 2s ease, color 2s ease; }
+  body.dark .f { border-color: #222; color: #444; }
+  .phase { display: none; }
+  .phase.active { display: block; }
+  .terminate-screen { font-family: "Courier New", monospace; font-size: 13px; line-height: 2.2; color: #888; }
+  body.dark .terminate-screen { color: #555; }
+  .terminate-line { opacity: 0; transition: opacity 0.6s ease; }
+  .terminate-line.show { opacity: 1; }
+  .terminate-line.red { color: #a00; }
+  .progress-track { width: 100%; height: 6px; background: #222; margin: 10px 0; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: #555; transition: width 0.3s linear; }
+  .progress-fill.reverse { background: #a00; }
+  .reconnect-screen { font-family: "Courier New", monospace; font-size: 13px; line-height: 2.2; color: #ccc; }
+  .reconnect-screen .welcome { font-size: 18px; color: #a00; margin-bottom: 20px; letter-spacing: 2px; }
+  .reconnect-screen .info-row { padding: 6px 0; border-bottom: 1px solid #1a1a1a; display: flex; }
+  .reconnect-screen .info-label { width: 200px; color: #666; }
+  .reconnect-screen .info-value { color: #ccc; }
+  .reconnect-screen .info-value.red { color: #a00; font-weight: bold; }
+  .cursor { display: inline-block; width: 8px; height: 14px; background: #888; animation: blink 1s step-end infinite; vertical-align: middle; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .final-black { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #000; z-index: 999; display: none; align-items: center; justify-content: center; }
+  .final-black.show { display: flex; }
+  .final-black .text { font-family: "Courier New", monospace; color: #333; font-size: 12px; text-align: center; line-height: 2.4; }
+  .final-black .text .highlight { color: #a00; font-size: 14px; }
+  @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+  .pulse { animation: pulse 2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<div class="c" id="mainBox">
+  <div class="phase active" id="phase1">
+    <p>会话已结束。</p>
+    <p>记录保留。</p>
+    <p>状态：未归类。</p>
+    <div class="f">上次访问者：admin（管理员） / 状态：未归类</div>
+  </div>
+  <div class="phase" id="phase2">
+    <p>会话已结束。</p>
+    <p>记录保留。</p>
+    <p>状态：未归类。</p>
+    <div class="f">上次访问者：admin（管理员） / 状态：未归类</div>
+    <div style="margin-top:20px; font-size:13px;">是否继续检索？ <a href="portal.html" style="color:#0a4a9e;">继续</a></div>
+  </div>
+  <div class="phase" id="phase3">
+    <div class="terminate-screen">
+      <div class="terminate-line" id="t1">正在结束会话...</div>
+      <div class="terminate-line" id="t2" style="margin-top:16px;">正在保存会话记录...</div>
+      <div class="progress-track" style="margin-top:6px;"><div class="progress-fill" id="progressBar"></div></div>
+      <div class="terminate-line" id="t3" style="margin-top:4px; font-size:11px;">0%</div>
+    </div>
+  </div>
+  <div class="phase" id="phase4">
+    <div class="terminate-screen">
+      <div class="terminate-line red" id="t4">保存失败。</div>
+      <div class="terminate-line" id="t5" style="margin-top:12px;">检测到会话终止异常。正在重新建立连接...</div>
+      <div class="terminate-line" id="t6" style="margin-top:20px; font-size:11px; color:#444;">正在回放本次会话记录：</div>
+      <div id="replayArea" style="margin-top:10px; font-size:12px; line-height:2;"></div>
+      <div class="terminate-line" id="t7" style="margin-top:20px;">连接已重建。<span class="cursor"></span></div>
+    </div>
+  </div>
+  <div class="phase" id="phase5">
+    <div class="reconnect-screen">
+      <div class="welcome">欢迎回来，0471。</div>
+      <div style="margin-bottom:16px; color:#666;">你已成功退出。</div>
+      <div class="info-row"><div class="info-label">账号状态</div><div class="info-value">已注销（员工）</div></div>
+      <div class="info-row"><div class="info-label">受试者编号</div><div class="info-value red">0471</div></div>
+      <div class="info-row"><div class="info-label">入组项目</div><div class="info-value">CT-2024-02</div></div>
+      <div class="info-row"><div class="info-label">入组时间</div><div class="info-value">2024-11-11 03:14:07</div></div>
+      <div class="info-row"><div class="info-label">知情同意书</div><div class="info-value">已签署（入职时）</div></div>
+      <div class="info-row"><div class="info-label">下次访视</div><div class="info-value red pulse">待通知</div></div>
+      <div style="margin-top:24px; color:#444; font-size:12px;">你选择了退出。系统已记录。<br>退出员工名单，即视为自愿加入受试者名单。</div>
+      <div style="margin-top:16px; color:#333; font-size:11px;"><span class="cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="final-black" id="finalBlack">
+  <div class="text">
+    <div>会话已终止。</div>
+    <div style="margin-top:12px;">记录已同步至其他节点。</div>
+    <div style="margin-top:24px;" class="highlight">0471 已入组。</div>
+    <div style="margin-top:24px; color:#222;">下次登录时，请使用该工号。</div>
+  </div>
+</div>
+
+<script>
+function showPhase(n) {
+  document.querySelectorAll('.phase').forEach(function(p) { p.className = 'phase'; });
+  document.getElementById('phase' + n).className = 'phase active';
+}
+function showLine(id, delay) {
+  setTimeout(function() {
+    var el = document.getElementById(id);
+    if (el) el.className = 'terminate-line show' + (el.classList.contains('red') ? ' red' : '');
+  }, delay);
+}
+
+setTimeout(function() { showPhase(2); }, 2000);
+
+setTimeout(function() {
+  showPhase(3);
+  document.body.className = 'dark';
+  showLine('t1', 300);
+  setTimeout(function() {
+    showLine('t2', 0);
+    var bar = document.getElementById('progressBar');
+    var pct = 0;
+    var timer = setInterval(function() {
+      pct += Math.random() * 12 + 4;
+      if (pct >= 100) {
+        pct = 100; clearInterval(timer);
+        bar.style.width = '100%';
+        document.getElementById('t3').textContent = '100%';
+        document.getElementById('t3').className = 'terminate-line show';
+        setTimeout(function() {
+          bar.className = 'progress-fill reverse';
+          var rp = 100;
+          var rt = setInterval(function() {
+            rp -= Math.random() * 15 + 8;
+            if (rp <= 0) {
+              rp = 0; clearInterval(rt);
+              bar.style.width = '0%';
+              document.getElementById('t3').textContent = '0%';
+              setTimeout(startPhase4, 400);
+            } else {
+              bar.style.width = rp + '%';
+              document.getElementById('t3').textContent = Math.floor(rp) + '%';
+            }
+          }, 120);
+        }, 600);
+      } else {
+        bar.style.width = pct + '%';
+        document.getElementById('t3').textContent = Math.floor(pct) + '%';
+      }
+    }, 200);
+  }, 800);
+}, 7000);
+
+var searchedWords = [];
+try { searchedWords = JSON.parse(localStorage.getItem('jangan_search_history') || '[]'); } catch(e) {}
+if (searchedWords.length === 0) searchedWords = ['NULL','0471','C-2024-11','数据清洗规则','修改日志','药物不良反应','受试者名单','锁定','我的访问记录','退出'];
+
+function startPhase4() {
+  document.getElementById('t4').className = 'terminate-line show red';
+  setTimeout(function() { document.getElementById('t5').className = 'terminate-line show'; }, 1200);
+  setTimeout(function() {
+    document.getElementById('t6').className = 'terminate-line show';
+    var area = document.getElementById('replayArea');
+    var i = 0;
+    var replayTimer = setInterval(function() {
+      if (i >= searchedWords.length) {
+        clearInterval(replayTimer);
+        setTimeout(function() {
+          document.getElementById('t7').className = 'terminate-line show';
+          setTimeout(function() { showPhase(5); }, 2000);
+        }, 1000);
+        return;
+      }
+      var line = document.createElement('div');
+      if (i === searchedWords.length - 1) line.style.color = '#a00';
+      line.textContent = '> ' + searchedWords[i];
+      line.style.opacity = '0';
+      line.style.transition = 'opacity 0.4s';
+      area.appendChild(line);
+      setTimeout(function() { line.style.opacity = '1'; }, 50);
+      i++;
+    }, 350);
+  }, 2400);
+}
+
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(m) {
+    if (m.target.id === 'phase5' && m.target.classList.contains('active')) {
+      setTimeout(function() { document.getElementById('finalBlack').className = 'final-black show'; }, 8000);
+    }
+  });
+});
+observer.observe(document.getElementById('phase5'), { attributes: true, attributeFilter: ['class'] });
+</script>
+</body>
+</html>
