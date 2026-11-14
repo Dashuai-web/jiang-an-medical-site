@@ -365,12 +365,26 @@ function buildLog() {
     html += '<tr><td>' + (i + 1) + '</td><td>' + list[i] + '</td><td>已记录</td></tr>';
   }
   html += '</table>';
-  html += '<p>检测到异常输入源。建议处理方式：</p>';
-  html += '<div style="margin-top:14px;">';
-  html += '<button class="action-btn" onclick="location.href=\'ending_archive.html\'">归档</button>';
-  html += '<button class="action-btn" onclick="location.href=\'ending_spread.html\'">外传</button>';
-  html += '<button class="action-btn" onclick="location.href=\'ending_silent.html\'">退出</button>';
-  html += '</div>';
+
+  // 解锁条件：至少搜过15个不同关键词 + 必须触发全部5个关键真相flag
+  var uniqueCount = list.length;
+  var keyFlags = ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock'];
+  var keyCount = 0;
+  for (var j = 0; j < keyFlags.length; j++) {
+    if (hasFlag(keyFlags[j])) keyCount++;
+  }
+
+  var unlocked = (uniqueCount >= 15 && keyCount >= 5);
+
+  if (unlocked) {
+    html += '<p>检测到异常输入源。建议处理方式：</p>';
+    html += '<div style="margin-top:14px;">';
+    html += '<button class="action-btn" onclick="location.href=\'ending_archive.html\'">归档</button>';
+    html += '<button class="action-btn" onclick="location.href=\'ending_spread.html\'">外传</button>';
+    html += '<button class="action-btn" onclick="location.href=\'ending_silent.html\'">退出</button>';
+    html += '</div>';
+  }
+
   return html;
 }
 
