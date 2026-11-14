@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>江安医药内部系统管理员账号（付费）- 职场匿名区</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f0f0f0; margin: 0; padding: 0; }
+  .top { background: #2b579a; color: #fff; padding: 10px 0; }
+  .top-inner { max-width: 760px; margin: 0 auto; }
+  .logo { font-size: 18px; font-weight: bold; }
+  .main { max-width: 760px; margin: 16px auto; background: #fff; border: 1px solid #ddd; }
+  .post-head { padding: 18px; border-bottom: 1px solid #eee; }
+  .post-head .title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+  .post-head .meta { font-size: 12px; color: #999; }
+  .post-body { padding: 18px; line-height: 2; font-size: 14px; }
+  .post-body p { margin: 0 0 14px; }
+  .paywall { background: #fffbf0; border: 1px dashed #d0a030; padding: 30px; margin: 20px 18px; text-align: center; }
+  .paywall p { margin: 0 0 16px; font-size: 14px; color: #8a6a00; }
+  .paywall button { padding: 10px 40px; background: #d0a030; color: #fff; border: none; border-radius: 4px; font-size: 15px; cursor: pointer; letter-spacing: 1px; }
+  .paywall button:hover { background: #b88a20; }
+  .paywall .note { font-size: 11px; color: #aaa; margin-top: 12px; }
+  .unlocked { display: none; }
+  .unlocked.show { display: block; }
+  .info-box { background: #f5f9f7; border: 1px solid #c8e0d0; padding: 16px 20px; margin: 14px 18px; font-size: 13px; line-height: 2; }
+  .info-box strong { color: #1a6b4a; }
+  .reply-box { padding: 18px; border-top: 1px solid #eee; }
+  .reply-box .panel-title { font-weight: bold; font-size: 13px; margin-bottom: 10px; }
+  .reply { padding: 10px 0; border-bottom: 1px dotted #eee; font-size: 13px; color: #555; line-height: 1.8; }
+  .reply:last-child { border-bottom: none; }
+  .reply .floor { color: #bbb; font-size: 11px; margin-right: 6px; }
+  .reply.deleted { color: #bbb; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="top"><div class="top-inner"><div class="logo">职场匿名区</div></div></div>
+<div class="main">
+  <div class="post-head">
+    <div class="title">江安医药内部系统管理员账号（付费）</div>
+    <div class="meta">作者：匿名用户 &nbsp;|&nbsp; 2023-11-05 10:33 &nbsp;|&nbsp; 浏览 1.2k &nbsp;|&nbsp; 付费 3人</div>
+  </div>
+  <div class="post-body">
+    <p>出江安医药内部系统管理员账号的登录方式。不是卖号，是告诉你怎么登。每个版本有独立的管理员密码，按对应版本的升级日期算。懂的来。</p>
+  </div>
+  <div class="paywall" id="paywall">
+    <p>该内容需要付费解锁</p>
+    <button onclick="unlock()">支付 ¥9.9 解锁</button>
+    <div class="note">支付后永久可见</div>
+  </div>
+  <div class="unlocked" id="unlocked">
+    <div class="info-box">
+      <p><strong>管理员账号：</strong>admin</p>
+      <p><strong>密码规则：</strong>jianganyiliao + 系统升级完成那天的日期（格式：YYYYMMDD）</p>
+      <p><strong>注意：</strong>每个版本有独立的密码，按对应版本的升级日期计算。v2.0 的日期官网新闻中心能查到。旧版的日期得进系统看。</p>
+    </div>
+  </div>
+  <div class="reply-box">
+    <div class="panel-title">回复（5）</div>
+    <div class="reply"><span class="floor">1楼</span>真的假的？这也能卖？</div>
+    <div class="reply"><span class="floor">2楼</span>买过的说一句，是真的。登进去能看到不少东西。</div>
+    <div class="reply"><span class="floor">3楼</span>别乱搞，被查出来算谁的。</div>
+    <div class="reply deleted"><span class="floor">4楼</span>该回复已被删除。</div>
+    <div class="reply"><span class="floor">5楼</span>楼主还在吗？旧版的密码怎么搞？</div>
+  </div>
+</div>
+<script>
+function unlock() {
+  document.getElementById('paywall').style.display = 'none';
+  document.getElementById('unlocked').className = 'unlocked show';
+}
+</script>
+</body>
+</html>

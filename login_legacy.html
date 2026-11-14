@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>江安医药 内部信息平台 v1.9.4 - 登录</title>
+<style>
+  body { font-family: SimSun, 宋体, serif; margin: 0; padding: 0; background: #e9e9e9; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .login-box { width: 400px; background: #fff; border: 1px solid #b0b0b0; }
+  .login-head { background: linear-gradient(#4a6a8a, #3a5a7a); color: #fff; padding: 20px 24px; }
+  .login-head .logo { font-size: 17px; font-weight: bold; letter-spacing: 2px; }
+  .login-head .sub { font-size: 11px; color: #c8d8e8; margin-top: 4px; }
+  .login-body { padding: 28px 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; color: #3a5a7a; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 6px 8px; border: 1px solid #b0b8c0; font-family: SimSun, 宋体, serif; font-size: 14px; box-sizing: border-box; }
+  .login-btn { width: 100%; padding: 8px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 14px; cursor: pointer; color: #333; letter-spacing: 2px; }
+  .login-btn:active { background: #d0d0d0; }
+  .error-msg { color: #a00; font-size: 12px; margin-top: 10px; display: none; }
+  .error-msg.show { display: block; }
+  .login-foot { text-align: center; padding: 12px 24px 18px; font-size: 11px; color: #90a0b0; border-top: 1px solid #d0d8e0; }
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-head">
+    <div class="logo">江安医药 内部信息平台</div>
+    <div class="sub">v1.9.4 · 调试模式</div>
+  </div>
+  <div class="login-body">
+    <div class="form-group">
+      <label>工号 / 账号</label>
+      <input type="text" id="user" placeholder="请输入账号" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>密码</label>
+      <input type="password" id="pass" placeholder="请输入密码" autocomplete="off">
+    </div>
+    <button class="login-btn" id="loginBtn">登 录</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+  <div class="login-foot">系统版本 1.9.4 &nbsp;|&nbsp; 仅限调试使用</div>
+</div>
+<script>
+function tryLogin() {
+  var u = document.getElementById('user').value.replace(/^\s+|\s+$/g, '');
+  var p = document.getElementById('pass').value.replace(/^\s+|\s+$/g, '');
+  var err = document.getElementById('errorMsg');
+  if (u === 'admin' && p === 'jianganyiliao20240815') {
+    window.location.href = 'index.html';
+    return;
+  }
+  err.textContent = '账号或密码错误。';
+  err.className = 'error-msg show';
+}
+document.getElementById('loginBtn').addEventListener('click', tryLogin);
+document.getElementById('pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryLogin(); });
+document.getElementById('user').addEventListener('keydown', function (e) { if (e.key === 'Enter') document.getElementById('pass').focus(); });
+</script>
+</body>
+</html>

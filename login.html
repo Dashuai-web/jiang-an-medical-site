@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>江安医药 内部信息平台 v2.0 - 登录</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #14553a 0%, #1a6b4a 50%, #2a8a5a 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .login-box { width: 400px; background: #fff; border-radius: 4px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); overflow: hidden; }
+  .login-head { background: #1a6b4a; color: #fff; padding: 28px 30px 22px; }
+  .login-head .logo { font-size: 20px; font-weight: bold; letter-spacing: 3px; }
+  .login-head .sub { font-size: 12px; color: #a8d0b8; margin-top: 6px; }
+  .login-body { padding: 30px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 9px 12px; border: 1px solid #d0d0d0; border-radius: 3px; font-size: 14px; font-family: inherit; box-sizing: border-box; background: #fafafa; }
+  .form-group input:focus { outline: none; border-color: #1a6b4a; background: #fff; }
+  .login-btn { width: 100%; padding: 11px; background: #1a6b4a; color: #fff; border: none; border-radius: 3px; font-size: 15px; cursor: pointer; margin-top: 6px; letter-spacing: 2px; }
+  .login-btn:hover { background: #14553a; }
+  .error-msg { color: #a00; font-size: 12px; margin-top: 10px; display: none; line-height: 1.6; }
+  .error-msg.show { display: block; }
+  .login-foot { text-align: center; padding: 16px 30px 24px; font-size: 11px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="login-box">
+  <div class="login-head">
+    <div class="logo">江安医药</div>
+    <div class="sub">内部信息平台 v2.0</div>
+  </div>
+  <div class="login-body">
+    <div class="form-group">
+      <label>工号 / 账号</label>
+      <input type="text" id="user" placeholder="请输入工号" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label>密码</label>
+      <input type="password" id="pass" placeholder="请输入密码" autocomplete="off">
+    </div>
+    <button class="login-btn" id="loginBtn">登 录</button>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+  <div class="login-foot">系统版本 v2.0.1 &nbsp;|&nbsp; 技术支持：信息中心</div>
+</div>
+<script>
+function tryLogin() {
+  var u = document.getElementById('user').value.replace(/^\s+|\s+$/g, '');
+  var p = document.getElementById('pass').value.replace(/^\s+|\s+$/g, '');
+  var err = document.getElementById('errorMsg');
+  if (u === 'admin' && p === 'jianganyiliao20241028') {
+    window.location.href = 'newhome.html';
+    return;
+  }
+  if (u === '0471' && (p === '000000' || p === '00000000')) {
+    err.textContent = '该账号状态异常，已停用。请联系系统管理员。';
+    err.className = 'error-msg show';
+    return;
+  }
+  err.textContent = '账号或密码错误。';
+  err.className = 'error-msg show';
+}
+document.getElementById('loginBtn').addEventListener('click', tryLogin);
+document.getElementById('pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryLogin(); });
+document.getElementById('user').addEventListener('keydown', function (e) { if (e.key === 'Enter') document.getElementById('pass').focus(); });
+</script>
+</body>
+</html>

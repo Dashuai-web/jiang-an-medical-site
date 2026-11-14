@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>搜索结果 - 职场匿名区</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f0f0f0; margin: 0; padding: 0; }
+  .top { background: #2b579a; color: #fff; padding: 10px 0; }
+  .top-inner { max-width: 860px; margin: 0 auto; }
+  .logo { font-size: 18px; font-weight: bold; }
+  .main { max-width: 860px; margin: 16px auto; background: #fff; border: 1px solid #ddd; }
+  .panel-title { background: #f4f4f4; border-bottom: 1px solid #ddd; padding: 8px 14px; font-weight: bold; font-size: 13px; }
+  .result-item { padding: 14px; border-bottom: 1px solid #eee; }
+  .result-item:last-child { border-bottom: none; }
+  .result-item .tag { display: inline-block; font-size: 11px; background: #e8eef7; color: #2b579a; padding: 1px 6px; margin-right: 6px; }
+  .result-item .tag.banned { background: #f5e8e8; color: #a00; }
+  .result-item a { color: #2b579a; text-decoration: none; font-size: 14px; font-weight: bold; }
+  .result-item .desc { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.7; }
+  .no-result { padding: 30px; text-align: center; color: #999; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="top"><div class="top-inner"><div class="logo">职场匿名区</div></div></div>
+<div class="main">
+  <div class="panel-title" id="resultTitle">搜索结果</div>
+  <div id="resultArea"></div>
+</div>
+<script>
+var q = '';
+var params = window.location.search.substring(1).split('&');
+for (var i = 0; i < params.length; i++) {
+  var kv = params[i].split('=');
+  if (kv[0] === 'q') q = decodeURIComponent(kv[1] || '');
+}
+document.getElementById('resultTitle').textContent = '搜索结果：' + q;
+var area = document.getElementById('resultArea');
+if (q.indexOf('江安') !== -1) {
+  area.innerHTML =
+    '<div class="result-item"><span class="tag banned">讨论区</span><a href="zone.html">江安医药内部交流区（已封禁）</a><div class="desc">创建于2021年，2022年10月后停止更新。当前状态：已封禁，仅可浏览历史帖子标题。</div></div>' +
+    '<div class="result-item"><span class="tag">帖子</span><a href="ask.html">有没有人认识江安医药的老周？</a><div class="desc">作者：匿名用户 · 2024-11-09 · 5回复</div></div>' +
+    '<div class="result-item"><span class="tag">帖子</span><a href="admin.html">江安医药内部系统管理员账号（付费）</a><div class="desc">作者：匿名 · 2023-11-05 · 5回复</div></div>' +
+    '<div class="result-item"><span class="tag">帖子</span><a href="account.html">有没有人知道江安医药内部系统的账号怎么搞？</a><div class="desc">作者：匿名 · 2023-06-12 · 6回复</div></div>' +
+    '<div class="result-item"><span class="tag">帖子</span><a href="#">江安医药面试流程分享</a><div class="desc">作者：匿名 · 2023-06-12 · 3回复</div></div>' +
+    '<div class="result-item"><span class="tag">帖子</span><a href="#">江安医药的offer值得去吗？</a><div class="desc">作者：匿名 · 2023-11-02 · 8回复</div></div>';
+} else {
+  area.innerHTML = '<div class="no-result">未找到相关结果。</div>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>系统信息 - 江安医药 内部信息平台 v2.0</title>
+<style>
+  body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #f0f2f5; font-size: 14px; color: #333; }
+  .topbar { background: #1a6b4a; color: #fff; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; }
+  .topbar .left { display: flex; align-items: center; gap: 14px; }
+  .topbar .logo { font-size: 17px; font-weight: bold; letter-spacing: 2px; }
+  .topbar .ver { font-size: 11px; color: #a8d0b8; border: 1px solid #3a8a5a; padding: 1px 6px; border-radius: 2px; }
+  .topbar .right { font-size: 13px; color: #c8e8d8; }
+  .topbar .right a { color: #c8e8d8; text-decoration: none; margin-left: 16px; }
+  .layout { display: flex; min-height: calc(100vh - 52px); }
+  .sidebar { width: 200px; background: #fff; border-right: 1px solid #e0e0e0; padding: 12px 0; }
+  .sidebar a { display: block; padding: 10px 24px; color: #555; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; }
+  .sidebar a:hover { background: #f5f9f7; color: #1a6b4a; }
+  .sidebar a.active { background: #eef7f2; color: #1a6b4a; border-left-color: #1a6b4a; font-weight: bold; }
+  .main { flex: 1; padding: 24px 30px; }
+  .panel { background: #fff; border-radius: 4px; border: 1px solid #e8e8e8; margin-bottom: 18px; max-width: 700px; }
+  .panel-head { padding: 14px 24px; border-bottom: 1px solid #eee; font-size: 15px; font-weight: bold; color: #333; }
+  .panel-body { padding: 8px 0; }
+  .info-row { display: flex; padding: 10px 24px; border-bottom: 1px solid #f2f2f2; font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { width: 180px; color: #888; }
+  .info-row .value { flex: 1; color: #333; }
+  .footer { text-align: center; padding: 16px 0 24px; font-size: 11px; color: #bbb; }
+  .legacy-link { font-size: 11px; color: #e8e8e8; text-decoration: none; }
+  .legacy-link:hover { color: #1a6b4a; text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="left">
+    <div class="logo">江安医药 内部信息平台</div>
+    <div class="ver">v2.0</div>
+  </div>
+  <div class="right">admin（管理员）<a href="login.html">退出</a></div>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <a href="newhome.html">首页</a>
+    <a href="#">公告</a>
+    <a href="#">人事</a>
+    <a href="#">财务</a>
+    <a href="#">论坛</a>
+    <a href="sysinfo.html" class="active">系统管理</a>
+  </div>
+  <div class="main">
+    <div class="panel">
+      <div class="panel-head">系统信息</div>
+      <div class="panel-body">
+        <div class="info-row"><div class="label">系统名称</div><div class="value">江安医药内部信息平台</div></div>
+        <div class="info-row"><div class="label">当前版本</div><div class="value">v2.0.1</div></div>
+        <div class="info-row"><div class="label">当前版本升级完成日期</div><div class="value">2024-10-28</div></div>
+        <div class="info-row"><div class="label">上一版本</div><div class="value">v1.9.4</div></div>
+        <div class="info-row"><div class="label">上一版本升级完成日期</div><div class="value">2024-08-15</div></div>
+        <div class="info-row"><div class="label">数据库状态</div><div class="value">正常</div></div>
+        <div class="info-row"><div class="label">迁移状态</div><div class="value">已完成</div></div>
+        <div class="info-row"><div class="label">当前登录账号</div><div class="value">admin（管理员）</div></div>
+        <div class="info-row"><div class="label">最后登录</div><div class="value">2024-10-28 03:14:07</div></div>
+      </div>
+    </div>
+    <div class="footer">
+      江安医药科技有限公司 &copy; 2024 &nbsp;|&nbsp; v2.0.1<br>
+      <a href="login_legacy.html" class="legacy-link">v1.9.4 预览环境</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
