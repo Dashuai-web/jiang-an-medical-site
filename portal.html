@@ -21,6 +21,9 @@
   .search-bar button { padding: 5px 20px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 14px; cursor: pointer; margin-left: 6px; color: #333; }
   .search-bar button:active { background: #d0d0d0; }
   .hint { font-size: 12px; color: #8a9aaa; margin-top: 8px; }
+  .quick { font-size: 12px; color: #8a9aaa; margin-top: 8px; }
+  .quick a { color: #2a4a6a; text-decoration: none; border-bottom: 1px dotted #7a8a9a; margin: 0 10px 0 2px; cursor: pointer; }
+  .quick a:hover { color: #a00; border-bottom-color: #a00; }
   .counter { font-size: 11px; color: #a0b0c0; margin-top: 4px; }
   .warn { color: #a00; font-size: 12px; margin-top: 6px; display: none; }
   .warn.show { display: block; }
@@ -61,13 +64,14 @@
       <li data-key="新系统上线">关于新信息系统 v2.0 上线的通知</li>
       <li data-key="旧版系统">旧版系统停用公告</li>
       <li data-key="更新日志">系统更新记录（v2.0）</li>
+      <li data-key="受试者招募不足">关于 CT-2024-02 受试者招募不足的补充公告（公司员工）</li>
     </ul>
   </div>
   <div class="search-bar">
     <label for="searchInput">全站检索：</label>
     <input id="searchInput" type="text" placeholder="输入关键词后按回车" autocomplete="off">
     <button id="searchBtn">检索</button>
-    <div class="hint">检索范围：公告、人员、批次、规则、日志、项目、受试者。输入关键词后按回车。</div>
+    <div class="quick">快捷搜索：<a href="javascript:;" onclick="quickSearch('日志');return false;">日志</a><a href="javascript:;" onclick="quickSearch('规则');return false;">规则</a></div>
     <div class="counter" id="counter">本次会话已检索 0 次</div>
     <div class="warn" id="warn"></div>
   </div>
@@ -323,7 +327,14 @@ var database = {
   "待归类": '<p>当前访问状态：待归类。</p><p>请在会话结束前选择处理方式。</p>',
   "归档": "GO:ending_archive.html",
   "外传": "GO:ending_spread.html",
-  "退出": "GO:ending_silent.html"
+  "退出": "GO:ending_silent.html",
+  "受试者招募不足": '<p><strong>关于 CT-2024-02 受试者招募不足的补充公告</strong></p><p>项目编号：CT-2024-02 / 计划入组 36 例 / 已入组 28 例</p><p>缺口 8 例。外部招募渠道已连续两周无有效新增。</p><p>经伦理委员会备案，现面向公司在职员工开放内部招募，名额优先分配至行政部与临床试验中心。</p><p>参与方式：由系统从员工健康知情同意书中自动筛选，被选中者由部门主管口头通知。</p><p>补贴：完成全部访视 3000 元；中途退出按已完成访视比例发放。</p><p class="meta">发布日期：2024-11-08 / 发布部门：临床试验中心</p><p class="tiny">备注：员工无需另行报名。入职时签署的《员工健康知情同意书》第 4 条第 2 款已覆盖本项安排。</p>',
+  "受试者招募": function() { return database["受试者招募不足"]; },
+  "受试者不足": function() { return database["受试者招募不足"]; },
+  "内部招募": function() { return database["受试者招募不足"]; },
+  "招募公告": function() { return database["受试者招募不足"]; },
+  "日志": '<p>系统日志索引（权限：管理员）：</p><table class="data-table"><tr><th>类别</th><th>检索词</th><th>状态</th></tr><tr><td>检索记录</td><td>我的访问记录</td><td>可查看</td></tr><tr><td>调试日志</td><td>调试日志</td><td>可查看</td></tr><tr><td>修改日志</td><td>修改日志</td><td>可查看</td></tr><tr><td>清洗日志</td><td>历史清洗记录</td><td>可查看</td></tr><tr><td>系统日志</td><td>检索日志</td><td>部分缺失</td></tr></table><p class="meta">日志按会话隔离。被标记的会话将单独归档，归档后不再计入任何列表。</p>',
+  "规则": '<p>系统运行规则（调试模式可见）：</p><table class="data-table"><tr><th>编号</th><th>摘要</th></tr><tr><td>规则3.1</td><td>必填字段缺失的记录，进入待注销队列。</td></tr><tr><td>规则3.2</td><td>审批链断裂的记录，由临时权限 NULL 代为确认。</td></tr><tr><td>规则3.3</td><td>所有检索行为均视为对系统的输入，需记录来源。</td></tr><tr><td>规则3.4</td><td>异常输入源应在会话结束前归类。</td></tr><tr><td>规则3.5</td><td>已注销记录不可恢复。工号可复用。</td></tr></table><p class="meta">规则由临时权限账号维护，修改不留痕。</p>'
 };
 
 function checkThresholds() {
@@ -338,7 +349,8 @@ var flagMap = {
   "修改日志":"sawModifyLog","修改记录":"sawModifyLog","药物不良反应":"sawDrugReaction","不良反应":"sawDrugReaction",
   "给药记录":"sawDosage","sae":"sawSAE","严重不良事件":"sawSAE","可复用":"sawReusable","非离职":"sawNonResign",
   "入职记录":"sawHireRecord","分配":"sawHireRecord","受试者名单":"sawSubjectList","入组":"sawSubjectList",
-  "锁定":"sawLock","账号注销":"sawLock","ct-2021-03":"sawCT2021"
+  "锁定":"sawLock","账号注销":"sawLock","ct-2021-03":"sawCT2021",
+  "受试者招募":"sawRecruit","受试者招募不足":"sawRecruit","内部招募":"sawRecruit"
 };
 
 function lookup(raw) {
@@ -403,6 +415,11 @@ function backToHome() {
   document.getElementById('searchInput').value = '';
   document.getElementById('searchInput').focus();
   window.scrollTo(0, 0);
+}
+
+function quickSearch(k) {
+  document.getElementById('searchInput').value = k;
+  doSearch(k);
 }
 
 function doSearch(raw) {
