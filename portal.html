@@ -85,7 +85,7 @@
   try { ok = sessionStorage.getItem('ja_portal_ok') === '1'; } catch (e) {}
   if (!ok) {
     var m = /[?&]k=([^&]+)/.exec(location.search);
-    if (m && decodeURIComponent(m[1]) === 'v1.9.4') {
+    if (m && (decodeURIComponent(m[1]) === 'v1.9.4' || decodeURIComponent(m[1]) === '0x7F')) {
       try { sessionStorage.setItem('ja_portal_ok', '1'); } catch (e) {}
       ok = true;
       try { history.replaceState(null, '', location.pathname); } catch (e) {}
