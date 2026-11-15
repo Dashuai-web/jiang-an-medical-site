@@ -104,6 +104,25 @@ function cat(p) {
   return typeof FS[path] === 'string' ? FS[path] : null;
 }
 
+function completePath(frag) {
+  if (!frag) return null;
+  var f = frag.toLowerCase();
+  var abs = f.charAt(0) === '/';
+  var cands = [];
+  for (var d in DIRS) {
+    if (d === '/') continue;
+    var dn = d.split('/').pop().toLowerCase();
+    if (abs ? d.toLowerCase().indexOf(f) === 0 : dn.indexOf(f) === 0) cands.push(d);
+  }
+  for (var k in FS) {
+    if (typeof FS[k] !== 'string') continue;
+    var bn = k.split('/').pop().toLowerCase();
+    if (abs ? k.toLowerCase().indexOf(f) === 0 : bn.indexOf(f) === 0) cands.push(k);
+  }
+  cands.sort();
+  return cands.length ? cands[0] : null;
+}
+
 function run(cmd) {
   var parts = cmd.trim().split(/\s+/);
   var c = parts[0];
@@ -111,7 +130,7 @@ function run(cmd) {
   if (c === 'help' || c === '?') {
     out('out', '可用命令：');
     out('out', '  ls [路径]       列出目录内容（dir 同义）');
-    out('out', '  cat <文件>      查看文件内容（type 同义）');
+    out('out', '  cat <文件>      查看文件内容（type/open/read 同义，可直接写文件名）');
     out('out', '  cd <目录>       进入目录');
     out('out', '  pwd            显示当前路径');
     out('out', '  su <口令>       提升为管理员权限');
@@ -125,10 +144,22 @@ function run(cmd) {
     var r = ls(arg);
     if (r === '__DENY__') out('err', '权限不足：/root 需要管理员权限（su）。');
     else out('out', r === null ? 'ls: 无此文件或目录' : r);
-  } else if (c === 'cat' || c === 'type') {
+  } else if (c === 'cat' || c === 'type' || c === 'open' || c === 'read') {
     var r = cat(arg);
-    if (r === '__DENY__') out('err', '权限不足：/root 需要管理员权限（su）。');
-    else out('out', r === null ? 'cat: 无此文件' : r);
+    if (r === '__DENY__') {
+      out('err', '权限不足：/root 需要管理员权限（su）。');
+    } else if (r !== null) {
+      out('out', r);
+    } else {
+      var hits = [];
+      for (var k in FS) {
+        if (typeof FS[k] !== 'string') continue;
+        if (k.split('/').pop().toLowerCase() === arg.toLowerCase()) hits.push(k);
+      }
+      if (hits.length === 1) out('out', cat(hits[0]));
+      else if (hits.length > 1) out('out', '找到多个同名文件，请写完整路径：\n' + hits.join('\n'));
+      else out('out', 'cat: 无此文件（先用 ls 看看目录里有什么）');
+    }
   } else if (c === 'cd') {
     var target = normPath(arg);
     if (underRoot(target) && !root) out('err', '权限不足：/root 需要管理员权限（su）。');
@@ -193,10 +224,19 @@ refreshPrompt();
 input.addEventListener('keydown', function (e) {
   if (e.key === 'Tab') {
     e.preventDefault();
-    var cmds = ['help', 'ls', 'cat', 'cd', 'pwd', 'clear', 'verify', 'su', 'decrypt', 'dir', 'type'];
-    var v = input.value.trim();
-    for (var i = 0; i < cmds.length; i++) {
-      if (cmds[i].indexOf(v) === 0) { input.value = cmds[i]; break; }
+    var val = input.value;
+    var sp = val.lastIndexOf(' ');
+    if (sp === -1) {
+      var cmds = ['help', 'ls', 'cat', 'open', 'read', 'cd', 'pwd', 'clear', 'verify', 'su', 'decrypt', 'dir', 'type'];
+      var vv = val.trim();
+      for (var i = 0; i < cmds.length; i++) {
+        if (cmds[i].indexOf(vv) === 0) { input.value = cmds[i]; break; }
+      }
+    } else {
+      var head = val.slice(0, sp + 1);
+      var frag = val.slice(sp + 1);
+      var done = completePath(frag);
+      if (done) input.value = head + done;
     }
     return;
   }
