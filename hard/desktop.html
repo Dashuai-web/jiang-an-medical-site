@@ -10,37 +10,44 @@
          font-family: "Microsoft YaHei", "SimSun", sans-serif; }
   #desktop { position: relative; width: 100%; height: 100%;
              background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); padding: 18px; }
-  .icon { position: absolute; width: 86px; text-align: center; cursor: pointer; color: #fff;
+  .icon { position: absolute; width: 84px; text-align: center; cursor: pointer; color: #fff;
           text-shadow: 1px 1px 2px rgba(0,0,0,.6); user-select: none; }
-  .icon .img { font-size: 34px; line-height: 1; }
+  .icon .img { font-size: 32px; line-height: 1; }
   .icon .lb { font-size: 12px; margin-top: 4px; }
-  .icon.sel .lb { background: #0a2a4a; outline: 1px dotted #fff; }
   #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 34px;
              background: #24507d; border-top: 1px solid #1a3f66; display: flex;
-             align-items: center; padding: 0 10px; color: #fff; font-size: 12px; }
+             align-items: center; padding: 0 10px; color: #fff; font-size: 12px; z-index: 20; }
   #taskbar .start { background: #3a8a3a; padding: 4px 14px; border-radius: 3px; font-weight: bold; }
   #taskbar .clock { margin-left: auto; padding: 0 8px; border-left: 1px solid #1a3f66; }
   .win { position: absolute; background: #ece9d8; border: 2px solid #0a2a4a;
-         box-shadow: 3px 3px 0 rgba(0,0,0,.3); min-width: 280px; max-width: 420px; z-index: 10; }
+         box-shadow: 3px 3px 0 rgba(0,0,0,.3); min-width: 300px; max-width: 440px; z-index: 10; }
   .win .tb { background: #0a2a4a; color: #fff; padding: 4px 8px; font-size: 12px;
-             display: flex; align-items: center; cursor: move; }
+             display: flex; align-items: center; }
   .win .tb .x { margin-left: auto; background: #c33; border: 1px solid #fff; padding: 0 7px; cursor: pointer; }
-  .win .ct { padding: 12px 14px; font-size: 13px; color: #222; line-height: 1.9; max-height: 320px; overflow: auto; white-space: pre-wrap; }
+  .win .ct { padding: 12px 14px; font-size: 13px; color: #222; line-height: 1.9; max-height: 340px; overflow: auto; white-space: pre-wrap; }
   .win .ct .note { color: #7a5a00; }
   .win .ct .del { color: #8a2020; }
-  .link { color: #0000cc; text-decoration: underline; cursor: pointer; }
+  .win .ct .me { color: #1a4a8a; }
+  .win .ct .other { color: #333; }
+  .chat { border-left: 3px solid #c8c8b8; padding-left: 10px; margin: 8px 0; }
+  .chat .m { margin: 5px 0; }
+  .chat .who { color: #888; font-size: 11px; }
   @media (max-width: 720px) {
-    .icon { width: 72px; }
-    .win { max-width: 94vw; }
+    .icon { width: 70px; }
+    .win { max-width: 92vw; }
   }
 </style>
 </head>
 <body>
 <div id="desktop">
-  <div class="icon" style="left:18px; top:16px;" data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
-  <div class="icon" style="left:120px; top:16px;" data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
-  <div class="icon" style="left:18px; top:140px;" data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
-  <div class="icon" style="left:120px; top:140px;" data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+  <div class="icon" style="left:18px; top:14px;" data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
+  <div class="icon" style="left:120px; top:14px;" data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
+  <div class="icon" style="left:222px; top:14px;" data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
+  <div class="icon" style="left:324px; top:14px;" data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+  <div class="icon" style="left:18px; top:150px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
+  <div class="icon" style="left:120px; top:150px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
+  <div class="icon" style="left:222px; top:150px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
+  <div class="icon" style="left:324px; top:150px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
 </div>
 <div id="taskbar">
   <span class="start">开始</span>
@@ -53,7 +60,11 @@ var WIN = {
   memo: { t: '备忘录.txt', c: '2024年11月18日 入职\n\n舅舅的工号是 0471。\n\n如果有人看到这份文件，说明我已经不在了。\n\n别报警。去查。' },
   trash: { t: '回收站', c: '一封被删除的邮件（草稿）：\n\n「小陈，如果我出事，去查事故编号 AQ-2022-10-19。\n死亡原因那一栏被人改过。原始报告在观察室，改后的是办公楼三层。」\n\n<span class="del">（该草稿从未发出）</span>' },
   computer: { t: '我的电脑', c: '本地磁盘 (C:)\n  └ 江安\\\n      ├ 备份\\\n      │    └ 旧版入口.txt  ← 见「江安备份」图标\n      └ 员工资料\\\n           └ 已加密，无法打开\n\n<span class="note">提示：旧版系统 v1.9.4 的密码，规则写在服务器配置里。</span>' },
-  backup: { t: '江安备份', c: '旧版入口.txt：\n\n「v1.9.4 登录地址，从官网新闻页最底部能进。\n密码 = jianganyiliao + 一个日期。\n那个日期不在任何网页上，要去服务器 /etc/config 里看。」\n\n<span class="note">※ 服务器地址写在舅舅桌上的便签上。</span>' }
+  backup: { t: '江安备份', c: '旧版入口.txt：\n\n「v1.9.4 登录地址，从官网新闻页最底部能进。\n密码 = jianganyiliao + 一个日期。\n那个日期不在任何网页上，要去服务器 /etc/config 里看。」\n\n<span class="note">※ 服务器地址写在舅舅桌上的便签上。</span>' },
+  wechat: { t: '微信', c: '<div class="chat"><div class="m"><span class="who">行政-小刘</span></div><div class="m other">周哥，这周体检抽了四管血，往年才两管。</div><div class="m me">我这也是。说是升级套餐。</div><div class="m other">升级什么了也不说。算了。</div></div><div class="chat"><div class="m"><span class="who">陈默（外甥）</span></div><div class="m me">小陈，舅舅可能出事了。记住我的工号：<b>0471</b>。</div><div class="m note">（未发送）</div></div>' },
+  qq: { t: 'QQ', c: '【江安医药同事群】\n\n有人说凌晨三点又被叫去加班吗？\n\n— 又来了。这个月第几次了。\n— 别问，问就是系统维护。\n— 我听见观察室三号有动静。\n— 闭嘴。\n\n<span class="note">（群消息停在 2022-10-19 之后，再没人说话。）</span>' },
+  browser: { t: '浏览器', c: '地址栏：http://www.jiangan-pharma.com\n\n收藏夹：\n  · 江安医药官网\n  · 新闻中心\n  · 内部信息平台 v2.0 登录\n  · QQ邮箱\n\n最近访问：\n  2022-10-19 22:10  内部信息平台\n  2022-10-19 22:12  受试者管理系统\n\n<span class="note">※ QQ邮箱里有一封没删的邮件。</span>' },
+  mail: { t: 'QQ邮箱', c: '收件箱（1）\n\n【江安医药 · 人事】入职体检安排\n「新员工请于 11 月 4 日—22 日前往指定机构体检。\n项目：采血、心电图、生命体征监测。」\n\n草稿箱（1）\n\n【未发出】小陈，如果我出事，去查事故编号 AQ-2022-10-19。' }
 };
 
 function openWin(k) {
@@ -62,8 +73,8 @@ function openWin(k) {
   var d = WIN[k];
   var w = document.createElement('div');
   w.className = 'win';
-  w.style.left = (60 + Math.random() * 80) + 'px';
-  w.style.top = (40 + Math.random() * 60) + 'px';
+  w.style.left = (70 + Math.random() * 90) + 'px';
+  w.style.top = (50 + Math.random() * 70) + 'px';
   w.innerHTML = '<div class="tb"><span>' + d.t + '</span><span class="x" onclick="this.parentNode.parentNode.remove()">✕</span></div>'
     + '<div class="ct">' + d.c + '</div>';
   document.getElementById('desktop').appendChild(w);
