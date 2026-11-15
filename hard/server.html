@@ -25,12 +25,14 @@
 <div id="term"></div>
 <script>
 var term = document.getElementById('term');
+var prow = null;
 
 function out(cls, txt) {
   var d = document.createElement('div');
   d.className = 'line ' + (cls || 'out');
   d.textContent = txt;
-  term.appendChild(d);
+  if (prow && prow.parentNode === term) term.insertBefore(d, prow);
+  else term.appendChild(d);
 }
 
 var FS = {
@@ -162,7 +164,8 @@ function run(cmd) {
       out('err', 'verify: 校验码错误。');
     }
   } else if (c === 'clear') {
-    term.innerHTML = '';
+    var lines = term.querySelectorAll('.line');
+    for (var i = 0; i < lines.length; i++) lines[i].remove();
   } else {
     out('err', 'command not found: ' + c + '（输入 help 查看命令）');
   }
@@ -172,16 +175,17 @@ out('boot', 'JIANGAN-PHARMA · 运维节点 2\n');
 out('boot', '连接已建立。最后登录：2022-10-19 22:15（终端 3F 观察室）\n');
 out('boot', '输入 help 查看命令，Tab 可补全。\n');
 
-var prow = document.createElement('div');
-prow.className = 'prow';
+var prow_el = document.createElement('div');
+prow_el.className = 'prow';
 var ps = document.createElement('span');
 ps.className = 'ps';
 var input = document.createElement('input');
 input.autocomplete = 'off';
 input.spellcheck = false;
-prow.appendChild(ps);
-prow.appendChild(input);
-term.appendChild(prow);
+prow_el.appendChild(ps);
+prow_el.appendChild(input);
+term.appendChild(prow_el);
+prow = prow_el;
 
 function refreshPrompt() { ps.textContent = 'jiangansrv:' + cwd + '$ '; }
 refreshPrompt();
@@ -199,11 +203,12 @@ input.addEventListener('keydown', function (e) {
   if (e.key !== 'Enter') return;
   var v = input.value;
   input.value = '';
+  if (v.trim() === '') return;
   var echo = document.createElement('div');
   echo.className = 'line in';
   echo.textContent = 'jiangansrv:' + cwd + '$ ' + v;
   term.insertBefore(echo, prow);
-  if (v.trim() !== '') run(v);
+  run(v);
   refreshPrompt();
   input.focus();
   window.scrollTo(0, document.body.scrollHeight);
