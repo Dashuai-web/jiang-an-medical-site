@@ -550,5 +550,45 @@ for (var i = 0; i < notices.length; i++) {
   notices[i].addEventListener('click', function () { doSearch(this.getAttribute('data-key')); });
 }
 </script>
+<script>
+/* ---- 访问保护 ---- */
+(function () {
+  if (/[?&]nodev=1/.test(location.search)) return;
+  var hits = 0, frozen = false;
+  function overlay(msg) {
+    var o = document.getElementById('dwGuard');
+    if (!o) {
+      o = document.createElement('div');
+      o.id = 'dwGuard';
+      o.style.cssText = 'position:fixed;inset:0;background:rgba(24,0,0,.95);color:#e6c4c4;z-index:2147483000;'
+        + 'display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;'
+        + 'font-family:SimSun,宋体,serif;font-size:15px;line-height:2.1;';
+      document.body.appendChild(o);
+    }
+    o.innerHTML = msg;
+  }
+  function mark() {
+    hits++;
+    if (hits === 1) overlay('检测到调试工具。<br>本次会话已被记录。<br><span style="font-size:12px;color:#8a6a6a;">关闭调试工具后刷新页面</span>');
+    if (hits >= 3) { frozen = true; overlay('会话已终止。<br><span style="font-size:12px;color:#8a6a6a;">你已经看得够多了。</span>'); }
+  }
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('keydown', function (e) {
+    var k = (e.key || '').toUpperCase();
+    if (k === 'F12'
+      || (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C'))
+      || (e.ctrlKey && (k === 'U' || k === 'S'))
+      || (e.metaKey && e.altKey && k === 'I')) {
+      e.preventDefault(); e.stopPropagation(); mark();
+    }
+  }, true);
+  setInterval(function () {
+    if (frozen) return;
+    var t = performance.now();
+    try { (function () { debugger; })(); } catch (e) {}
+    if (performance.now() - t > 150) mark();
+  }, 1500);
+})();
+</script>
 </body>
 </html>
