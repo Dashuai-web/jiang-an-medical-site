@@ -168,7 +168,7 @@ var combos = {
 };
 
 var database = {
-  "系统升级": '<p>系统将于11月15日02:00-04:00升级，期间检索功能可能不可用。</p><p class="meta">发布部门：信息中心 / 发布时间：2024-11-08</p>',
+  "系统升级": '<p>系统将于 11 月 15 日 02:00–04:00 停机升级，期间检索功能不可用。</p><p class="meta">发布部门：信息中心 / 发布时间：2024-11-08</p><p class="tiny">注：本次为例行停机，不涉及版本变更。v2.0 上线公告日为 2024-10-28。</p>',
   "考勤": '<p>2024年度考勤核对已开始，请各部门于11月30日前完成确认。</p><p class="meta">发布部门：行政部 / 发布时间：2024-11-01</p>',
   "培训": '<p>培训通知请关注公告栏。</p>',
   "会议室": '<p>会议室预订功能暂不可用。</p>',
@@ -369,6 +369,11 @@ var database = {
   "异常输入源": '<p>定义：与封存记录产生关联的访客。</p><p>关联记录：空编号</p>',
   "admin": '~PHA+5b2T5YmN5Lya6K+d6Lqr5Lu977yaYWRtaW7vvIjnrqHnkIblkZjvvInjgII8L3A+PHA+5p2D6ZmQ562J57qn77ya566h55CG5ZGY44CCPC9wPjxwPuS8muivneeKtuaAge+8muato+W4uO+8iOWPr+iDveW3suWPmOabtO+8ieOAgjwvcD4=',
   "待归类": '~PHA+5b2T5YmN6K6/6Zeu54q25oCB77ya5b6F5b2S57G744CCPC9wPjxwPuivt+WcqOS8muivnee7k+adn+WJjemAieaLqeWkhOeQhuaWueW8j+OAgjwvcD4=',
+  "升级": '<p>检索到 3 条与升级相关的记录：</p><p>· 系统升级 —— 例行停机公告</p><p>· 升级记录 —— 版本升级完成时间（内部）</p><p>· 新系统上线 —— 对外公告</p><p class="meta">公告日期与完成日期不一定一致，请以内部记录为准。</p>',
+  "升级记录": '~PHA+PHN0cm9uZz7niYjmnKzljYfnuqforrDlvZXvvIjlhoXpg6jvvIk8L3N0cm9uZz48L3A+PHRhYmxlIGNsYXNzPSJkYXRhLXRhYmxlIj48dHI+PHRoPueJiOacrDwvdGg+PHRoPuWNh+e6p+eql+WPozwvdGg+PHRoPuWunumZheWujOaIkOaXtumXtDwvdGg+PHRoPuWvueWkluWFrOWRiuaXpTwvdGg+PC90cj48dHI+PHRkPnYxLjkuNDwvdGQ+PHRkPjIwMjQtMDgtMTUgMDE6MDA8L3RkPjx0ZD4yMDI0LTA4LTE1IDA0OjEyPC90ZD48dGQ+MjAyNC0wOC0xNTwvdGQ+PC90cj48dHI+PHRkPnYyLjA8L3RkPjx0ZD4yMDI0LTEwLTI2IDAwOjMwPC90ZD48dGQ+MjAyNC0xMC0yNiAwMjo0MDwvdGQ+PHRkPjIwMjQtMTAtMjg8L3RkPjwvdHI+PC90YWJsZT48cCBjbGFzcz0iYWxlcnQiPnYyLjAg5a6e6ZmF5a6M5oiQ5pe26Ze05q+U5a+55aSW5YWs5ZGK5pep5Lik5aSp44CC57O757uf5YaF44CM5Y2H57qn5a6M5oiQ5pel5pyf44CN5a2X5q615Y+W5YWs5ZGK5pel77yM566h55CG5ZGY5a+G56CB5Y+W5a6e6ZmF5a6M5oiQ5pel44CCPC9wPg==',
+  "C-2024-11": '<p>批次 C-2024-11：数据清洗批次。</p><p>执行时间：2024-10-21 02:00:00。</p><p>处理记录：4 条，其中 1 条为人工干预。</p><p class="tiny">批次内 0471 已转入受试者名单。</p>',
+  "JA-2021-033": '<p>药品批号：JA-2021-033。</p><p>品种：XX 片（5mg）。</p><p>用于项目 CT-2021-03。</p><p class="meta">该批次留样已于 2022-10-21 销毁。</p>',
+  "S-0471": '<p>样本编号：JA-2021-033-S0471。</p><p>所属受试者：0471。</p><p>采集时间：2022-10-19 22:15。</p><p>状态：已销毁（2022-10-21）。</p>',
   "归档": function() { return isUnlocked() ? "GO:9a3f1c7e.html" : LOCKED_MSG; },
   "外传": function() { return isUnlocked() ? "GO:c47b0d92.html" : LOCKED_MSG; },
   "退出": function() { return isUnlocked() ? "GO:e1b83a56.html" : LOCKED_MSG; },
@@ -402,10 +407,10 @@ function checkThresholds() {
 }
 
 var flagMap = {
-  "食堂":"sawCanteen","0471":"saw0471","2022":"saw2022","事故":"sawAccident","安全事故":"sawAccident",
-  "修改日志":"sawModifyLog","修改记录":"sawModifyLog","药物不良反应":"sawDrugReaction","不良反应":"sawDrugReaction",
+  "食堂":"sawCanteen","0471":"saw0471","事故":"sawAccident","安全事故":"sawAccident",
+  "修改日志":"sawModifyLog","修改记录":"sawModifyLog","药物不良反应":"sawDrugReaction",
   "给药记录":"sawDosage","sae":"sawSAE","严重不良事件":"sawSAE","可复用":"sawReusable","非离职":"sawNonResign",
-  "入职记录":"sawHireRecord","分配":"sawHireRecord","受试者名单":"sawSubjectList","入组":"sawSubjectList",
+  "入职记录":"sawHireRecord","受试者名单":"sawSubjectList",
   "锁定":"sawLock","账号注销":"sawLock","ct-2021-03":"sawCT2021",
   "受试者招募":"sawRecruit","受试者招募不足":"sawRecruit","内部招募":"sawRecruit"
 };
