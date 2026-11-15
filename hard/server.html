@@ -124,6 +124,12 @@ function completePath(frag) {
   return cands.length ? cands[0] : null;
 }
 
+function ending(url) {
+  out('warn', '正在处理……');
+  try { sessionStorage.setItem('ja_ending_ok', '1'); } catch (e) {}
+  setTimeout(function () { location.href = url; }, 700);
+}
+
 function run(cmd) {
   var parts = cmd.trim().split(/\s+/);
   var c = parts[0];
@@ -137,6 +143,7 @@ function run(cmd) {
     out('out', '  su <口令>       提升为管理员权限');
     out('out', '  decrypt <文件> <密钥>  解密文件');
     out('out', '  verify <码>     提交校验码');
+    out('out', '  归档 / 外传 / 退出   通过校验后，直接输入进入结局');
     out('out', '  clear          清屏');
     out('out', '  ?              显示本帮助');
     out('out', '');
@@ -197,14 +204,24 @@ function run(cmd) {
         return;
       }
       unlocked = true;
-      out('warn', '校验通过。会话已标记为「异常输入源」。处理方式：');
-      out('warn', '  归档 ->  9a3f1c7e.html');
-      out('warn', '  外传 ->  c47b0d92.html');
-      out('warn', '  退出 ->  e1b83a56.html');
+      out('warn', '校验通过。会话已标记为「异常输入源」。');
+      out('warn', '请选择处理方式，直接在命令行输入：');
+      out('warn', '  归档   （archive）');
+      out('warn', '  外传   （spread）');
+      out('warn', '  退出   （exit）');
       try { sessionStorage.setItem('ja_ending_ok', '1'); } catch (e) {}
     } else {
       out('err', 'verify: 校验码错误。');
     }
+  } else if (c === '归档' || c === 'archive') {
+    if (!unlocked) out('err', '尚未通过校验。');
+    else ending('../9a3f1c7e.html');
+  } else if (c === '外传' || c === 'spread') {
+    if (!unlocked) out('err', '尚未通过校验。');
+    else ending('../c47b0d92.html');
+  } else if (c === '退出' || c === 'exit') {
+    if (!unlocked) out('err', '尚未通过校验。');
+    else ending('../e1b83a56.html');
   } else if (c === 'clear') {
     var lines = term.querySelectorAll('.line');
     for (var i = 0; i < lines.length; i++) lines[i].remove();
