@@ -81,7 +81,7 @@
     </div>
     <div class="side-box">
       <div class="panel-title">当前在线</div>
-      <div class="body">游客 214 人<br>注册用户 38 人</div>
+      <div class="body">游客 214 人<br>注册用户 38 人<div id="lastLogin" style="display:none; margin-top:10px; color:#a00; line-height:1.7;">上次登录：2024-11-09 03:14:07<br>IP：10.8.4.71（内网）</div></div>
     </div>
   </div>
 </div>
@@ -156,6 +156,8 @@ function forumLogin() {
 function closeMask() {
   var mask = document.getElementById('loginMask');
   if (mask) mask.className = 'login-mask';
+  var ll = document.getElementById('lastLogin');
+  if (ll) ll.style.display = 'block';
   var t = document.getElementById('loginToast');
   if (t) { t.style.display = 'block'; setTimeout(function () { t.style.opacity = '0'; setTimeout(function () { t.style.display = 'none'; }, 700); }, 2400); }
 }
