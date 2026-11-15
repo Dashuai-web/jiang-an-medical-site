@@ -98,21 +98,24 @@
   <!-- ===================== 困难版 ===================== -->
   <div class="pane" id="pane1">
     <details open>
-      <summary>① 六个载体的解法</summary>
+      <summary>① 资料包（六类载体）</summary>
       <div class="inner">
+        <p>困难版不依赖官网和匿名区，全部来自资料包里的渗透产物。</p>
+        <h4>目标画像（hard/dossier.html）</h4>
+        <p>OSINT 汇总：公司信息、组织架构、关键人物（周明 0471）、异常点。</p>
         <h4>旧电脑（hard/desktop.html）</h4>
-        <p>双击图标开窗口。收获：<code>0471</code>（备忘录）、<code>AQ-2022-10-19</code>（回收站邮件）、"密码规则在服务器 /etc/config"（江安备份）。</p>
+        <p>翻文件。收获：工牌（→ 0471）、10 月 19 日事故（→ 事故编号）、旧版入口指向服务器。</p>
         <h4>服务器终端（hard/server.html）</h4>
         <p>命令：<code>help</code> <code>ls</code> <code>cat</code> <code>cd</code> <code>pwd</code> <code>verify</code>。</p>
-        <p><code>cat /etc/config</code> → <code>LEGACY_BUILD=2024-08-15</code>（v1.9.4 密码日期）。<code>ls /var/log</code> + <code>cat clean.log</code> 是剧情。</p>
+        <p>关键四步：<code>cat README</code>（时间戳规则）→ <code>cat /etc/config</code>（Unix 时间戳，转成日期）→ <code>cat /etc/security/pwpolicy</code>（口令格式）→ <code>cat /etc/hosts</code>（登录入口）。</p>
         <h4>图片（hard/notice.html）</h4>
-        <p>招聘启事底部有极淡的日期 <code>2024年10月28日</code>（放大/反色可见）；工牌上是工号 <code>0471</code>。</p>
+        <p>招聘启事水印只给「2024年10月__日」，日「28」藏在红印章里（放大）；工牌上是工号 <code>0471</code>。</p>
         <h4>摩斯（hard/signal.html）</h4>
-        <p>红光闪烁，长=划、短=点。解码得 <code>S I X</code> —— 第六次。</p>
+        <p>点红灯播放滴答声，长=划、短=点。解码得 <code>S I X</code> —— 第六次。</p>
         <h4>404 藏线索</h4>
-        <p>把关键词打进网址：<code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>、<code>/five</code>。</p>
-        <h4>假论坛（hard/forum.html）</h4>
-        <p>9 个死帖，1 个置顶帖。置顶帖 6 楼/8 楼点出：「承者」=「受试者」。</p>
+        <p>关键词打进网址：<code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>。</p>
+        <h4>员工之家镜像（hard/forum.html）</h4>
+        <p>9 死 1 活。活帖 6 楼把「承者」拆成字谜：「承受的承」+「人的意思」。</p>
       </div>
     </details>
 
@@ -121,9 +124,9 @@
       <div class="inner">
         <table>
           <tr><th>用途</th><th>密码</th><th>困难版来源</th></tr>
-          <tr><td>v2.0</td><td><code>jianganyiliao20241028</code></td><td>图片里招聘启事的日期</td></tr>
-          <tr><td>v1.9.4</td><td><code>jianganyiliao20240815</code></td><td>服务器 <code>cat /etc/config</code></td></tr>
-          <tr><td>暗网仪式</td><td><code>31415918</code></td><td>同普通版，承者簿 + 入职日</td></tr>
+          <tr><td>v2.0</td><td><code>jianganyiliao20241028</code></td><td>服务器时间戳 1730073600 → 2024-10-28</td></tr>
+          <tr><td>v1.9.4</td><td><code>jianganyiliao20240815</code></td><td>服务器时间戳 1723680000 → 2024-08-15</td></tr>
+          <tr><td>暗网仪式</td><td><code>31415918</code></td><td>承者簿 314159 + 入职日 18</td></tr>
         </table>
       </div>
     </details>
