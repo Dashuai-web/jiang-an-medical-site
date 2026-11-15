@@ -3,57 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>入职前夜 · 困难版</title>
+<title>目标：江安医药</title>
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; background: #0e0f10; color: #c9c2b2;
-         font-family: "Microsoft YaHei", sans-serif; }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 44px 18px 60px; }
-  .story { font-size: 15px; line-height: 2.1; color: #bdb6a6; }
-  .story p { margin: 0 0 14px; }
+  body { margin: 0; background: #0a0c0e; color: #c9c2b2;
+         font-family: "Consolas", "Microsoft YaHei", monospace; }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 40px 18px 60px; }
+  .head { border-bottom: 1px solid #1d2023; padding-bottom: 14px; margin-bottom: 16px; }
+  .head .t { font-size: 18px; color: #7fb07f; letter-spacing: 2px; }
+  .head .s { font-size: 12px; color: #5a6058; margin-top: 6px; line-height: 1.8; }
+  .story { font-size: 14px; line-height: 2; color: #b8b1a0; }
+  .story p { margin: 0 0 12px; }
   .story .hl { color: #c9b458; }
-  .rule { border-top: 1px solid #232529; margin: 30px 0 18px; padding-top: 18px;
-          font-size: 12px; color: #6a655a; line-height: 1.9; }
+  .rule { border: 1px solid #1d2023; border-radius: 6px; padding: 12px 14px; margin: 20px 0 18px;
+          font-size: 12px; color: #6a655a; line-height: 1.9; background: #0d0f11; }
   .rule b { color: #8a6a3a; }
-  .desk { border: 1px solid #232529; border-radius: 6px; overflow: hidden; }
-  .desk .h { background: #16171a; padding: 8px 14px; font-size: 12px; color: #6a655a; }
+  .desk { border: 1px solid #1d2023; border-radius: 6px; overflow: hidden; }
+  .desk .h { background: #121416; padding: 8px 14px; font-size: 12px; color: #6a655a; }
   .item { display: flex; align-items: center; gap: 14px; padding: 14px 16px;
-          border-top: 1px solid #1c1e22; text-decoration: none; color: #c9c2b2; }
-  .item:hover { background: #141519; }
+          border-top: 1px solid #1a1c1f; text-decoration: none; color: #c9c2b2; }
+  .item:hover { background: #101214; }
   .item .ic { font-size: 20px; width: 26px; text-align: center; }
   .item .t { font-size: 14px; }
-  .item .s { font-size: 11px; color: #5a5a5a; margin-top: 3px; }
-  .item .arr { margin-left: auto; color: #3a3a3a; }
+  .item .s { font-size: 11px; color: #4a4a4a; margin-top: 3px; }
+  .item .arr { margin-left: auto; color: #333; }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="head">
+    <div class="t">TARGET: 江安医药</div>
+    <div class="s">OSINT · 取证 · 渗透 —— 一个内部举报人留下的资料包。</div>
+  </div>
+
   <div class="story">
-    <p>你叫陈默，大三。你舅舅周明，2022 年 10 月之后失联。家里人说，他去了外地。你不信。</p>
-    <p>你查了两年。下周一，你要去江安医药入职。入职之前，你回到舅舅的老房子，把他留下的东西翻了一遍。</p>
-    <p class="hl">桌上摊着几样东西。没有说明书，只有它们自己。</p>
+    <p>有人通过暗网把一份资料包塞给了你，没有署名，只有一行字：</p>
+    <p class="hl">「他们在用人。查下去，别用正常人的方式查。」</p>
+    <p>资料包里是这些东西。目标：江安医药。</p>
   </div>
 
   <div class="rule">
-    <b>困难版规则：</b>没有说明书，只有它们自己。
+    <b>规则：</b>没有说明书。线索都在资料包里——有的要翻文件，有的要登服务器，有的要放大图片，有的藏在网址里。找到，就是你的。
   </div>
 
   <div class="desk">
-    <div class="h">舅舅房间里的东西</div>
+    <div class="h">资料包内容</div>
+    <a class="item" href="hard/dossier.html"><span class="ic">📁</span>
+      <span><div class="t">目标画像</div><div class="s">公开情报汇总</div></span><span class="arr">›</span></a>
     <a class="item" href="hard/desktop.html"><span class="ic">🖥️</span>
-      <span><div class="t">一台旧电脑</div><div class="s">Win2000，很久没开机</div></span><span class="arr">›</span></a>
+      <span><div class="t">一台旧电脑的镜像</div><div class="s">死者生前的机器，取到了整盘</div></span><span class="arr">›</span></a>
     <a class="item" href="hard/server.html"><span class="ic">⌨️</span>
-      <span><div class="t">一张写有服务器地址的便签</div><div class="s">江安医药 · 运维</div></span><span class="arr">›</span></a>
+      <span><div class="t">服务器入口</div><div class="s">举报人给的 IP，未授权</div></span><span class="arr">›</span></a>
     <a class="item" href="hard/forum.html"><span class="ic">🧾</span>
-      <span><div class="t">「员工之家」论坛地址</div><div class="s">内部论坛，早已关闭</div></span><span class="arr">›</span></a>
-    <a class="item" href="hard/signal.html"><span class="ic">📻</span>
-      <span><div class="t">一个老式收音机</div><div class="s">没信号，只有一点红光</div></span><span class="arr">›</span></a>
+      <span><div class="t">员工之家镜像</div><div class="s">内部论坛快照，已停更</div></span><span class="arr">›</span></a>
     <a class="item" href="hard/notice.html"><span class="ic">📄</span>
-      <span><div class="t">几张泛黄的纸张</div><div class="s">招聘启事、体检单、工牌</div></span><span class="arr">›</span></a>
-    <a class="item" href="company.html"><span class="ic">🌐</span>
-      <span><div class="t">江安医药官网</div><div class="s">和平时一样</div></span><span class="arr">›</span></a>
-    <a class="item" href="forum.html"><span class="ic">🗨️</span>
-      <span><div class="t">职场匿名区</div><div class="s">和平时一样</div></span><span class="arr">›</span></a>
+      <span><div class="t">几份扫描件</div><div class="s">招聘启事、体检单、工牌</div></span><span class="arr">›</span></a>
+    <a class="item" href="hard/signal.html"><span class="ic">📻</span>
+      <span><div class="t">一段音频信号</div><div class="s">从旧电脑里提出来的一段声码</div></span><span class="arr">›</span></a>
   </div>
 </div>
 <script>

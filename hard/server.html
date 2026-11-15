@@ -34,10 +34,13 @@ function out(cls, txt) {
 
 var FS = {
   '/': ['etc', 'var', 'home', 'README'],
-  '/etc': ['config', 'passwd'],
+  '/etc': ['config', 'passwd', 'security', 'hosts'],
   '/README': '本节点所有时间字段使用 Unix 时间戳（自 1970-01-01 00:00:00 UTC 起算的秒数）。\n',
   '/etc/config': 'V2_BUILD_TS=1730073600\nLEGACY_BUILD_TS=1723680000\n',
   '/etc/passwd': 'admin:x:1000:1000:,,,:/home/admin:/bin/sh\nzhouming:x:1001:1001:,,,:/home/zhouming:/bin/sh\n',
+  '/etc/hosts': '10.8.4.71  legacy-portal\n10.8.4.72  v2-portal\n# 门户入口（内网路径）：\n#   v1.9.4 -> /login_legacy.html\n#   v2.0  -> /login.html\n',
+  '/etc/security': ['pwpolicy'],
+  '/etc/security/pwpolicy': '管理员口令 = 公司名拼音 + 构建日期(YYYYMMDD)\n构建日期见 /etc/config。\n',
   '/var': ['log'],
   '/var/log': ['clean.log', 'sys.log'],
   '/var/log/clean.log': '2022-10-21 02:00 清洗批次（C-2024-11 前身）\n[NULL] 覆盖记录：源=0471，目标=空编号\n[NULL] 补录失败：姓名字段永久缺失\n# 该记录已封存\n',
@@ -46,7 +49,7 @@ var FS = {
   '/home/zhouming': ['note.txt'],
   '/home/zhouming/note.txt': '小陈：\n我可能是第 6 次。\n如果我回不来了，记住编号 0471。\n—— 舅舅\n'
 };
-var DIRS = { '/': '', '/etc': '', '/var': '', '/var/log': '', '/home': '', '/home/zhouming': '' };
+var DIRS = { '/': '', '/etc': '', '/etc/security': '', '/var': '', '/var/log': '', '/home': '', '/home/zhouming': '' };
 
 var cwd = '/';
 var unlocked = false;
