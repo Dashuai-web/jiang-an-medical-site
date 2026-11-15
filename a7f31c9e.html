@@ -222,7 +222,7 @@ function _h(t) { var x = 0; for (var i = 0; i < t.length; i++) x += t.charCodeAt
 
 function tryUnlock() {
   var v = norm(document.getElementById('pw').value);
-  if (_h(v) === 12594) {   /* 校验和，密码不落明文 */
+  if (_h(v) === 12904) {   /* 校验和，密码不落明文 */
     unlockedLock = true;
     var d = DATA[0];
     for (var i = 0; i < DATA.length; i++) if (DATA[i].lock) d = DATA[i];
