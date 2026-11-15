@@ -33,9 +33,10 @@ function out(cls, txt) {
 }
 
 var FS = {
-  '/': ['etc', 'var', 'home'],
+  '/': ['etc', 'var', 'home', 'README'],
   '/etc': ['config', 'passwd'],
-  '/etc/config': 'V2_BUILD=2024-10-28\nLEGACY_BUILD=2024-08-15\n',
+  '/README': '本节点所有时间字段使用 Unix 时间戳（自 1970-01-01 00:00:00 UTC 起算的秒数）。\n',
+  '/etc/config': 'V2_BUILD_TS=1730073600\nLEGACY_BUILD_TS=1723680000\n',
   '/etc/passwd': 'admin:x:1000:1000:,,,:/home/admin:/bin/sh\nzhouming:x:1001:1001:,,,:/home/zhouming:/bin/sh\n',
   '/var': ['log'],
   '/var/log': ['clean.log', 'sys.log'],
