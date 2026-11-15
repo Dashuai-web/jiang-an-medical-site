@@ -98,63 +98,56 @@
   <!-- ===================== 困难版 ===================== -->
   <div class="pane" id="pane1">
     <details open>
-      <summary>① 资料包（六类载体）</summary>
+      <summary>① 核心：服务器命令行探案</summary>
       <div class="inner">
-        <p>困难版不依赖官网和匿名区，全部来自资料包里的渗透产物。</p>
-        <h4>目标画像（hard/dossier.html）</h4>
-        <p>OSINT 汇总：公司信息、组织架构、关键人物（周明 0471）、异常点。</p>
-        <h4>旧电脑（hard/desktop.html）</h4>
-        <p>翻文件。收获：工牌（→ 0471）、10 月 19 日事故（→ 事故编号）、旧版入口指向服务器。</p>
-        <h4>服务器终端（hard/server.html）</h4>
-        <p>命令：<code>help</code> <code>ls</code> <code>cat</code> <code>cd</code> <code>pwd</code> <code>verify</code>。</p>
-        <p>关键四步：<code>cat README</code>（时间戳规则）→ <code>cat /etc/config</code>（Unix 时间戳，转成日期）→ <code>cat /etc/security/pwpolicy</code>（口令格式）→ <code>cat /etc/hosts</code>（登录入口）。</p>
-        <h4>图片（hard/notice.html）</h4>
-        <p>招聘启事水印只给「2024年10月__日」，日「28」藏在红印章里（放大）；工牌上是工号 <code>0471</code>。</p>
-        <h4>摩斯（hard/signal.html）</h4>
-        <p>点红灯播放滴答声，长=划、短=点。解码得 <code>S I X</code> —— 第六次。</p>
-        <h4>404 藏线索</h4>
-        <p>关键词打进网址：<code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>。</p>
-        <h4>员工之家镜像（hard/forum.html）</h4>
-        <p>9 死 1 活。活帖 6 楼把「承者」拆成字谜：「承受的承」+「人的意思」。</p>
+        <p>困难版不使用门户，也不依赖官网/匿名区。服务器终端就是整个调查界面。</p>
+        <h4>命令</h4>
+        <p><code>ls</code>/<code>dir</code>　<code>cat</code>/<code>type</code>　<code>cd</code>　<code>pwd</code>　<code>su &lt;口令&gt;</code>　<code>decrypt &lt;文件&gt; &lt;密钥&gt;</code>　<code>verify &lt;码&gt;</code></p>
+        <h4>调查链</h4>
+        <p>1. <code>cat README</code> → 时间戳规则 + 线索在哪</p>
+        <p>2. <code>cat /etc/config</code> → <code>1730073600</code> / <code>1723680000</code></p>
+        <p>3. <code>cat /etc/security/pwpolicy</code> → 口令 = 公司名拼音 + 构建日期</p>
+        <p>4. 时间戳 1730073600 → 2024-10-28 → 口令 <code>jianganyiliao20241028</code></p>
+        <p>5. <code>su jianganyiliao20241028</code> → 解锁 /root</p>
+        <p>6. <code>cat /srv/clinical/roster.txt</code> → 承者簿（印 3 1 4 1 5 9 + 第 7 行 2024-11-18）</p>
+        <p>7. <code>decrypt ritual.enc 31415918</code> → 仪式流程</p>
+        <p>8. <code>cat /root/verify.txt</code> → 校验码 <code>220471</code></p>
+        <p>9. <code>verify 220471</code> → 三个结局</p>
       </div>
     </details>
 
     <details>
-      <summary>② 密码速查（来源不同）</summary>
+      <summary>② 其他载体</summary>
+      <div class="inner">
+        <h4>目标画像（hard/dossier.html）</h4><p>OSINT：组织架构、周明 0471、异常点。</p>
+        <h4>旧电脑（hard/desktop.html）</h4><p>工牌 0471、10 月 19 日事故、入口指向服务器。</p>
+        <h4>员工之家镜像（hard/forum.html）</h4><p>9 死 1 活，活帖把「承者」拆字谜。</p>
+        <h4>摩斯（hard/signal.html）</h4><p>点红灯听声：S I X —— 第六次。</p>
+        <h4>扫描件（hard/notice.html）</h4><p>招聘启事「2024年10月__日」+ 印章里的 28；工牌 0471。</p>
+        <h4>404（根目录 404.html）</h4><p><code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>③ 密码速查</summary>
       <div class="inner">
         <table>
-          <tr><th>用途</th><th>密码</th><th>困难版来源</th></tr>
-          <tr><td>v2.0</td><td><code>jianganyiliao20241028</code></td><td>服务器时间戳 1730073600 → 2024-10-28</td></tr>
-          <tr><td>v1.9.4</td><td><code>jianganyiliao20240815</code></td><td>服务器时间戳 1723680000 → 2024-08-15</td></tr>
-          <tr><td>暗网仪式</td><td><code>31415918</code></td><td>承者簿 314159 + 入职日 18</td></tr>
+          <tr><th>用途</th><th>值</th><th>来源</th></tr>
+          <tr><td>服务器 su 提权</td><td><code>jianganyiliao20241028</code></td><td>时间戳 1730073600 → 2024-10-28</td></tr>
+          <tr><td>解密 ritual.enc</td><td><code>31415918</code></td><td>承者簿 314159 + 入职日 18</td></tr>
+          <tr><td>收尾校验码</td><td><code>220471</code></td><td>22（年份）+ 0471</td></tr>
         </table>
       </div>
     </details>
 
     <details>
-      <summary>③ 门户（困难版）：25 词 + 6 flag → 校验码</summary>
+      <summary>④ 暗网（困难版）：14 / 30 / 42</summary>
       <div class="inner">
-        <p>门槛提高到 <b>25 个不同词</b>，关键 flag 变成 <b>6 个</b>（多一个 <span class="kw">受试者招募</span>）。公告列表和快捷搜索被隐藏。</p>
-        <p>搜满后「我的访问记录」不再给按钮，而是显示校验码 <code>220471</code>。</p>
+        <p>外传结局 → 报纸 → 点「镜像 0x7F」→ 暗网。层级门槛 <b>14 / 30 / 42</b>，解锁提示不列关键词。</p>
       </div>
     </details>
 
-    <details>
-      <summary>④ 服务器 verify 解锁结局</summary>
-      <div class="inner">
-        <p>回到服务器终端，输入 <code>verify 220471</code> → 列出三个结局链接（归档/外传/退出）。</p>
-      </div>
-    </details>
-
-    <details>
-      <summary>⑤ 暗网（困难版）：14 / 30 / 42</summary>
-      <div class="inner">
-        <p>层级门槛提高到 <b>14 / 30 / 42</b> 次命中，解锁提示不再列出关键词，只能靠已读内容自己推。</p>
-        <p>密钥与结局和普通版一致。</p>
-      </div>
-    </details>
-
-    <div class="warn">困难版不改变剧情，只改变「拿到线索的方式」和「门槛」。所有密码、结局、真相与普通版相同。</div>
+    <div class="warn">困难版不改变剧情与结局，只改「获取线索的方式」：全程命令行探案与取证，不使用门户。</div>
   </div>
 </div>
 
