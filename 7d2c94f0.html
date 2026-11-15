@@ -52,4 +52,16 @@
 <p>帖子已发布。标题：《感谢分享，陈默》。</p>
 <div class="f">你的账号状态：已注销 / 关联工号：0471</div>
 </div>
+
+<div id="over" style="position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:99;opacity:0;transition:opacity 1.2s;">
+  <div id="overtxt" style="color:#e8e8e8;font-family:SimSun,宋体,serif;font-size:18px;letter-spacing:3px;opacity:0;transition:opacity 1.6s;text-align:center;">你以为这就结束了吗</div>
+</div>
+<script>
+setTimeout(function () { document.getElementById('over').style.opacity = '1'; }, 4200);
+setTimeout(function () { document.getElementById('overtxt').style.opacity = '1'; }, 5800);
+setTimeout(function () {
+  try { sessionStorage.setItem('ja_spread_done', '1'); } catch (e) {}
+  location.href = 'a7f31c9e.html';
+}, 9800);
+</script>
 </body></html>

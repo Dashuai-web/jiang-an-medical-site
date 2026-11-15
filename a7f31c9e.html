@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JIANGAN // OFFLINE MIRROR</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #07090a; }
+  body {
+    font-family: Consolas, "Courier New", monospace;
+    color: #9ef0c0; font-size: 14px; line-height: 1.9;
+    min-height: 100vh; position: relative;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+    opacity: .5;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 18px 14px 60px; position: relative; z-index: 6; }
+  .hd { border-bottom: 1px solid #1d3a2c; padding-bottom: 10px; margin-bottom: 14px; }
+  .hd .t1 { color: #4be08a; letter-spacing: 2px; font-weight: bold; font-size: 15px; }
+  .hd .t2 { color: #3a6b52; font-size: 11px; margin-top: 3px; }
+  .hd .t3 { color: #2f5a45; font-size: 11px; margin-top: 2px; }
+  .bar { display: flex; justify-content: space-between; font-size: 11px; color: #3a6b52; margin: 10px 0 14px; border: 1px dashed #1d3a2c; padding: 6px 10px; }
+  .search { display: flex; gap: 6px; margin-bottom: 6px; }
+  .search input {
+    flex: 1; min-width: 0; background: #0b1210; border: 1px solid #22493a; color: #9ef0c0;
+    padding: 9px 11px; font-family: inherit; font-size: 14px; outline: none;
+  }
+  .search input:focus { border-color: #3a8a5a; box-shadow: 0 0 8px rgba(58,138,90,.35); }
+  .search button {
+    background: #12241c; border: 1px solid #2d6b4c; color: #6ee6a2; padding: 9px 20px;
+    font-family: inherit; font-size: 14px; cursor: pointer;
+  }
+  .search button:hover { background: #173326; }
+  .hint { font-size: 11px; color: #2f5a45; margin-bottom: 18px; }
+  .post { border-left: 2px solid #1d3a2c; padding: 8px 0 8px 12px; margin-bottom: 16px; animation: fin .35s ease; }
+  @keyframes fin { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  .post .ph { color: #4be08a; font-size: 13px; margin-bottom: 6px; }
+  .post .pm { color: #2f5a45; font-size: 11px; margin-bottom: 8px; }
+  .post .pb p { margin: 0 0 8px; }
+  .post table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 12px; }
+  .post th, .post td { border: 1px solid #1d3a2c; padding: 6px 8px; text-align: left; }
+  .post th { color: #4be08a; font-weight: normal; background: #0c1611; }
+  .warnline { color: #e08a6a; }
+  .okline { color: #4be08a; }
+  .dim { color: #2f5a45; }
+  .sysmsg { border: 1px dashed #2d6b4c; padding: 8px 12px; margin-bottom: 16px; color: #6ee6a2; font-size: 12px; }
+  .lockbox { border: 1px solid #6a4a20; background: #120f08; padding: 14px; margin-bottom: 16px; }
+  .lockbox p { margin: 0 0 10px; color: #d8a860; font-size: 13px; }
+  .lockbox input { background: #0b0a06; border: 1px solid #6a4a20; color: #d8a860; padding: 8px 10px; font-family: inherit; width: 170px; }
+  .lockbox button { background: #1a1408; border: 1px solid #8a6a30; color: #d8a860; padding: 8px 16px; font-family: inherit; cursor: pointer; margin-left: 6px; }
+  .endbox { border: 1px solid #2d6b4c; padding: 18px; margin-top: 22px; }
+  .endbox h3 { color: #e08a6a; font-size: 15px; margin: 0 0 12px; font-weight: normal; letter-spacing: 1px; }
+  .endbox button {
+    display: block; width: 100%; margin: 8px 0; padding: 11px; background: #0d1a14;
+    border: 1px solid #2d6b4c; color: #9ef0c0; font-family: inherit; font-size: 14px; cursor: pointer; text-align: left;
+  }
+  .endbox button:hover { background: #153024; }
+  .final { text-align: center; margin-top: 30px; color: #e08a6a; letter-spacing: 2px; }
+  .blink { animation: bl 1.2s steps(2) infinite; }
+  @keyframes bl { 50% { opacity: 0; } }
+  @media (max-width: 720px) {
+    body { font-size: 13px; }
+    .wrap { padding: 12px 10px 50px; }
+    .hd .t1 { font-size: 13px; }
+    .search button { padding: 9px 12px; }
+    .post table { font-size: 11px; }
+    .post th, .post td { padding: 4px 5px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <div class="t1">JIANGAN // OFFLINE MIRROR</div>
+    <div class="t2">镜像节点 0x7F · 只读 · 不记录访问</div>
+    <div class="t3">访客_未登记 · 会话 <span id="sid"></span></div>
+  </div>
+  <div class="bar">
+    <span>已解密：<span id="cnt">0</span> / <span id="total">0</span></span>
+    <span id="stageLabel">层级 1</span>
+  </div>
+  <div class="search">
+    <input id="q" type="text" placeholder="输入你手上仅有的东西" autocomplete="off">
+    <button id="go">检索</button>
+  </div>
+  <div class="hint" id="hint">镜像只回应它认识的词。不认识的，不会给你任何回答。</div>
+  <div id="feed"></div>
+</div>
+
+<script>
+(function () {
+  try { if (sessionStorage.getItem('ja_spread_done') === '1') return; } catch (e) {}
+  location.replace('index.html');
+})();
+
+var DATA = [
+  /* ---------- 层级 1 ---------- */
+  { k: ['0471'], t: '编号 0471 回收记录', m: '记录编号 R-0471 · 只读', s: 1,
+    b: ['<p>编号：0471</p><p>原使用者：周*（行政部）</p><p>注销类型：非离职</p><p>注销时间：2022-10-19 23:47:03</p><p>编号状态：封存 24 个月</p><p>启用时间：2024-01-15（分配给新入职员工）</p>',
+        '<p class="warnline">备注：该编号在承者簿上排第 6 位。</p>'] },
+
+  { k: ['aq-2022-10-19', '事故', '事故编号'], t: '事故编号 AQ-2022-10-19（未清洗）', m: '原始记录 · 与公开版不一致', s: 1,
+    b: ['<p>原始版本（2022-10-19）：</p><p>死亡原因：药物不良反应<br>地点：临床试验中心观察室 3 号</p>',
+        '<p>清洗后版本（2022-10-21）：</p><p>死亡原因：突发意外<br>地点：办公楼三层</p>',
+        '<p class="warnline">执行人：NULL。复核：无。</p>',
+        '<p>同一份报告里，死者从观察室被搬回了自己的办公室。</p>'] },
+
+  { k: ['回收', '编号回收'], t: '编号回收制度', m: '内部制度 · 节选', s: 1,
+    b: ['<p>员工死亡后，其编号不得空缺，须在 24 个月内启用。</p><p>启用时，原记录的姓名字段置空，新使用者继承该编号。</p>',
+        '<p class="warnline">空缺的编号会被系统自动补一条「不存在的人」。</p>',
+        '<p>目的：任何时刻，员工总数不得减少。</p>'] },
+
+  { k: ['承者'], t: '（被删除的帖）', m: '残片 · 仅剩一行', s: 1,
+    b: ['<p>「承者」二字在 2021-06 之后的所有公开文档中被替换为「受试者」。</p>',
+        '<p>替换理由：避免宗教联想。</p>',
+        '<p class="dim">镜像中仍保留 3 处原始用法。</p>'] },
+
+  { k: ['受试者'], t: '术语替换说明', m: '版本变更记录', s: 1,
+    b: ['<p>2021-06-01 起，「承者」统一改为「受试者」。</p><p>涉及文档 148 份，历史版本已封存。</p>',
+        '<p>临床试验中心的正式名称未变。</p>'] },
+
+  { k: ['不存在的人'], t: '异常记录汇总', m: '数据清洗 · 待处理', s: 1,
+    b: ['<p>编号与姓名不匹配的记录，统称「不存在的人」。</p><p>当前数量：4 条。</p>',
+        '<p class="dim">其中 1 条的编号为空，姓名也为空，创建时间 2022-10-19 23:47:03。</p>'] },
+
+  { k: ['实习生'], t: '2025 届实习生（预分配）', m: '镜像残留 · 名单截断', s: 1,
+    b: ['<p>编号 0472 / 陈默 / 待入职 / 2024-11-18</p><p>编号 0473 / — / 待定</p>',
+        '<p class="dim">名册上 0472 这一行，比其他人早填了三个月。</p>'] },
+
+  { k: ['体检'], t: '体检数据流向', m: '内部邮件 · 转发', s: 1,
+    b: ['<p>本年度体检数据（采血、心电图、生命体征）已由临床试验中心归档。</p>',
+        '<p>行政部无需留存副本。</p>',
+        '<p class="warnline">回信：合格名单什么时候出？<br>答复：只出不合格的。</p>'] },
+
+  { k: ['null', '临时权限'], t: 'NULL 是什么', m: '账号说明', s: 1,
+    b: ['<p>NULL 是系统在检测到「审批链断裂」时自动生成的一类临时账号。</p>',
+        '<p>无人持有，无法登录，操作记录永远显示为「NULL」。</p>',
+        '<p>用途：在需要有人签字、但又不能有人签字的地方，替那个人签。</p>'] },
+
+  { k: ['买号', '账号'], t: '出江安内部系统账号，300 一个', m: '匿名 · 2023-11-05', s: 1,
+    b: ['<p>楼主：出号，能进后台，别问怎么来的。</p><p>1 楼：骗子。</p><p>2 楼：买了，进不去。</p><p>3 楼：已封。</p>',
+        '<p class="dim">（镜像里这样的帖子很多，都是假的。）</p>'] },
+
+  { k: ['工资', '待遇'], t: '江安工资一般，胜在稳定', m: '匿名 · 2021-03-12', s: 1,
+    b: ['<p>行政岗 5k，五险一金，不加班。稳定。</p><p>1 楼：就是地方偏。</p>'] },
+
+  { k: ['谣言', '暗网'], t: '别信那些说法', m: '匿名 · 2023-08-09', s: 1,
+    b: ['<p>暗网那帮人瞎传的，什么两年一次，都是离职的人编的。</p><p>1 楼：就是。</p><p>2 楼：你怎么知道是编的？</p><p>3 楼：（该回复已删除）</p>'] },
+
+  /* ---------- 层级 2 ---------- */
+  { k: ['承者簿'], t: '承者簿（第 1—7 条）', m: '手抄件 · 影印', s: 2,
+    b: ['<table><tr><th>次序</th><th>编号</th><th>仪式日期</th><th>部门</th><th>印</th></tr>',
+        '<tr><td>1</td><td>0413</td><td>2012-10-18</td><td>生产部</td><td>3</td></tr>',
+        '<tr><td>2</td><td>0427</td><td>2014-10-17</td><td>质量部</td><td>1</td></tr>',
+        '<tr><td>3</td><td>0440</td><td>2016-10-19</td><td>行政部</td><td>4</td></tr>',
+        '<tr><td>4</td><td>0452</td><td>2018-10-18</td><td>研发部</td><td>1</td></tr>',
+        '<tr><td>5</td><td>0468</td><td>2020-10-19</td><td>生产部</td><td>5</td></tr>',
+        '<tr><td>6</td><td>0471</td><td>2022-10-19</td><td>行政部</td><td>9</td></tr>',
+        '<tr><td>7</td><td>0472</td><td>2024-11-18</td><td>—</td><td>?</td></tr></table>',
+        '<p>每两年一次，日期固定在十月中下旬。</p>',
+        '<p class="warnline">第七行已经写好，只差一个印。</p>'] },
+
+  { k: ['0413'], t: '第 1 次 · 0413', m: '承者簿影印 · 单条', s: 2,
+    b: ['<p>2012-10-18 夜，生产部。记录：药物不良反应。</p><p>编号 0413 于 2014-01 重新分配给新员工。</p>'] },
+
+  { k: ['0427'], t: '第 2 次 · 0427', m: '承者簿影印 · 单条', s: 2,
+    b: ['<p>2014-10-17 夜，质量部。记录：心脏骤停。</p><p>编号 0427 于 2016-03 重新分配。</p>'] },
+
+  { k: ['0440'], t: '第 3 次 · 0440', m: '承者簿影印 · 单条', s: 2,
+    b: ['<p>2016-10-19 夜，行政部。记录：过敏反应。</p><p>编号 0440 于 2018-02 重新分配。</p>'] },
+
+  { k: ['0452'], t: '第 4 次 · 0452', m: '承者簿影印 · 单条', s: 2,
+    b: ['<p>2018-10-18 夜，研发部。记录：低血糖。</p><p>编号 0452 于 2020-01 重新分配。</p>'] },
+
+  { k: ['0468'], t: '第 5 次 · 0468', m: '承者簿影印 · 单条', s: 2,
+    b: ['<p>2020-10-19 夜，生产部。记录：输液反应。</p><p>编号 0468 于 2022-04 重新分配。</p>'] },
+
+  { k: ['命名规则', '编号规则'], t: '编号命名规则', m: '人事制度 · 内部版', s: 2,
+    b: ['<p>一、编号按入职顺序递增，永不空缺。</p><p>二、离职员工编号保留 12 个月；死亡员工编号保留 24 个月。</p>',
+        '<p>三、编号在保留期满后启用，姓名栏置空。</p>',
+        '<p class="warnline">四、承者编号不得启用为受试者编号之外的其他用途。</p>'] },
+
+  { k: ['印'], t: '关于「印」', m: '手写批注 · 来源不明', s: 2,
+    b: ['<p>每次仪式要留一个一位数，记在承者簿上。</p>',
+        '<p>前六次分别是：3、1、4、1、5、9。</p>',
+        '<p>第一个承者说，记数没有意义，只要一直写下去。</p>',
+        '<p class="warnline">第七位不由上一位给。第七位由承者本人写。</p>',
+        '<p>写什么？写他入职那一天的「日」。</p>'] },
+
+  { k: ['第七次', '第 7 次'], t: '第七次', m: '未开始', s: 2,
+    b: ['<p>第七次尚未开始。</p><p>名单已备。</p><p>编号 0472 已预分配。</p>',
+        '<p class="dim">入职日：2024-11-18。</p>'] },
+
+  { k: ['气运'], t: '气运', m: '未索引 · 片段', s: 2,
+    b: ['<p>公司内部有一本「气运台账」，每年结一次。</p>',
+        '<p>台账上不写钱，只写一个人的名字，和一个数字。</p>',
+        '<p class="dim">数字是正的，就继续；是负的，就换人。</p>'] },
+
+  { k: ['封存'], t: '封存', m: '制度说明', s: 2,
+    b: ['<p>封存 ≠ 删除。</p><p>封存的记录不进任何列表，但可以被「知道它存在的人」检索到。</p>',
+        '<p class="warnline">所以你现在能读到这一条。</p>'] },
+
+  { k: ['名册', '花名册'], t: '员工名册（完整版）', m: '导出文件 · 损坏', s: 2,
+    b: ['<p>名册共 322 行。第 133 行、第 187 行、第 244 行、第 301 行姓名为空。</p>',
+        '<p>这四行的编号分别是 0440、0452、0468、0471。</p>',
+        '<p class="dim">全部是「承者」。全部已离职。</p>'] },
+
+  { k: ['凌晨', '03:14', '时间'], t: '为什么总是 03:14', m: '匿名 · 2022-11-02', s: 2,
+    b: ['<p>所有仪式都在凌晨三点前后。系统里那条 03:14:07，是模板常量，不是真时间。</p>',
+        '<p>有人说那是「数之极」的缩写。</p>',
+        '<p class="dim">我查过：3.1415926。取前三位和后四位，拼起来就是 03:14:07。</p>'] },
+
+  /* ---------- 层级 3 ---------- */
+  { k: ['仪式', '仪式流程'], t: '仪式流程', m: '加密文件 · 需要七位以上密钥', s: 3, lock: true,
+    b: [] },
+
+  { k: ['择人'], t: '一 · 择人', m: '流程解读', s: 3,
+    b: ['<p>入职三个月内。</p><p>无近亲在同一城市。</p><p>体检合格，且体检数据已进入临床试验中心。</p>',
+        '<p class="dim">——所以体检必须做，而且必须由中心归档。</p>'] },
+
+  { k: ['换名'], t: '二 · 换名', m: '流程解读', s: 3,
+    b: ['<p>以受试者编号代称本人，档案姓名栏置空。</p><p>此后一切记录只认编号，不认名字。</p>',
+        '<p class="warnline">姓名一栏空着，就不算死过。</p>'] },
+
+  { k: ['开场', '给药'], t: '三 · 开场', m: '流程解读', s: 3,
+    b: ['<p>以「临床试验」名义给药。</p><p>给药时刻须在 22:15 前后。</p><p>观察记录只保留两行：给药、死亡。</p>',
+        '<p class="dim">中间那段不记。不记就不存在。</p>'] },
+
+  { k: ['收', '收尾'], t: '四 · 收', m: '流程解读', s: 3,
+    b: ['<p>死亡登记为「事故」。</p><p>编号封存 24 个月。</p><p>事故报告允许修改一次，修订人不留名。</p>'] },
+
+  { k: ['续', '延续'], t: '五 · 续', m: '流程解读', s: 3,
+    b: ['<p>编号启用，承者簿添一行。</p><p>公司得以继续。</p>',
+        '<p class="warnline">这不是比喻。承者簿之外，还有一个「气运」台账，每年结一次。</p>'] },
+
+  { k: ['密钥', '密码'], t: '密钥构成', m: '批注 · 来源不明', s: 3,
+    b: ['<p>密钥一共八位。</p><p>前六位，是承者簿上前六次留下的印，按次序连写。</p>',
+        '<p>后两位，是第七位承者入职那天的「日」。</p>',
+        '<p class="dim">所以第七位承者必须自己打开这份文件——在他还在的时候。</p>'] },
+
+  { k: ['气运台账'], t: '气运台账（2012—2020）', m: '扫描件 · 表格', s: 3,
+    b: ['<table><tr><th>年度</th><th>数值</th><th>备注</th></tr>',
+        '<tr><td>2012</td><td>+41</td><td>首次</td></tr>',
+        '<tr><td>2014</td><td>+37</td><td>—</td></tr>',
+        '<tr><td>2016</td><td>+44</td><td>—</td></tr>',
+        '<tr><td>2018</td><td>+52</td><td>—</td></tr>',
+        '<tr><td>2020</td><td>+48</td><td>—</td></tr>',
+        '<tr><td>2022</td><td>+61</td><td>最高</td></tr>',
+        '<tr><td>2024</td><td>—</td><td>待结</td></tr></table>',
+        '<p class="warnline">每一个正数，对应承者簿上的一次。</p>'] },
+
+  /* ---------- 层级 4 ---------- */
+  { k: ['安祭'], t: '安祭', m: '1998 · 创始文件', s: 4,
+    b: ['<p>1998 年，周氏兄弟创办江安堂。</p><p>教义只有一句：企业之气运，寄于承者之身。</p>',
+        '<p>承者以血肉承载公司之「续」，每两年一换。</p>',
+        '<p>换成临床试验，换成受试者，换成编号——都只是让它合法。</p>',
+        '<p class="dim">周氏至今仍在董事会。</p>'] },
+
+  { k: ['周明', '周*'], t: '第 6 次 · 周明', m: '承者簿 · 备注', s: 4,
+    b: ['<p>行政部，工号 0471。</p><p>2022-10-19 23:47 于临床试验中心观察室 3 号死亡。</p>',
+        '<p>死因由「药物不良反应」改为「突发意外」，地点由观察室改为办公楼三层。</p>',
+        '<p class="warnline">他死在自己的办公室这件事，是后来「补」进去的。</p>'] },
+
+  { k: ['0472'], t: '编号 0472 预分配记录', m: '只读 · 未启用', s: 4,
+    b: ['<p>编号：0472</p><p>来源：简历投递</p><p>姓名：陈默</p><p>入职日：2024-11-18</p>',
+        '<p class="warnline">备注：承者簿第 7 行已预留。</p>'] },
+
+  { k: ['陈默'], t: '承者簿 · 第 7 条', m: '已预填', s: 4,
+    b: ['<p>次序：7</p><p>编号：0472</p><p>仪式日期：2024-11-18（入职当日）</p><p>印：待写</p>',
+        '<p>你翻了两年的资料，是为了找一个人。</p>',
+        '<p class="warnline">他们翻了两年的简历，是为了等一个人。</p>'] },
+
+  { k: ['董事会', '周氏'], t: '董事会名单（1998—2024）', m: '工商档案 · 节选', s: 4,
+    b: ['<p>周振邦、周振业、周立群、周明。</p>',
+        '<p>前三人为创始人之子，第四人于 2022 年 10 月除名。</p>',
+        '<p class="warnline">除名原因一栏，写的是「自愿离职」。</p>'] },
+
+  { k: ['第七位', '承者本人'], t: '第七位', m: '最后一条', s: 4,
+    b: ['<p>第七位由承者本人书写。</p><p>写他入职那一天的日。</p>',
+        '<p>2024-11-18。日是 18。</p>',
+        '<p class="okline">密钥：314159 + 18</p>'] }
+];
+
+var STAGE_TOTAL = 3 + 9 + 6 + 4;
+var stage = 1;
+var searched = {};
+var seen = {};
+var unlockedLock = false;
+var finished = false;
+
+document.getElementById('total').textContent = DATA.length;
+document.getElementById('sid').textContent = Math.random().toString(16).slice(2, 8).toUpperCase();
+
+function qs(k) {
+  var m = location.search.substring(1).split('&');
+  for (var i = 0; i < m.length; i++) {
+    var p = m[i].split('=');
+    if (decodeURIComponent(p[0]) === k) return decodeURIComponent(p[1] || '');
+  }
+  return '';
+}
+function norm(x) {
+  return x.replace(/[\uFF01-\uFF5E]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); })
+    .replace(/\u3000/g, ' ').replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '').toLowerCase();
+}
+
+function countSeen() { return Object.keys(seen).length; }
+
+function feedHTML(title, meta, body, cls) {
+  var h = '<div class="post ' + (cls || '') + '"><div class="ph">' + title + '</div>';
+  if (meta) h += '<div class="pm">' + meta + '</div>';
+  h += '<div class="pb">' + body + '</div></div>';
+  return h;
+}
+
+function push(html) {
+  var d = document.createElement('div');
+  d.innerHTML = html;
+  var feed = document.getElementById('feed');
+  feed.insertBefore(d.firstChild, feed.firstChild);
+  window.scrollTo(0, 0);
+}
+
+function sysMsg(txt) {
+  push('<div class="sysmsg">' + txt + '</div>');
+}
+
+function findPost(n) {
+  for (var i = 0; i < DATA.length; i++) {
+    var d = DATA[i];
+    if (d.s > stage) continue;
+    for (var j = 0; j < d.k.length; j++) {
+      if (norm(d.k[j]) === n) return d;
+    }
+  }
+  return null;
+}
+
+function showPost(d) {
+  if (d.lock && !unlockedLock) {
+    push('<div class="lockbox"><p>■■ 该文件已加密。需要密钥。</p>' +
+      '<input id="pw" type="password" maxlength="12" placeholder="密钥">' +
+      '<button id="pwgo">打开</button><p class="dim" style="margin-top:10px;font-size:11px;" id="pwerr"></p></div>');
+    document.getElementById('pwgo').addEventListener('click', tryUnlock);
+    document.getElementById('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+    return;
+  }
+  var body = d.b.join('');
+  push(feedHTML(d.t, d.m, body));
+  seen[d.t] = 1;
+  document.getElementById('cnt').textContent = countSeen();
+  checkStage();
+}
+
+function tryUnlock() {
+  var v = norm(document.getElementById('pw').value);
+  if (v === '31415918') {
+    unlockedLock = true;
+    var d = DATA[0];
+    for (var i = 0; i < DATA.length; i++) if (DATA[i].lock) d = DATA[i];
+    var body = d.b.join('');
+    push(feedHTML('仪式流程（解密）', '密钥正确 · 只读', body));
+    seen['仪式流程'] = 1;
+    document.getElementById('cnt').textContent = countSeen();
+    checkStage();
+  } else {
+    document.getElementById('pwerr').textContent = '密钥错误。';
+    document.getElementById('pwerr').className = 'warnline';
+  }
+}
+
+function checkStage() {
+  var n = Object.keys(searched).length;
+  if (stage === 1 && n >= 10) {
+    stage = 2;
+    sysMsg('镜像更新：命中未索引记录 3 条。<br>可检索：承者簿 / 命名规则 / 印 / 第七次 / 气运');
+    document.getElementById('stageLabel').textContent = '层级 2';
+  } else if (stage === 2 && n >= 22 && searched['承者簿'] && searched['印']) {
+    stage = 3;
+    sysMsg('镜像更新：发现加密文件 1 份。<br>可检索：仪式（需密钥）');
+    document.getElementById('stageLabel').textContent = '层级 3';
+  } else if (stage === 3 && unlockedLock && n >= 30) {
+    stage = 4;
+    sysMsg('镜像更新：底层目录已开放。<br>可检索：安祭 / 周明 / 0472 / 陈默');
+    document.getElementById('stageLabel').textContent = '层级 4';
+  } else if (stage === 4 && !finished && seen['承者簿 · 第 7 条'] && seen['第七位']) {
+    finished = true;
+    showEnding();
+  }
+}
+
+function showEnding() {
+  var box = document.createElement('div');
+  box.className = 'endbox';
+  box.innerHTML = '<h3>你已经看完了。现在选。</h3>' +
+    '<button data-a="police">报警</button>' +
+    '<button data-a="public">公开</button>' +
+    '<button data-a="enter">进入</button>';
+  document.getElementById('feed').insertBefore(box, document.getElementById('feed').firstChild);
+  var btns = box.querySelectorAll('button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function () { finale(this.getAttribute('data-a')); });
+  }
+  window.scrollTo(0, 0);
+}
+
+function finale(a) {
+  var txt = '';
+  if (a === 'police') {
+    txt = '<p>你拨了 110。</p><p>接线员听完，问你：江安医药，是高新区那个江安吗？</p><p>你说，是。</p>' +
+          '<p class="dim">然后是一段很长的静音。她说：这个号码，登记在我们内部线路上。</p>' +
+          '<p>你挂断了。你记下了她的工号。你把它写进承者簿。</p>';
+  } else if (a === 'public') {
+    txt = '<p>你把镜像打包，发到匿名区。</p><p>三分钟后，帖子标题变成：该用户不存在。</p>' +
+          '<p class="dim">又过了两分钟，你的账号注销了。</p>' +
+          '<p>平台上多了一条新帖：《有没有人认识陈默？》</p>';
+  } else {
+    txt = '<p>你在承者簿第七行，写下了自己的印。</p><p>18。</p>' +
+          '<p class="dim">系统提示：编号 0472 已启用。</p>' +
+          '<p>你入职那天，他们不用再等。</p>';
+  }
+  var box = document.querySelector('.endbox');
+  if (box) box.style.display = 'none';
+  push(feedHTML('会话结束', '镜像已断开', txt));
+  var f = document.createElement('div');
+  f.className = 'final';
+  f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次<br>承者：陈默';
+  document.querySelector('.wrap').appendChild(f);
+}
+
+document.getElementById('go').addEventListener('click', run);
+document.getElementById('q').addEventListener('keydown', function (e) { if (e.key === 'Enter') run(); });
+
+function run() {
+  var raw = document.getElementById('q').value;
+  var n = norm(raw);
+  if (!n) return;
+  document.getElementById('q').value = '';
+
+  var d = findPost(n);
+  if (!d) {
+    push(feedHTML('未命中', '', '<p class="dim">该关键词未在镜像中留下记录。</p>'));
+    return;
+  }
+  if (searched[n]) {
+    push(feedHTML(d.t, d.m, d.b.join('')));
+    return;
+  }
+  searched[n] = 1;
+  document.getElementById('hint').textContent = '镜像只回应它认识的词。已命中 ' + Object.keys(searched).length + ' 次。';
+  showPost(d);
+}
+
+document.getElementById('hint').textContent = '镜像只回应它认识的词。不认识的，不会给你任何回答。';
+document.getElementById('q').focus();
+</script>
+</body>
+</html>
