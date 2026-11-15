@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>信号</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0c0c0c; color: #8a8a8a; font-family: "Microsoft YaHei", monospace; }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 60px 18px; text-align: center; }
+  .label { font-size: 12px; letter-spacing: 3px; color: #4a4a4a; margin-bottom: 30px; }
+  .lamp { width: 90px; height: 90px; margin: 0 auto 36px; border-radius: 50%;
+          background: #1a0606; border: 2px solid #2a0a0a; transition: background .05s; }
+  .lamp.on { background: #ff1a1a; box-shadow: 0 0 40px rgba(255,0,0,.7); }
+  .note { font-size: 12px; color: #555; line-height: 2; }
+  .btn { margin-top: 26px; background: #181818; color: #777; border: 1px solid #2a2a2a;
+         padding: 8px 18px; font-family: inherit; font-size: 12px; cursor: pointer; }
+  .btn:hover { color: #aaa; border-color: #444; }
+  .chart { display: none; margin-top: 22px; font-size: 13px; color: #666; line-height: 2;
+           text-align: left; max-width: 320px; margin-left: auto; margin-right: auto; }
+  .chart table { border-collapse: collapse; width: 100%; }
+  .chart td { border: 1px solid #222; padding: 4px 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="label">— 老式收音机 · 只剩一点红光 —</div>
+  <div class="lamp" id="lamp"></div>
+  <div class="note">长亮 = 划（—）　短亮 = 点（·）<br>熄灭的间隔，分隔字母。</div>
+  <button class="btn" onclick="toggleChart()">查看摩斯对照表</button>
+  <button class="btn" onclick="playSound()" id="soundBtn">播放声音</button>
+  <div class="chart" id="chart">
+    <table>
+      <tr><td>A ·—</td><td>B —···</td><td>C —·—·</td><td>D —··</td></tr>
+      <tr><td>E ·</td><td>F ··—·</td><td>G ——·</td><td>H ····</td></tr>
+      <tr><td>I ··</td><td>J ·———</td><td>K —·—</td><td>L ·—··</td></tr>
+      <tr><td>M ——</td><td>N —·</td><td>O ———</td><td>P ·——·</td></tr>
+      <tr><td>Q ——·—</td><td>R ·—·</td><td>S ···</td><td>T —</td></tr>
+      <tr><td>U ··—</td><td>V ···—</td><td>W ·——</td><td>X —··—</td></tr>
+      <tr><td>Y —·——</td><td>Z ——··</td></tr>
+    </table>
+  </div>
+</div>
+<script>
+var lamp = document.getElementById('lamp');
+// S I X
+var seq = [
+  ['dot','dot','dot'], ['dot','dot'], ['dash','dot','dot','dash']
+];
+var dotMs = 220, dashMs = 600, gapIn = 220, gapLetter = 700, gapLoop = 2400;
+var i = 0, j = 0, phase = 'on', timer = null;
+
+function step() {
+  var letter = seq[i];
+  var sym = letter[j];
+  if (phase === 'on') {
+    lamp.className = 'lamp on';
+    timer = setTimeout(function () {
+      phase = 'off';
+      lamp.className = 'lamp';
+      timer = setTimeout(function () {
+        j++;
+        if (j < letter.length) { phase = 'on'; step(); }
+        else { j = 0; i++; if (i >= seq.length) { i = 0; timer = setTimeout(step, gapLoop); } else { timer = setTimeout(step, gapLetter); } }
+      }, gapIn);
+    }, sym === 'dot' ? dotMs : dashMs);
+  }
+}
+step();
+
+function toggleChart() {
+  var c = document.getElementById('chart');
+  c.style.display = c.style.display === 'block' ? 'none' : 'block';
+}
+
+var audioCtx = null;
+function playSound() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  var t0 = audioCtx.currentTime;
+  var idx = 0, off = 0;
+  seq.forEach(function (letter, li) {
+    letter.forEach(function (sym) {
+      var dur = sym === 'dot' ? 0.22 : 0.6;
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      o.type = 'sine'; o.frequency.value = 700;
+      g.gain.setValueAtTime(0.0001, t0 + off);
+      g.gain.exponentialRampToValueAtTime(0.2, t0 + off + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t0 + off); o.stop(t0 + off + dur + 0.02);
+      off += dur + 0.22;
+    });
+    off += 0.48;
+  });
+}
+</script>
+</body>
+</html>

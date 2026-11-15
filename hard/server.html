@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江安医药 · 服务器</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0a0c0e; color: #c8d8c8;
+         font-family: "Consolas", "Courier New", monospace; }
+  #term { max-width: 760px; margin: 0 auto; padding: 26px 18px 60px; min-height: 100vh; }
+  .line { white-space: pre-wrap; line-height: 1.6; font-size: 13px; }
+  .in { color: #7fb07f; }
+  .out { color: #b0c0b0; }
+  .warn { color: #c0a060; }
+  .boot { color: #5a6a5a; font-size: 12px; line-height: 1.7; }
+  .prow { display: flex; gap: 0; }
+  .prow .ps { color: #7fb07f; white-space: nowrap; }
+  input { background: transparent; border: none; outline: none; color: #c8d8c8;
+          font-family: inherit; font-size: 13px; flex: 1; caret-color: #7fb07f; }
+</style>
+</head>
+<body>
+<div id="term"></div>
+<script>
+var term = document.getElementById('term');
+
+function out(cls, txt) {
+  var d = document.createElement('div');
+  d.className = 'line ' + (cls || 'out');
+  d.textContent = txt;
+  term.appendChild(d);
+}
+
+var FS = {
+  '/': ['etc', 'var', 'home'],
+  '/etc': ['config', 'passwd'],
+  '/etc/config': 'V2_BUILD=2024-10-28\nLEGACY_BUILD=2024-08-15\n# 系统内所有日期字段取对外公告日\n# v1.9.4 密码 = jianganyiliao + LEGACY_BUILD\n',
+  '/etc/passwd': 'admin:x:1000:1000:,,,:/home/admin:/bin/sh\nzhouming:x:1001:1001:,,,:/home/zhouming:/bin/sh\n',
+  '/var': ['log'],
+  '/var/log': ['clean.log', 'sys.log'],
+  '/var/log/clean.log': '2022-10-21 02:00 清洗批次（C-2024-11 前身）\n[NULL] 覆盖记录：源=0471，目标=空编号\n[NULL] 补录失败：姓名字段永久缺失\n# 该记录已封存\n',
+  '/var/log/sys.log': '2024-11-11 03:14:07 0471 转入受试者名单\n2024-11-11 03:14:07 账号注销\n',
+  '/home': ['zhouming'],
+  '/home/zhouming': ['note.txt'],
+  '/home/zhouming/note.txt': '小陈：\n我可能是第 6 次。\n如果我回不来了，记住编号 0471。\n—— 舅舅\n'
+};
+var DIRS = { '/': '', '/etc': '', '/var': '', '/var/log': '', '/home': '', '/home/zhouming': '' };
+
+var cwd = '/';
+var unlocked = false;
+
+function resolve(p) {
+  if (p === '/') return '/';
+  var parts = [];
+  var base = p.startsWith('/') ? '' : cwd;
+  (base + '/' + p).split('/').forEach(function (s) {
+    if (s === '' || s === '.') return;
+    if (s === '..') parts.pop();
+    else parts.push(s);
+  });
+  return '/' + parts.join('/');
+}
+function normPath(p) {
+  var r = resolve(p).replace(/\/+/g, '/');
+  if (r.length > 1 && r.endsWith('/')) r = r.slice(0, -1);
+  return r || '/';
+}
+function ls(p) {
+  var path = normPath(p);
+  if (Array.isArray(FS[path])) return FS[path].join('  ');
+  if (typeof FS[path] === 'string') return path.split('/').pop();
+  return null;
+}
+function cat(p) {
+  var path = normPath(p);
+  return typeof FS[path] === 'string' ? FS[path] : null;
+}
+
+function run(cmd) {
+  var parts = cmd.trim().split(/\s+/);
+  var c = parts[0];
+  var arg = parts[1] || '';
+  if (c === 'help' || c === '?') {
+    out('out', '可用命令：ls [路径]   cat <文件>   cd <目录>   pwd   clear   verify <校验码>');
+  } else if (c === 'ls') {
+    var r = ls(arg);
+    out('out', r === null ? 'ls: 无此文件或目录' : r);
+  } else if (c === 'cat') {
+    var r = cat(arg);
+    out('out', r === null ? 'cat: 无此文件' : r);
+  } else if (c === 'cd') {
+    var target = normPath(arg);
+    if (DIRS.hasOwnProperty(target)) { cwd = target; }
+    else out('out', 'cd: 无此目录');
+  } else if (c === 'pwd') {
+    out('out', cwd);
+  } else if (c === 'clear') {
+    term.innerHTML = '';
+  } else if (c === 'verify') {
+    if (arg === '220471') {
+      unlocked = true;
+      out('warn', '校验通过。会话已标记为「异常输入源」。处理方式：');
+      out('warn', '  归档 ->  9a3f1c7e.html');
+      out('warn', '  外传 ->  c47b0d92.html');
+      out('warn', '  退出 ->  e1b83a56.html');
+      try { sessionStorage.setItem('ja_ending_ok', '1'); } catch (e) {}
+    } else {
+      out('out', 'verify: 校验码错误。');
+    }
+  } else {
+    out('out', 'command not found: ' + c);
+  }
+}
+
+out('boot', 'JIANGAN-PHARMA · 运维节点 2\n');
+out('boot', '连接已建立。最后登录：2022-10-19 22:15（终端 3F 观察室）\n');
+out('boot', '输入 help 开始。\n');
+
+var prow = document.createElement('div');
+prow.className = 'prow';
+var ps = document.createElement('span');
+ps.className = 'ps';
+var input = document.createElement('input');
+input.autocomplete = 'off';
+input.spellcheck = false;
+prow.appendChild(ps);
+prow.appendChild(input);
+term.appendChild(prow);
+
+function refreshPrompt() { ps.textContent = 'jiangansrv:' + cwd + '$ '; }
+refreshPrompt();
+
+input.addEventListener('keydown', function (e) {
+  if (e.key !== 'Enter') return;
+  var v = input.value;
+  input.value = '';
+  // 回显命令行
+  var echo = document.createElement('div');
+  echo.className = 'line in';
+  echo.textContent = 'jiangansrv:' + cwd + '$ ' + v;
+  term.insertBefore(echo, prow);
+  if (v.trim() !== '') run(v);
+  refreshPrompt();
+  input.focus();
+  window.scrollTo(0, document.body.scrollHeight);
+});
+input.focus();
+</script>
+</body>
+</html>

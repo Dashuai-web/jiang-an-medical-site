@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f2ed; color: #333; font-family: "SimSun", "Microsoft YaHei", serif;
+         min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .box { max-width: 560px; padding: 40px; text-align: center; line-height: 2; }
+  .code { font-size: 40px; color: #bbb; letter-spacing: 4px; }
+  .msg { font-size: 14px; color: #777; margin-top: 10px; }
+  .frag { background: #fff; border: 1px solid #ddd; padding: 20px 26px; text-align: left;
+          font-size: 14px; color: #333; line-height: 2; margin-top: 20px; display: none; }
+  .frag .t { font-weight: bold; color: #8a2020; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="code">404</div>
+  <div class="msg" id="msg">该页面不存在。也许它从未存在过。</div>
+  <div class="frag" id="frag"></div>
+</div>
+<script>
+var p = location.pathname.toLowerCase().replace(/^\/+|\/+$/g, '');
+var frag = null;
+if (p.indexOf('0471') !== -1) {
+  frag = { t: '编号 0471', b: '原使用者：周明（行政部）。<br>2022-10-19 死亡注销。<br>编号封存 24 个月，于 2024-01-15 重新分配。<br><span style="color:#a00;">该编号在承者簿上排第 6 位。</span>' };
+} else if (p.indexOf('2022-10-19') !== -1 || p.indexOf('aq') !== -1 || p.indexOf('accident') !== -1) {
+  frag = { t: '事故编号 AQ-2022-10-19', b: '原始：药物不良反应 / 临床试验中心观察室 3 号。<br>修订（2022-10-21）：突发意外 / 办公楼三层。<br>修订人：NULL。复核：无。' };
+} else if (p.indexOf('server.log') !== -1) {
+  frag = { t: 'server.log · 片段', b: '「检测到记录冲突，执行覆盖。源：0471，目标：空编号。」<br>「该记录已封存。」<br>「日志末尾签名：NULL」' };
+} else if (p.indexOf('six') !== -1 || p.indexOf('sixth') !== -1) {
+  frag = { t: '第六次', b: '第 6 次：0471，行政部。<br>仪式日期：2022-10-19。<br><span style="color:#a00;">下一个，是第 7 次。</span>' };
+} else if (p.indexOf('five') !== -1 || p.indexOf('fifth') !== -1) {
+  frag = { t: '第五次', b: '第 5 次：0468，生产部。<br>仪式日期：2020-10-19。' };
+}
+if (frag) {
+  document.getElementById('msg').style.display = 'none';
+  var f = document.getElementById('frag');
+  f.style.display = 'block';
+  f.innerHTML = '<div class="t">' + frag.t + '</div>' + frag.b;
+}
+</script>
+</body>
+</html>

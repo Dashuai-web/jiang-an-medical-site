@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江安医药 · 员工之家</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f2ed; color: #333; font-family: "Microsoft YaHei", "SimSun", sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+  .top { border-bottom: 2px solid #1a4a8a; padding-bottom: 10px; margin-bottom: 18px; }
+  .top .t { font-size: 20px; font-weight: bold; color: #1a4a8a; }
+  .top .s { font-size: 12px; color: #999; margin-top: 4px; }
+  .board { background: #fff; border: 1px solid #ddd; }
+  .board .h { background: #eef3fa; padding: 8px 12px; font-size: 13px; font-weight: bold; border-bottom: 1px solid #ddd; }
+  .thread { padding: 11px 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .thread:last-child { border-bottom: none; }
+  .thread .ti { font-size: 14px; color: #1a4a8a; }
+  .thread .meta { font-size: 11px; color: #aaa; margin-top: 3px; }
+  .thread.dead .ti { color: #bbb; }
+  .thread.dead { cursor: not-allowed; }
+  .sticky { background: #fffbea; }
+  .sticky .ti::before { content: "【置顶】"; color: #c0392b; }
+  .toast { position: fixed; left: 50%; top: 30%; transform: translateX(-50%);
+           background: #222; color: #eee; padding: 12px 22px; border-radius: 4px;
+           font-size: 13px; display: none; z-index: 50; }
+  .post { background: #fff; border: 1px solid #ddd; padding: 18px; line-height: 1.9; font-size: 14px; display: none; }
+  .post .rp { padding: 9px 0; border-top: 1px dotted #ddd; font-size: 13px; color: #555; }
+  .post .rp b { color: #1a4a8a; font-weight: normal; }
+  .back { display: inline-block; margin-top: 14px; color: #1a4a8a; text-decoration: none; font-size: 13px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="t">江安医药 · 员工之家</div>
+    <div class="s">内部论坛（已停止维护，仅读）· 最后更新 2023-01-06</div>
+  </div>
+
+  <div class="board" id="list">
+    <div class="h">全部主题</div>
+    <div class="thread sticky live" data-live="1"><div><div class="ti">关于受试者项目，内部人说几句</div><div class="meta">8 回复 · 2022-09-30</div></div></div>
+    <div class="thread dead"><div><div class="ti">食堂周四菜单</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">B 座电梯检修</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">工牌丢了哪里补办</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">体检报告什么时候出</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">新系统登录不了</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">实习生宿舍分配</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">中秋礼品什么时候发</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">离职交接流程</div><div class="meta">该主题已被删除</div></div></div>
+    <div class="thread dead"><div><div class="ti">有没有拼车的</div><div class="meta">该主题已被删除</div></div></div>
+  </div>
+
+  <div class="post" id="post">
+    <div class="ti" style="font-size:16px;font-weight:bold;color:#1a4a8a;margin-bottom:10px;">关于受试者项目，内部人说几句</div>
+    <p>楼主（匿名）：公司那个受试者项目，劝大家别报名。补贴看着多，进去容易出来难。</p>
+    <div class="rp"><b>1楼：</b>你参加过？</div>
+    <div class="rp"><b>2楼：</b>我就问一句，你们听过「承者」这个词吗？</div>
+    <div class="rp"><b>3楼：</b>没有，那是啥？</div>
+    <div class="rp"><b>4楼：</b>你们去系统里搜一下就知道了——虽然搜出来的可能不是你们想要的。</div>
+    <div class="rp"><b>5楼：</b>该回复已被删除。</div>
+    <div class="rp"><b>6楼（2021 年前的缓存）：</b>2021 年 6 月之后，公司把文档里所有「承者」都换成了「受试者」。</div>
+    <div class="rp"><b>7楼：</b>楼上在说啥？</div>
+    <div class="rp"><b>8楼（最后一条）：</b>记住这两个字就够了。<b style="color:#c0392b;">承者</b>。</div>
+    <a class="back" onclick="backToList()">← 返回列表</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">该主题不存在（404）。</div>
+
+<script>
+var toast = document.getElementById('toast');
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(function () { toast.style.display = 'none'; }, 1600);
+}
+document.querySelectorAll('.thread.dead').forEach(function (el) {
+  el.addEventListener('click', function () { showToast('该主题不存在（404）。'); });
+});
+document.querySelector('.thread.live').addEventListener('click', function () {
+  document.getElementById('list').style.display = 'none';
+  document.getElementById('post').style.display = 'block';
+});
+function backToList() {
+  document.getElementById('post').style.display = 'none';
+  document.getElementById('list').style.display = 'block';
+}
+</script>
+</body>
+</html>

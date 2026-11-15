@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江安医药 · 攻略文档</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f5f3ec; color: #2a2a2a; font-family: "Microsoft YaHei", sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 30px 18px 80px; }
+  h1 { font-size: 24px; margin: 0 0 6px; }
+  .sub { font-size: 13px; color: #888; margin-bottom: 22px; }
+  .tabs { display: flex; gap: 10px; margin-bottom: 22px; border-bottom: 2px solid #ddd; }
+  .tab { padding: 10px 22px; cursor: pointer; font-size: 15px; color: #666;
+         border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0; }
+  .tab.active { background: #fff; border-color: #ddd; color: #1a4a8a; font-weight: bold; margin-bottom: -2px; }
+  .pane { display: none; background: #fff; border: 1px solid #ddd; border-radius: 0 6px 6px 6px; padding: 22px; }
+  .pane.active { display: block; }
+  details { border: 1px solid #e5e5e5; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+  summary { padding: 12px 16px; cursor: pointer; font-weight: bold; font-size: 14px; background: #faf8f2; }
+  details[open] summary { border-bottom: 1px solid #eee; }
+  .inner { padding: 14px 18px; font-size: 13.5px; line-height: 2; color: #333; }
+  .inner h4 { margin: 16px 0 6px; color: #8a2020; font-size: 14px; }
+  .inner p { margin: 0 0 10px; }
+  code { background: #f0eee6; border: 1px solid #e0ddd0; border-radius: 3px; padding: 1px 6px;
+         font-family: Consolas, monospace; font-size: 13px; color: #8a2020; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0 14px; font-size: 13px; }
+  th, td { border: 1px solid #e2e2e2; padding: 7px 10px; text-align: left; }
+  th { background: #f6f4ec; }
+  .warn { background: #fff8e8; border-left: 3px solid #d0a030; padding: 8px 12px; margin: 10px 0; font-size: 13px; }
+  .kw { display: inline-block; background: #eef3fa; color: #1a4a8a; border-radius: 3px; padding: 1px 7px; margin: 2px; font-size: 12px; }
+  @media (max-width: 720px) { .tab { padding: 9px 14px; font-size: 14px; } .pane { padding: 14px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>江安医药 · 攻略文档</h1>
+  <div class="sub">普通版与困难版的完整解谜过程。建议卡住了再看。</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="sw(0,this)">普通版</div>
+    <div class="tab" onclick="sw(1,this)">困难版</div>
+  </div>
+
+  <!-- ===================== 普通版 ===================== -->
+  <div class="pane active" id="pane0">
+    <details open>
+      <summary>① 密码速查</summary>
+      <div class="inner">
+        <table>
+          <tr><th>用途</th><th>账号</th><th>密码</th><th>来源</th></tr>
+          <tr><td>v2.0 内部系统</td><td>admin</td><td><code>jianganyiliao20241028</code></td><td>新闻中心 v2.0 上线通知的日期 2024-10-28</td></tr>
+          <tr><td>v1.9.4 门户</td><td>admin</td><td><code>jianganyiliao20240815</code></td><td>系统信息页「上一版本升级完成日期」2024-08-15</td></tr>
+          <tr><td>暗网仪式文件</td><td>—</td><td><code>31415918</code></td><td>承者簿六位印 314159 + 入职日 18</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary>② 主线流程</summary>
+      <div class="inner">
+        <p>1. 首页「入职前夜」→ 匿名区登录（点一下即可）→ 付费帖拿规则：<code>jianganyiliao</code> + 升级完成日期。</p>
+        <p>2. 官网「新闻中心」→ v2.0 上线通知 → 日期 <code>2024-10-28</code> → 登录页。</p>
+        <p>3. v2.0 登录 <code>jianganyiliao20241028</code> → 系统管理「系统信息」→ 上一版本完成日期 <code>2024-08-15</code> → 页脚小字进 v1.9.4 预览。</p>
+        <p>4. v1.9.4 登录 <code>jianganyiliao20240815</code> → 进入门户。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>③ 门户通关：15 词 + 5 个关键记录</summary>
+      <div class="inner">
+        <p>同时满足：<b>本次会话搜过 15 个不同词</b> + <b>触发 5 个关键 flag</b>。</p>
+        <p>5 个关键 flag 对应的词：<span class="kw">0471</span><span class="kw">药物不良反应</span><span class="kw">修改日志</span><span class="kw">受试者名单</span><span class="kw">锁定</span></p>
+        <p>推荐 15 词：</p>
+        <p><span class="kw">0471</span><span class="kw">事故</span><span class="kw">修改日志</span><span class="kw">药物不良反应</span><span class="kw">给药记录</span><span class="kw">SAE</span><span class="kw">受试者名单</span><span class="kw">入组</span><span class="kw">锁定</span><span class="kw">账号注销</span><span class="kw">知情同意书</span><span class="kw">空编号</span><span class="kw">调试日志</span><span class="kw">待归类</span><span class="kw">我的访问记录</span></p>
+        <p>搜满后，搜「我的访问记录」，底部出现三个按钮。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>④ 三个结局</summary>
+      <div class="inner">
+        <p>归档 / 外传 / 退出。归档与退出到此为止；只有「外传」会继续。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>⑤ 外传之后：报纸 → 暗网</summary>
+      <div class="inner">
+        <p>外传 → 社会性注销 → 血字「你以为这就结束了吗？」→ 江安日报 → 评论区张青留言 → 点匿名回复里的「镜像 0x7F」。</p>
+        <p>暗网门槛：层级 1→2 需 <b>10 次</b>命中；2→3 需 <b>22 次</b>且搜过「承者簿」「印」；3→4 需 <b>30 次</b>且解开密钥。</p>
+        <p>密钥 <code>31415918</code>：承者簿六位印 314159 + 第七位承者入职日 2024-11-18 的「18」。</p>
+        <p>层级 4 看完「陈默」「第七位」→ 三选结尾。</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== 困难版 ===================== -->
+  <div class="pane" id="pane1">
+    <details open>
+      <summary>① 六个载体的解法</summary>
+      <div class="inner">
+        <h4>旧电脑（hard/desktop.html）</h4>
+        <p>双击图标开窗口。收获：<code>0471</code>（备忘录）、<code>AQ-2022-10-19</code>（回收站邮件）、"密码规则在服务器 /etc/config"（江安备份）。</p>
+        <h4>服务器终端（hard/server.html）</h4>
+        <p>命令：<code>help</code> <code>ls</code> <code>cat</code> <code>cd</code> <code>pwd</code> <code>verify</code>。</p>
+        <p><code>cat /etc/config</code> → <code>LEGACY_BUILD=2024-08-15</code>（v1.9.4 密码日期）。<code>ls /var/log</code> + <code>cat clean.log</code> 是剧情。</p>
+        <h4>图片（hard/notice.html）</h4>
+        <p>招聘启事底部有极淡的日期 <code>2024年10月28日</code>（放大/反色可见）；工牌上是工号 <code>0471</code>。</p>
+        <h4>摩斯（hard/signal.html）</h4>
+        <p>红光闪烁，长=划、短=点。解码得 <code>S I X</code> —— 第六次。</p>
+        <h4>404 藏线索</h4>
+        <p>把关键词打进网址：<code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>、<code>/five</code>。</p>
+        <h4>假论坛（hard/forum.html）</h4>
+        <p>9 个死帖，1 个置顶帖。置顶帖 6 楼/8 楼点出：「承者」=「受试者」。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>② 密码速查（来源不同）</summary>
+      <div class="inner">
+        <table>
+          <tr><th>用途</th><th>密码</th><th>困难版来源</th></tr>
+          <tr><td>v2.0</td><td><code>jianganyiliao20241028</code></td><td>图片里招聘启事的日期</td></tr>
+          <tr><td>v1.9.4</td><td><code>jianganyiliao20240815</code></td><td>服务器 <code>cat /etc/config</code></td></tr>
+          <tr><td>暗网仪式</td><td><code>31415918</code></td><td>同普通版，承者簿 + 入职日</td></tr>
+        </table>
+      </div>
+    </details>
+
+    <details>
+      <summary>③ 门户（困难版）：25 词 + 6 flag → 校验码</summary>
+      <div class="inner">
+        <p>门槛提高到 <b>25 个不同词</b>，关键 flag 变成 <b>6 个</b>（多一个 <span class="kw">受试者招募</span>）。公告列表和快捷搜索被隐藏。</p>
+        <p>搜满后「我的访问记录」不再给按钮，而是显示校验码 <code>220471</code>。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>④ 服务器 verify 解锁结局</summary>
+      <div class="inner">
+        <p>回到服务器终端，输入 <code>verify 220471</code> → 列出三个结局链接（归档/外传/退出）。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>⑤ 暗网（困难版）：14 / 30 / 42</summary>
+      <div class="inner">
+        <p>层级门槛提高到 <b>14 / 30 / 42</b> 次命中，解锁提示不再列出关键词，只能靠已读内容自己推。</p>
+        <p>密钥与结局和普通版一致。</p>
+      </div>
+    </details>
+
+    <div class="warn">困难版不改变剧情，只改变「拿到线索的方式」和「门槛」。所有密码、结局、真相与普通版相同。</div>
+  </div>
+</div>
+
+<script>
+function sw(i, el) {
+  var tabs = document.querySelectorAll('.tab');
+  for (var j = 0; j < tabs.length; j++) tabs[j].className = 'tab';
+  el.className = 'tab active';
+  var panes = document.querySelectorAll('.pane');
+  for (var k = 0; k < panes.length; k++) panes[k].className = 'pane';
+  document.getElementById('pane' + i).className = 'pane active';
+}
+</script>
+</body>
+</html>

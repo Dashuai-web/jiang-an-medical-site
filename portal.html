@@ -383,10 +383,16 @@ var database = {
 
 var LOCKED_MSG = '<p>该操作需由系统在会话结束时自动执行。</p><p class="meta">当前会话状态：待归类。</p>';
 
+var HARD = false;
+try { HARD = sessionStorage.getItem('ja_mode') === 'hard'; } catch (e) {}
+
 function isUnlocked() {
   var list = Object.keys(state.searched);
-  if (list.length < 15) return false;
-  var keyFlags = ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock'];
+  var need = HARD ? 25 : 15;
+  if (list.length < need) return false;
+  var keyFlags = HARD
+    ? ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock', 'sawRecruit']
+    : ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock'];
   for (var i = 0; i < keyFlags.length; i++) { if (!hasFlag(keyFlags[i])) return false; }
   return true;
 }
@@ -452,12 +458,18 @@ function buildLog() {
   var unlocked = (uniqueCount >= 15 && keyCount >= 5);
 
   if (unlocked) {
-    html += '<p>检测到异常输入源。建议处理方式：</p>';
-    html += '<div style="margin-top:14px;">';
-    html += '<button class="action-btn" onclick="location.href=\'ending_archive.html\'">归档</button>';
-    html += '<button class="action-btn" onclick="location.href=\'ending_spread.html\'">外传</button>';
-    html += '<button class="action-btn" onclick="location.href=\'ending_silent.html\'">退出</button>';
-    html += '</div>';
+    if (HARD) {
+      html += '<p class="alert">检测到异常输入源。</p>';
+      html += '<p>校验码：<strong style="font-size:20px;letter-spacing:3px;color:#a00;">220471</strong></p>';
+      html += '<p class="meta">将该校验码带回服务器终端，执行 verify。</p>';
+    } else {
+      html += '<p>检测到异常输入源。建议处理方式：</p>';
+      html += '<div style="margin-top:14px;">';
+      html += '<button class="action-btn" onclick="location.href=\'9a3f1c7e.html\'">归档</button>';
+      html += '<button class="action-btn" onclick="location.href=\'c47b0d92.html\'">外传</button>';
+      html += '<button class="action-btn" onclick="location.href=\'e1b83a56.html\'">退出</button>';
+      html += '</div>';
+    }
   }
 
   return html;
@@ -578,6 +590,16 @@ for (var i = 0; i < notices.length; i++) {
     try { (function () { debugger; })(); } catch (e) {}
     if (performance.now() - t > 150) mark();
   }, 1500);
+})();
+</script>
+<script>
+(function () {
+  var H = false;
+  try { H = sessionStorage.getItem('ja_mode') === 'hard'; } catch (e) {}
+  if (!H) return;
+  var q = document.querySelector('.quick'); if (q) q.style.display = 'none';
+  var nl = document.querySelector('.notice-list');
+  if (nl && nl.parentNode) nl.parentNode.style.display = 'none';
 })();
 </script>
 </body>

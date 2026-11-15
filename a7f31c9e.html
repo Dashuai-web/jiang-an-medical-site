@@ -135,6 +135,8 @@ var DATA=_d('MRpMDENUMUNeU1ZfSDxCRRVMUEOJ2/eL5dZOV1VZW0GL/P+I/teGydGL1/RMS0MDSFt
 
 var STAGE_TOTAL = 3 + 9 + 6 + 4;
 var stage = 1;
+var HARD = false;
+try { HARD = sessionStorage.getItem('ja_mode') === 'hard'; } catch (e) {}
 var searched = {};
 var seen = {};
 var unlockedLock = false;
@@ -226,17 +228,17 @@ function tryUnlock() {
 
 function checkStage() {
   var n = Object.keys(searched).length;
-  if (stage === 1 && n >= 10) {
+  if (stage === 1 && n >= (HARD ? 14 : 10)) {
     stage = 2;
-    sysMsg('镜像更新：命中未索引记录 3 条。<br>可检索：承者簿 / 命名规则 / 印 / 第七次 / 气运');
+    sysMsg(HARD ? '镜像更新：出现了新的记录。' : '镜像更新：命中未索引记录 3 条。<br>可检索：承者簿 / 命名规则 / 印 / 第七次 / 气运');
     document.getElementById('stageLabel').textContent = '层级 2';
-  } else if (stage === 2 && n >= 22 && searched['承者簿'] && searched['印']) {
+  } else if (stage === 2 && n >= (HARD ? 30 : 22) && searched['承者簿'] && searched['印']) {
     stage = 3;
-    sysMsg('镜像更新：发现加密文件 1 份。<br>可检索：仪式（需密钥）');
+    sysMsg(HARD ? '镜像更新：出现了一个加密文件。' : '镜像更新：发现加密文件 1 份。<br>可检索：仪式（需密钥）');
     document.getElementById('stageLabel').textContent = '层级 3';
-  } else if (stage === 3 && unlockedLock && n >= 30) {
+  } else if (stage === 3 && unlockedLock && n >= (HARD ? 42 : 30)) {
     stage = 4;
-    sysMsg('镜像更新：底层目录已开放。<br>可检索：安祭 / 周明 / 0472 / 陈默');
+    sysMsg(HARD ? '镜像更新：底层目录已开放。' : '镜像更新：底层目录已开放。<br>可检索：安祭 / 周明 / 0472 / 陈默');
     document.getElementById('stageLabel').textContent = '层级 4';
   } else if (stage === 4 && !finished && seen['承者簿 · 第 7 条'] && seen['第七位']) {
     finished = true;
