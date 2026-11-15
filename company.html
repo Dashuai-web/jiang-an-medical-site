@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>江安医药科技有限公司</title>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #fff; margin: 0; padding: 0; }
@@ -30,22 +31,49 @@
   .side-box h4 { margin: 0 0 10px; font-size: 14px; color: #1a6b4a; }
   .side-box p { margin: 6px 0; font-size: 13px; color: #666; line-height: 1.7; }
   .footer { background: #f5f5f5; border-top: 1px solid #e0e0e0; padding: 20px 0; text-align: center; font-size: 12px; color: #999; margin-top: 40px; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688XXX</span></div>
+  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688417</span></div>
 </div>
 <div class="header"><div class="logo">江安医药<span>JIANGAN PHARMA</span></div></div>
 <div class="nav">
   <div class="nav-inner">
     <a href="company.html" class="active">首页</a>
-    <a href="#">关于我们</a>
+    <a href="corp.html?p=about">关于我们</a>
     <a href="news.html">新闻中心</a>
-    <a href="#">产品研发</a>
-    <a href="#">临床试验</a>
-    <a href="#">加入我们</a>
-    <a href="#">联系我们</a>
+    <a href="corp.html?p=products">产品研发</a>
+    <a href="corp.html?p=clinical">临床试验</a>
+    <a href="corp.html?p=careers">加入我们</a>
+    <a href="corp.html?p=contact">联系我们</a>
   </div>
 </div>
 <div class="banner">
@@ -56,11 +84,11 @@
   <div class="main-col">
     <div class="section-title">新闻中心</div>
     <div class="news-item"><a href="news.html">关于新信息系统 v2.0 上线的通知</a><span class="date">2024-10-28</span></div>
-    <div class="news-item"><a href="#">2024年度员工体检安排通知</a><span class="date">2024-10-15</span></div>
-    <div class="news-item"><a href="#">关于开展消防安全演练的通知</a><span class="date">2024-10-08</span></div>
-    <div class="news-item"><a href="#">第三季度工作总结会议纪要</a><span class="date">2024-09-28</span></div>
-    <div class="news-item"><a href="#">关于规范办公用品申领流程的通知</a><span class="date">2024-09-15</span></div>
-    <div class="news-item"><a href="#">2024年中秋节放假安排</a><span class="date">2024-09-01</span></div>
+    <div class="news-item"><a href="news.html?n=n2">2024年度员工体检安排通知</a><span class="date">2024-10-15</span></div>
+    <div class="news-item"><a href="news.html?n=n3">关于开展消防安全演练的通知</a><span class="date">2024-10-08</span></div>
+    <div class="news-item"><a href="news.html?n=n4">第三季度工作总结会议纪要</a><span class="date">2024-09-28</span></div>
+    <div class="news-item"><a href="news.html?n=n5">关于规范办公用品申领流程的通知</a><span class="date">2024-09-15</span></div>
+    <div class="news-item"><a href="news.html?n=n6">2024年中秋节放假安排</a><span class="date">2024-09-01</span></div>
   </div>
   <div class="side-col">
     <div class="side-box">
@@ -69,12 +97,12 @@
     </div>
     <div class="side-box">
       <h4>联系我们</h4>
-      <p>地址：XX市XX区XX路88号</p>
-      <p>电话：0571-8888XXXX</p>
+      <p>地址：浙江省杭州市滨江区江陵路1688号</p>
+      <p>电话：0571-8663 2518</p>
       <p>邮箱：info@jiangan-pharma.com</p>
     </div>
   </div>
 </div>
-<div class="footer">江安医药科技有限公司 &copy; 2015-2024 &nbsp;|&nbsp; 浙ICP备XXXXXXXX号</div>
+<div class="footer">江安医药科技有限公司 &copy; 2015-2024 &nbsp;|&nbsp; 浙ICP备2015028471号-2</div>
 </body>
 </html>

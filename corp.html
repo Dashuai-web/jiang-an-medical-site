@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>江安医药科技有限公司</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #fff; margin: 0; padding: 0; }
+  .topbar { background: #f5f5f5; border-bottom: 1px solid #e0e0e0; padding: 6px 0; font-size: 12px; color: #888; }
+  .topbar-inner { max-width: 960px; margin: 0 auto; padding: 0 14px; display: flex; justify-content: space-between; }
+  .header { max-width: 960px; margin: 0 auto; padding: 24px 14px 16px; }
+  .logo { font-size: 24px; font-weight: bold; color: #1a6b4a; letter-spacing: 2px; }
+  .logo span { font-size: 12px; color: #999; font-weight: normal; margin-left: 10px; letter-spacing: 0; }
+  .nav { background: #1a6b4a; }
+  .nav-inner { max-width: 960px; margin: 0 auto; display: flex; overflow-x: auto; }
+  .nav-inner a { color: #fff; text-decoration: none; padding: 12px 28px; font-size: 14px; display: block; white-space: nowrap; }
+  .nav-inner a:hover, .nav-inner a.active { background: #14553a; }
+  .content { max-width: 960px; margin: 30px auto; padding: 0 14px; }
+  .breadcrumb { font-size: 12px; color: #999; margin-bottom: 20px; }
+  .breadcrumb a { color: #1a6b4a; text-decoration: none; }
+  .page-title { font-size: 22px; font-weight: bold; color: #1a6b4a; border-bottom: 2px solid #1a6b4a; padding-bottom: 12px; margin-bottom: 22px; }
+  .art { line-height: 2.1; font-size: 14px; color: #444; max-width: 760px; }
+  .art p { margin: 0 0 14px; }
+  .art h3 { font-size: 15px; color: #1a6b4a; margin: 24px 0 10px; }
+  .art ul { padding-left: 22px; margin: 0 0 14px; }
+  .art li { margin-bottom: 8px; }
+  .grid { display: flex; gap: 18px; flex-wrap: wrap; }
+  .g-card { flex: 1 1 260px; border: 1px solid #e6e6e6; padding: 18px; background: #fafcfb; }
+  .g-card h4 { margin: 0 0 8px; font-size: 14px; color: #1a6b4a; }
+  .g-card p { margin: 0; font-size: 13px; color: #666; line-height: 1.9; }
+  .info-table { border-collapse: collapse; width: 100%; max-width: 760px; }
+  .info-table th, .info-table td { border: 1px solid #e2e2e2; padding: 10px 14px; text-align: left; font-size: 13px; }
+  .info-table th { background: #f4f8f6; width: 140px; color: #1a6b4a; font-weight: normal; }
+  .footer { background: #f5f5f5; border-top: 1px solid #e0e0e0; padding: 20px 14px; text-align: center; font-size: 12px; color: #999; margin-top: 40px; line-height: 1.9; }
+  @media (max-width: 720px) {
+    .nav-inner a { padding: 11px 15px; font-size: 13px; }
+    .page-title { font-size: 19px; }
+    .content { margin: 20px auto; }
+    .info-table th { width: 96px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688417</span></div>
+</div>
+<div class="header"><div class="logo">江安医药<span>JIANGAN PHARMA</span></div></div>
+<div class="nav">
+  <div class="nav-inner">
+    <a href="company.html">首页</a>
+    <a href="corp.html?p=about" data-p="about">关于我们</a>
+    <a href="news.html">新闻中心</a>
+    <a href="corp.html?p=products" data-p="products">产品研发</a>
+    <a href="corp.html?p=clinical" data-p="clinical">临床试验</a>
+    <a href="corp.html?p=careers" data-p="careers">加入我们</a>
+    <a href="corp.html?p=contact" data-p="contact">联系我们</a>
+  </div>
+</div>
+<div class="content">
+  <div class="breadcrumb"><a href="company.html">首页</a> &gt; <span id="crumb">关于我们</span></div>
+  <div class="page-title" id="pageTitle">关于我们</div>
+  <div class="art" id="art"></div>
+</div>
+<div class="footer">
+  江安医药科技有限公司 &copy; 2015-2024 &nbsp;|&nbsp; 浙江省杭州市滨江区江陵路1688号 &nbsp;|&nbsp; 浙ICP备2015028471号-2<br>
+  互联网药品信息服务资格证书：（浙）-非经营性-2021-0086
+</div>
+<script>
+var SECTIONS = {
+  about: {
+    title: '关于我们',
+    html: '<p>江安医药科技有限公司成立于 2015 年，总部位于浙江省杭州市滨江区，是一家以仿制药研发与临床药物试验服务为主营业务的医药科技企业。</p>'
+      + '<p>公司现有员工 320 余人，其中研发与临床研究相关人员占比 45%。下设药物研究院、临床试验中心、质量与注册部、生产管理部等 8 个职能部门。</p>'
+      + '<h3>发展历程</h3><ul>'
+      + '<li>2015 年：公司注册成立，首个仿制药项目立项。</li>'
+      + '<li>2017 年：取得《药品生产许可证》，建成口服固体制剂车间。</li>'
+      + '<li>2019 年：临床试验中心通过备案，具备 I 期临床试验承接资质。</li>'
+      + '<li>2021 年：通过国家高新技术企业认定。</li>'
+      + '<li>2023 年：累计完成 12 个仿制药品种的一致性评价。</li>'
+      + '<li>2024 年：信息化系统升级至 v2.0。</li></ul>'
+      + '<h3>资质与荣誉</h3>'
+      + '<p>国家高新技术企业、浙江省科技型中小企业、杭州市企业技术中心、药物临床试验机构备案单位（备案号：药临备 2019-0331）。</p>'
+  },
+  products: {
+    title: '产品研发',
+    html: '<p>公司聚焦心血管、内分泌、抗感染三大治疗领域，在研及已上市品种 26 个。</p>'
+      + '<div class="grid">'
+      + '<div class="g-card"><h4>心血管类</h4><p>XX 片（5mg/10mg）——已完成一致性评价，2022 年上市。</p></div>'
+      + '<div class="g-card"><h4>内分泌类</h4><p>XX 缓释胶囊（0.5g）——处于 BE 试验阶段。</p></div>'
+      + '<div class="g-card"><h4>抗感染类</h4><p>XX 注射液（0.25g）——已完成 I 期临床，待申报。</p></div>'
+      + '</div>'
+      + '<h3>研发平台</h3>'
+      + '<p>药物研究院设有制剂研究室、分析检测室、稳定性考察室，配备高效液相色谱仪、溶出度测定仪等设备 60 余台（套）。</p>'
+      + '<h3>质量体系</h3>'
+      + '<p>公司按 GMP 要求建立质量管理体系，2023 年通过省级药品监管部门飞行检查。</p>'
+  },
+  clinical: {
+    title: '临床试验',
+    html: '<p>临床试验中心位于公司园区 B 座三层，建筑面积约 1200 平方米，设有观察室 6 间、给药室 2 间、样本处理室 1 间、受试者接待室 1 间。</p>'
+      + '<h3>承接范围</h3><ul>'
+      + '<li>仿制药一致性评价生物等效性（BE）试验</li>'
+      + '<li>I 期耐受性与药代动力学试验</li>'
+      + '<li>药物相互作用研究</li></ul>'
+      + '<h3>受试者管理</h3>'
+      + '<p>中心建立受试者招募、筛选、入组、随访全流程管理制度。受试者来源包括社会公开招募与公司内部自愿参与，全部受试者须签署知情同意书。</p>'
+      + '<h3>伦理审查</h3>'
+      + '<p>公司伦理委员会独立开展伦理审查，审查记录按规定保存不少于 5 年。</p>'
+  },
+  careers: {
+    title: '加入我们',
+    html: '<p>公司长期招聘药物研发、临床研究、质量管理等岗位。2024 年校园招聘与实习生计划正在进行。</p>'
+      + '<h3>在招岗位</h3><ul>'
+      + '<li>临床试验中心 · 行政助理（实习生）—— 2 人，工作地点：杭州</li>'
+      + '<li>药物研究院 · 制剂研究员 —— 3 人，工作地点：杭州</li>'
+      + '<li>质量与注册部 · QA 专员 —— 1 人，工作地点：杭州</li>'
+      + '<li>生产管理部 · 车间工艺员 —— 2 人，工作地点：杭州</li></ul>'
+      + '<h3>员工福利</h3><ul>'
+      + '<li>五险一金、补充商业保险</li>'
+      + '<li>年度健康体检</li>'
+      + '<li>交通补贴、餐补</li>'
+      + '<li>内部培训与职称申报支持</li></ul>'
+      + '<h3>简历投递</h3>'
+      + '<p>邮箱：<strong>hr@jiangan-pharma.com</strong>（邮件标题请注明"应聘岗位+姓名"）</p>'
+  },
+  contact: {
+    title: '联系我们',
+    html: '<table class="info-table">'
+      + '<tr><th>公司地址</th><td>浙江省杭州市滨江区江陵路 1688 号 江安科技园 A 座</td></tr>'
+      + '<tr><th>邮政编码</th><td>310052</td></tr>'
+      + '<tr><th>总机电话</th><td>0571-8663 2518</td></tr>'
+      + '<tr><th>传真</th><td>0571-8663 2520</td></tr>'
+      + '<tr><th>商务合作</th><td>bd@jiangan-pharma.com</td></tr>'
+      + '<tr><th>人力资源</th><td>hr@jiangan-pharma.com</td></tr>'
+      + '<tr><th>投资者关系</th><td>ir@jiangan-pharma.com</td></tr>'
+      + '<tr><th>媒体联络</th><td>media@jiangan-pharma.com</td></tr>'
+      + '</table>'
+      + '<h3>来访路线</h3>'
+      + '<p>地铁：6 号线江陵路站 B 口，步行约 600 米。<br>公交：江陵路滨盛路口站（K300、K517、B支 7 路）。<br>自驾：园区地下车库对外开放，访客请在东门登记。</p>'
+      + '<h3>接待时间</h3>'
+      + '<p>工作日 09:00–11:30，13:30–17:00（法定节假日除外）</p>'
+  }
+};
+function qs(k) {
+  var m = location.search.substring(1).split('&');
+  for (var i = 0; i < m.length; i++) {
+    var p = m[i].split('=');
+    if (decodeURIComponent(p[0]) === k) return decodeURIComponent(p[1] || '');
+  }
+  return '';
+}
+var k = qs('p') || 'about';
+var s = SECTIONS[k] || SECTIONS.about;
+document.title = s.title + ' - 江安医药科技有限公司';
+document.getElementById('pageTitle').textContent = s.title;
+document.getElementById('crumb').textContent = s.title;
+document.getElementById('art').innerHTML = s.html;
+var links = document.querySelectorAll('.nav-inner a[data-p]');
+for (var i = 0; i < links.length; i++) {
+  if (links[i].getAttribute('data-p') === k) links[i].className = 'active';
+}
+</script>
+</body>
+</html>

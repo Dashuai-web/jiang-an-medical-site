@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><title>外传 - 跳转中</title>
-<style>body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;}.c{text-align:center;color:#888;}</style>
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>外传 - 跳转中</title>
+<style>body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;}.c{text-align:center;color:#888;}  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
+</style>
 </head>
 <body><div class="c"><p>正在跳转…</p></div>
 <script>setTimeout(function(){window.location.href='forum_post.html';},800);</script>

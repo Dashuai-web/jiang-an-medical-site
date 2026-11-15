@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>系统信息 - 江安医药 内部信息平台 v2.0</title>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #f0f2f5; font-size: 14px; color: #333; }
@@ -27,6 +28,33 @@
   .footer { text-align: center; padding: 16px 0 24px; font-size: 11px; color: #bbb; }
   .legacy-link { font-size: 11px; color: #e8e8e8; text-decoration: none; }
   .legacy-link:hover { color: #1a6b4a; text-decoration: underline; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -40,10 +68,10 @@
 <div class="layout">
   <div class="sidebar">
     <a href="newhome.html">首页</a>
-    <a href="#">公告</a>
-    <a href="#">人事</a>
-    <a href="#">财务</a>
-    <a href="#">论坛</a>
+    <a href="sys.html?p=notice">公告</a>
+    <a href="sys.html?p=hr">人事</a>
+    <a href="sys.html?p=finance">财务</a>
+    <a href="sys.html?p=forum">论坛</a>
     <a href="sysinfo.html" class="active">系统管理</a>
   </div>
   <div class="main">

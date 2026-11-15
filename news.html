@@ -2,20 +2,21 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>新闻中心 - 江安医药科技有限公司</title>
 <style>
+  * { box-sizing: border-box; }
   body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #fff; margin: 0; padding: 0; }
   .topbar { background: #f5f5f5; border-bottom: 1px solid #e0e0e0; padding: 6px 0; font-size: 12px; color: #888; }
-  .topbar-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; }
-  .header { max-width: 960px; margin: 0 auto; padding: 24px 0 16px; }
+  .topbar-inner { max-width: 960px; margin: 0 auto; padding: 0 14px; display: flex; justify-content: space-between; }
+  .header { max-width: 960px; margin: 0 auto; padding: 24px 14px 16px; }
   .logo { font-size: 24px; font-weight: bold; color: #1a6b4a; letter-spacing: 2px; }
   .logo span { font-size: 12px; color: #999; font-weight: normal; margin-left: 10px; letter-spacing: 0; }
   .nav { background: #1a6b4a; }
-  .nav-inner { max-width: 960px; margin: 0 auto; display: flex; }
-  .nav-inner a { color: #fff; text-decoration: none; padding: 12px 28px; font-size: 14px; display: block; }
-  .nav-inner a:hover { background: #14553a; }
-  .nav-inner a.active { background: #14553a; }
-  .content { max-width: 960px; margin: 30px auto; }
+  .nav-inner { max-width: 960px; margin: 0 auto; display: flex; overflow-x: auto; }
+  .nav-inner a { color: #fff; text-decoration: none; padding: 12px 28px; font-size: 14px; display: block; white-space: nowrap; }
+  .nav-inner a:hover, .nav-inner a.active { background: #14553a; }
+  .content { max-width: 960px; margin: 30px auto; padding: 0 14px; }
   .breadcrumb { font-size: 12px; color: #999; margin-bottom: 20px; }
   .breadcrumb a { color: #1a6b4a; text-decoration: none; }
   .page-title { font-size: 22px; font-weight: bold; color: #1a6b4a; border-bottom: 2px solid #1a6b4a; padding-bottom: 12px; margin-bottom: 24px; }
@@ -25,7 +26,7 @@
   .news-list li a { color: #333; text-decoration: none; }
   .news-list li a:hover { color: #1a6b4a; }
   .news-list li .date { color: #999; font-size: 13px; float: right; }
-  .news-detail .title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+  .news-detail .title { font-size: 20px; font-weight: bold; margin-bottom: 10px; line-height: 1.5; }
   .news-detail .meta { font-size: 13px; color: #999; border-bottom: 1px solid #eee; padding-bottom: 14px; margin-bottom: 20px; }
   .news-detail .body { line-height: 2; font-size: 14px; color: #444; }
   .news-detail .body p { margin: 0 0 14px; }
@@ -35,68 +36,123 @@
   .news-detail .footer-note a { color: #ddd; text-decoration: none; font-size: 11px; }
   .news-detail .footer-note a:hover { color: #1a6b4a; }
   .back-link { display: inline-block; margin-top: 20px; font-size: 13px; color: #1a6b4a; text-decoration: none; }
+  @media (max-width: 720px) {
+    .nav-inner a { padding: 11px 15px; font-size: 13px; }
+    .page-title { font-size: 19px; }
+    .content { margin: 20px auto; }
+    .news-list li { font-size: 14px; }
+    .news-list li .date { float: none; display: block; margin-top: 4px; }
+    .news-detail .title { font-size: 17px; }
+  }
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688XXX</span></div>
+  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688417</span></div>
 </div>
 <div class="header"><div class="logo">江安医药<span>JIANGAN PHARMA</span></div></div>
 <div class="nav">
   <div class="nav-inner">
     <a href="company.html">首页</a>
-    <a href="#">关于我们</a>
+    <a href="corp.html?p=about">关于我们</a>
     <a href="news.html" class="active">新闻中心</a>
-    <a href="#">产品研发</a>
-    <a href="#">临床试验</a>
-    <a href="#">加入我们</a>
-    <a href="#">联系我们</a>
+    <a href="corp.html?p=products">产品研发</a>
+    <a href="corp.html?p=clinical">临床试验</a>
+    <a href="corp.html?p=careers">加入我们</a>
+    <a href="corp.html?p=contact">联系我们</a>
   </div>
 </div>
 <div class="content">
   <div class="breadcrumb"><a href="company.html">首页</a> &gt; 新闻中心</div>
-  <div class="page-title">新闻中心</div>
-  <div id="listView">
-    <ul class="news-list">
-      <li><a href="#" onclick="showDetail();return false;">关于新信息系统 v2.0 上线的通知</a><span class="date">2024-10-28</span></li>
-      <li><a href="#">2024年度员工体检安排通知</a><span class="date">2024-10-15</span></li>
-      <li><a href="#">关于开展消防安全演练的通知</a><span class="date">2024-10-08</span></li>
-      <li><a href="#">第三季度工作总结会议纪要</a><span class="date">2024-09-28</span></li>
-      <li><a href="#">关于规范办公用品申领流程的通知</a><span class="date">2024-09-15</span></li>
-      <li><a href="#">2024年中秋节放假安排</a><span class="date">2024-09-01</span></li>
-      <li><a href="secure.html">关于开展信息系统安全培训的通知</a><span class="date">2021-09-10</span></li>
-    </ul>
-  </div>
-  <div id="detailView" class="news-detail" style="display:none;">
-    <div class="title">关于新信息系统 v2.0 上线的通知</div>
-    <div class="meta">发布部门：信息中心 &nbsp;|&nbsp; 发布时间：2024-10-28</div>
-    <div class="body">
-      <p>各部门、各位同事：</p>
-      <p>为进一步提升公司信息化管理水平，新信息系统 v2.0 已于 2024年10月28日 正式上线。现将有关事项通知如下：</p>
-      <ul>
-        <li>新系统检索模块统一升级，旧版入口不再维护。</li>
-        <li>数据迁移完成，旧系统数据已按新规则清洗并归档。</li>
-        <li>移除旧版调试入口。</li>
-        <li>临床试验受试者管理模块已并入新系统。</li>
-      </ul>
-      <p>新系统上线初期可能存在数据同步延迟，请各位同事耐心等待。如有疑问，请联系信息中心。</p>
-      <p>特此通知。</p>
-    </div>
-    <div class="footer-note">
-      如需调试旧版功能，可访问 <a href="login.html">v1.9.4 预览环境</a>。数据完整性不作保证。
-    </div>
-    <a href="#" class="back-link" onclick="showList();return false;">&larr; 返回新闻列表</a>
-  </div>
+  <div class="page-title" id="pageTitle">新闻中心</div>
+  <div id="listView"></div>
+  <div id="detailView" class="news-detail" style="display:none;"></div>
 </div>
 <script>
-function showDetail() {
-  document.getElementById('listView').style.display = 'none';
-  document.getElementById('detailView').style.display = 'block';
+var NEWS = {
+  n2: {
+    title: '2024年度员工体检安排通知', date: '2024-10-15', dept: '行政部',
+    html: '<p>各部门、各位同事：</p><p>本年度员工健康体检定于 11 月 4 日至 11 月 22 日进行，体检机构为杭州康泰体检中心（滨江店）。</p><ul><li>体检时间：工作日 07:30–10:30，需空腹。</li><li>预约方式：在企业微信"体检预约"中自选日期。</li><li>体检项目：血常规、肝肾功能、胸片、心电图、腹部 B 超。</li><li>40 岁以上员工增加颈动脉超声与肿瘤标志物筛查。</li></ul><p>体检报告由行政部统一领取，个人可在体检机构小程序查询电子版。</p>'
+  },
+  n3: {
+    title: '关于开展消防安全演练的通知', date: '2024-10-08', dept: '安全环保部',
+    html: '<p>定于 10 月 18 日 15:00 在公司园区开展消防疏散演练，请各部门提前安排工作。</p><ul><li>演练范围：A 座、B 座全体办公区域。</li><li>疏散集合点：园区西侧停车场。</li><li>请勿乘坐电梯，按疏散指示图就近撤离。</li></ul><p>演练结束后在原地点集合点名，未到场人员由部门负责人说明情况。</p>'
+  },
+  n4: {
+    title: '第三季度工作总结会议纪要', date: '2024-09-28', dept: '总经理办公室',
+    html: '<p>9 月 26 日，公司召开 2024 年第三季度工作总结会，各部门负责人参会。</p><ul><li>药物研究院：2 个一致性评价品种完成 BE 试验，进入申报准备。</li><li>临床试验中心：Q3 承接 BE 试验 3 项，受试者依从率 96%。</li><li>生产管理部：固体制剂车间产能利用率 78%，较上季度提升 6 个百分点。</li><li>信息中心：v2.0 系统计划于 10 月底完成上线。</li></ul><p>会议要求各部门在四季度重点抓好年度指标收口和 2025 年预算编制工作。</p>'
+  },
+  n5: {
+    title: '关于规范办公用品申领流程的通知', date: '2024-09-15', dept: '行政部',
+    html: '<p>自 10 月 1 日起，办公用品申领统一在系统"行政服务—用品申领"中提交，不再接收纸质单。</p><ul><li>常规用品（笔、纸、文件夹）每月 1—5 日集中申领。</li><li>单价 200 元以上物品需部门负责人审批。</li><li>领用后 3 个工作日内到行政部前台签收。</li></ul><p>请各部门知悉并转达。</p>'
+  },
+  n6: {
+    title: '2024年中秋节放假安排', date: '2024-09-01', dept: '行政部',
+    html: '<p>根据国家法定节假日安排，结合公司实际，中秋节放假安排如下：</p><ul><li>放假时间：9 月 15 日至 9 月 17 日，共 3 天。</li><li>9 月 14 日（星期六）正常上班。</li><li>生产车间、临床试验中心按各自排班执行，值班表报行政部备案。</li></ul><p>放假期间请关闭电源、锁好门窗，注意出行安全。</p>'
+  }
+};
+NEWS.n1 = {
+  title: '关于新信息系统 v2.0 上线的通知', date: '2024-10-28', dept: '信息中心',
+  html: '<p>各部门、各位同事：</p><p>为进一步提升公司信息化管理水平，新信息系统 v2.0 已于 2024年10月28日 正式上线。现将有关事项通知如下：</p><ul><li>新系统检索模块统一升级，旧版入口不再维护。</li><li>数据迁移完成，旧系统数据已按新规则清洗并归档。</li><li>移除旧版调试入口。</li><li>临床试验受试者管理模块已并入新系统。</li></ul><p>新系统上线初期可能存在数据同步延迟，请各位同事耐心等待。如有疑问，请联系信息中心。</p><p>特此通知。</p>',
+  legacy: true
+};
+var ORDER = ['n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7'];
+var META = { n1: '2024-10-28', n2: '2024-10-15', n3: '2024-10-08', n4: '2024-09-28', n5: '2024-09-15', n6: '2024-09-01', n7: '2021-09-10' };
+var LIST = {
+  n7: { title: '关于开展信息系统安全培训的通知', date: '2021-09-10', url: 'secure.html' },
+  n1: { title: '关于新信息系统 v2.0 上线的通知', date: '2024-10-28', url: 'news.html?n=n1' },
+  n2: { title: '2024年度员工体检安排通知', date: '2024-10-15', url: 'news.html?n=n2' },
+  n3: { title: '关于开展消防安全演练的通知', date: '2024-10-08', url: 'news.html?n=n3' },
+  n4: { title: '第三季度工作总结会议纪要', date: '2024-09-28', url: 'news.html?n=n4' },
+  n5: { title: '关于规范办公用品申领流程的通知', date: '2024-09-15', url: 'news.html?n=n5' },
+  n6: { title: '2024年中秋节放假安排', date: '2024-09-01', url: 'news.html?n=n6' }
+};
+
+function qs(k) {
+  var m = location.search.substring(1).split('&');
+  for (var i = 0; i < m.length; i++) {
+    var p = m[i].split('=');
+    if (decodeURIComponent(p[0]) === k) return decodeURIComponent(p[1] || '');
+  }
+  return '';
 }
-function showList() {
-  document.getElementById('listView').style.display = 'block';
-  document.getElementById('detailView').style.display = 'none';
+var n = qs('n');
+var listView = document.getElementById('listView');
+var detailView = document.getElementById('detailView');
+
+function renderList() {
+  var html = '<ul class="news-list">';
+  html += '<li><a href="' + LIST.n1.url + '">' + LIST.n1.title + '</a><span class="date">' + LIST.n1.date + '</span></li>';
+  ['n2', 'n3', 'n4', 'n5', 'n6'].forEach(function (k) {
+    html += '<li><a href="' + LIST[k].url + '">' + LIST[k].title + '</a><span class="date">' + LIST[k].date + '</span></li>';
+  });
+  html += '<li><a href="' + LIST.n7.url + '">' + LIST.n7.title + '</a><span class="date">' + LIST.n7.date + '</span></li>';
+  html += '</ul>';
+  listView.innerHTML = html;
+  listView.style.display = 'block';
+  detailView.style.display = 'none';
+  document.getElementById('pageTitle').textContent = '新闻中心';
 }
+
+function renderDetail(k) {
+  var d = NEWS[k];
+  if (!d) { renderList(); return; }
+  var html = '<div class="title">' + d.title + '</div>';
+  html += '<div class="meta">发布部门：' + d.dept + ' &nbsp;|&nbsp; 发布时间：' + d.date + '</div>';
+  html += '<div class="body">' + d.html + '</div>';
+  if (d.legacy) {
+    html += '<div class="footer-note">如需调试旧版功能，可访问 <a href="login.html">v1.9.4 预览环境</a>。数据完整性不作保证。</div>';
+  }
+  html += '<a href="news.html" class="back-link">&larr; 返回新闻列表</a>';
+  detailView.innerHTML = html;
+  detailView.style.display = 'block';
+  listView.style.display = 'none';
+  document.getElementById('pageTitle').textContent = d.title;
+  document.title = d.title + ' - 江安医药科技有限公司';
+  window.scrollTo(0, 0);
+}
+
+if (n && NEWS[n]) { renderList(); renderDetail(n); } else { renderList(); }
 </script>
 </body>
 </html>

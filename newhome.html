@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>江安医药 内部信息平台 v2.0 - 首页</title>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #f0f2f5; font-size: 14px; color: #333; }
@@ -30,9 +31,38 @@
   .list-item { padding: 11px 20px; border-bottom: 1px solid #f2f2f2; font-size: 13px; color: #555; display: flex; justify-content: space-between; }
   .list-item:last-child { border-bottom: none; }
   .list-item .date { color: #aaa; font-size: 12px; }
+  .list-item a { color: #555; text-decoration: none; }
+  .list-item a:hover { color: #1a6b4a; }
   .footer { text-align: center; padding: 16px 0 24px; font-size: 11px; color: #bbb; }
   .footer a { color: #bbb; text-decoration: none; }
   .footer a:hover { color: #1a6b4a; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -46,10 +76,10 @@
 <div class="layout">
   <div class="sidebar">
     <a href="newhome.html" class="active">首页</a>
-    <a href="#">公告</a>
-    <a href="#">人事</a>
-    <a href="#">财务</a>
-    <a href="#">论坛</a>
+    <a href="sys.html?p=notice">公告</a>
+    <a href="sys.html?p=hr">人事</a>
+    <a href="sys.html?p=finance">财务</a>
+    <a href="sys.html?p=forum">论坛</a>
     <a href="sysinfo.html">系统管理</a>
   </div>
   <div class="main">
@@ -65,9 +95,9 @@
     <div class="panel">
       <div class="panel-head">最新公告</div>
       <div class="panel-body">
-        <div class="list-item"><span>关于新信息系统 v2.0 上线的通知</span><span class="date">2024-10-28</span></div>
-        <div class="list-item"><span>2024年度员工体检安排通知</span><span class="date">2024-10-15</span></div>
-        <div class="list-item"><span>关于开展消防安全演练的通知</span><span class="date">2024-10-08</span></div>
+        <div class="list-item"><a href="sys.html?p=notice&n=n1">关于新信息系统 v2.0 上线的通知</a><span class="date">2024-10-28</span></div>
+        <div class="list-item"><a href="sys.html?p=notice&n=n2">2024年度员工体检安排通知</a><span class="date">2024-10-15</span></div>
+        <div class="list-item"><a href="sys.html?p=notice&n=n3">关于开展消防安全演练的通知</a><span class="date">2024-10-08</span></div>
       </div>
     </div>
     <div class="footer">

@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>江安医药内部交流区（已封禁）- 职场匿名区</title>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f0f0f0; margin: 0; padding: 0; }
@@ -18,6 +19,42 @@
   .thread a { color: #333; text-decoration: none; }
   .thread a:hover { color: #2b579a; text-decoration: underline; }
   .thread .author { color: #999; font-size: 12px; float: right; }
+  /* ---- login gate ---- */
+  .login-mask { position: fixed; inset: 0; background: rgba(20,30,45,.92); display: none; align-items: center; justify-content: center; z-index: 99; padding: 20px; }
+  .login-mask.show { display: flex; }
+  .login-card { background: #fff; padding: 30px 26px; max-width: 340px; width: 100%; text-align: center; border-radius: 4px; }
+  .login-card h3 { margin: 0 0 10px; font-size: 17px; color: #2b579a; }
+  .login-card p { font-size: 13px; color: #888; line-height: 1.8; margin: 0 0 18px; }
+  .login-card button { padding: 9px 40px; background: #2b579a; color: #fff; border: none; border-radius: 3px; font-size: 14px; cursor: pointer; }
+  .login-card .note { font-size: 11px; color: #bbb; margin-top: 12px; }
+  .login-toast { position: fixed; left: 50%; top: 22%; transform: translateX(-50%); background: rgba(30,40,55,.94); color: #fff; padding: 14px 30px; border-radius: 3px; font-size: 15px; letter-spacing: 1px; z-index: 100; display: none; transition: opacity .6s; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -31,11 +68,25 @@
 <div class="main">
   <div class="panel-title">江安医药内部交流区 · 历史帖子（共 6 条）</div>
   <div class="thread"><span class="date">2022-10-18</span><a href="post.html">最近出差变多了</a><span class="author">江安老周</span></div>
-  <div class="thread"><span class="date">2022-10-17</span><a href="#">临床试验中心最近不对劲</a><span class="author">江安老周</span></div>
-  <div class="thread"><span class="date">2022-10-15</span><a href="#">公司新项目招募，内部优先</a><span class="author">匿名</span></div>
-  <div class="thread"><span class="date">2022-10-12</span><a href="#">有没有人觉得体检项目变多了？</a><span class="author">匿名</span></div>
-  <div class="thread"><span class="date">2022-10-08</span><a href="#">入职三个月，说说感受</a><span class="author">匿名</span></div>
-  <div class="thread"><span class="date">2022-09-30</span><a href="#">临床试验中心新人报到</a><span class="author">江安老周</span></div>
+  <div class="thread"><span class="date">2022-10-17</span><a href="thread.html?t=zoneLab">临床试验中心最近不对劲</a><span class="author">江安老周</span></div>
+  <div class="thread"><span class="date">2022-10-15</span><a href="thread.html?t=zoneRecruit">公司新项目招募，内部优先</a><span class="author">匿名</span></div>
+  <div class="thread"><span class="date">2022-10-12</span><a href="thread.html?t=zoneCheckup">有没有人觉得体检项目变多了？</a><span class="author">匿名</span></div>
+  <div class="thread"><span class="date">2022-10-08</span><a href="thread.html?t=zone3months">入职三个月，说说感受</a><span class="author">匿名</span></div>
+  <div class="thread"><span class="date">2022-09-30</span><a href="thread.html?t=zoneNewbie">临床试验中心新人报到</a><span class="author">江安老周</span></div>
 </div>
+<div class="login-mask" id="loginMask"><div class="login-card"><h3>职场匿名区</h3><p>浏览需先登录。<br>匿名登录，无需账号密码。</p><button onclick="forumLogin()">登录</button><div class="note">登录即表示同意《匿名区使用条款》</div></div></div>
+<div class="login-toast" id="loginToast">欢迎回来，陈默！</div>
+<script>
+var LOGIN_KEY = 'cm_forum_login';
+function isLogged() { try { return localStorage.getItem(LOGIN_KEY) === '1'; } catch (e) { return false; } }
+function forumLogin() {
+  try { localStorage.setItem(LOGIN_KEY, '1'); } catch (e) {}
+  var m = document.getElementById('loginMask');
+  if (m) m.className = 'login-mask';
+  var t = document.getElementById('loginToast');
+  if (t) { t.style.display = 'block'; setTimeout(function () { t.style.opacity = '0'; setTimeout(function () { t.style.display = 'none'; }, 700); }, 2400); }
+}
+if (!isLogged()) document.getElementById('loginMask').className = 'login-mask show';
+</script>
 </body>
 </html>

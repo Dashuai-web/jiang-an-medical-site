@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>入职前夜</title>
 <style>
   body { font-family: SimSun, 宋体, serif; font-size: 15px; color: #333; background: #1a1a1a; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
@@ -9,6 +10,33 @@
   .box p { margin: 0 0 16px; }
   .box .link { display: block; margin-top: 30px; text-align: right; font-size: 14px; }
   .box .link a { color: #1a6b4a; text-decoration: none; border-bottom: 1px solid #1a6b4a; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -18,7 +46,8 @@
   <p>你不信。</p>
   <p>你查了两年。江安医药每年都在招实习生，今年你投了简历，下周一入职。临床试验中心，行政助理岗。</p>
   <p>入职之前，你想再找找有没有人认识他。你打开了职场匿名区。江安医药的官网你早就翻烂了，新闻中心、招聘页面、公司简介，什么都没找到。</p>
-  <div class="link"><a href="forum.html">进入职场匿名区 →</a></div>
+  <div class="link"><a href="company.html">先去江安医药官网看看 →</a></div>
+  <div class="link" style="margin-top:14px;"><a href="forum.html">进入职场匿名区 →</a></div>
 </div>
 </body>
 </html>

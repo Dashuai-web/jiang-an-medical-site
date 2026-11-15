@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>江安医药 内部信息平台 v1.9.4（调试模式）</title>
 <style>
   * { box-sizing: border-box; }
@@ -48,6 +49,33 @@
   .back-btn:active { background: #d0d0d0; }
   .action-btn { padding: 7px 28px; margin-right: 10px; border: 1px solid #7a8a9a; background: linear-gradient(#f0f0f0, #d8d8d8); font-family: SimSun, 宋体, serif; font-size: 14px; cursor: pointer; color: #333; }
   .action-btn:active { background: #d0d0d0; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -325,9 +353,9 @@ var database = {
   "异常输入源": '<p>定义：与封存记录产生关联的访客。</p><p>关联记录：空编号</p>',
   "admin": '<p>当前会话身份：admin（管理员）。</p><p>权限等级：管理员。</p><p>会话状态：正常（可能已变更）。</p>',
   "待归类": '<p>当前访问状态：待归类。</p><p>请在会话结束前选择处理方式。</p>',
-  "归档": "GO:ending_archive.html",
-  "外传": "GO:ending_spread.html",
-  "退出": "GO:ending_silent.html",
+  "归档": function() { return isUnlocked() ? "GO:ending_archive.html" : LOCKED_MSG; },
+  "外传": function() { return isUnlocked() ? "GO:ending_spread.html" : LOCKED_MSG; },
+  "退出": function() { return isUnlocked() ? "GO:ending_silent.html" : LOCKED_MSG; },
   "受试者招募不足": '<p><strong>关于 CT-2024-02 受试者招募不足的补充公告</strong></p><p>项目编号：CT-2024-02 / 计划入组 36 例 / 已入组 28 例</p><p>缺口 8 例。外部招募渠道已连续两周无有效新增。</p><p>经伦理委员会备案，现面向公司在职员工开放内部招募，名额优先分配至行政部与临床试验中心。</p><p>参与方式：由系统从员工健康知情同意书中自动筛选，被选中者由部门主管口头通知。</p><p>补贴：完成全部访视 3000 元；中途退出按已完成访视比例发放。</p><p class="meta">发布日期：2024-11-08 / 发布部门：临床试验中心</p><p class="tiny">备注：员工无需另行报名。入职时签署的《员工健康知情同意书》第 4 条第 2 款已覆盖本项安排。</p>',
   "受试者招募": function() { return database["受试者招募不足"]; },
   "受试者不足": function() { return database["受试者招募不足"]; },
@@ -337,11 +365,24 @@ var database = {
   "规则": '<p>系统运行规则（调试模式可见）：</p><table class="data-table"><tr><th>编号</th><th>摘要</th></tr><tr><td>规则3.1</td><td>必填字段缺失的记录，进入待注销队列。</td></tr><tr><td>规则3.2</td><td>审批链断裂的记录，由临时权限 NULL 代为确认。</td></tr><tr><td>规则3.3</td><td>所有检索行为均视为对系统的输入，需记录来源。</td></tr><tr><td>规则3.4</td><td>异常输入源应在会话结束前归类。</td></tr><tr><td>规则3.5</td><td>已注销记录不可恢复。工号可复用。</td></tr></table><p class="meta">规则由临时权限账号维护，修改不留痕。</p>'
 };
 
+var LOCKED_MSG = '<p>该操作需由系统在会话结束时自动执行。</p><p class="meta">当前会话状态：待归类。</p>';
+
+function isUnlocked() {
+  var list = Object.keys(state.searched);
+  if (list.length < 15) return false;
+  var keyFlags = ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock'];
+  for (var i = 0; i < keyFlags.length; i++) { if (!hasFlag(keyFlags[i])) return false; }
+  return true;
+}
+
 function checkThresholds() {
   var warn = document.getElementById('warn');
   if (state.count >= 20 && state.count < 40) document.getElementById('footer').textContent = '系统版本 1.9.4 / 维护状态：正常 / 会话记录已达阈值';
   if (state.count >= 40 && state.count < 60) { warn.textContent = '检测到持续检索行为。本次会话可能被标记。'; warn.className = 'warn show'; }
-  if (state.count >= 60) { warn.textContent = '检测到持续检索行为。建议处理方式：归档 / 外传 / 退出。'; warn.className = 'warn show'; }
+  if (state.count >= 60) {
+    warn.textContent = isUnlocked() ? '检测到持续检索行为。建议处理方式：归档 / 外传 / 退出。' : '检测到持续检索行为。本次会话可能被标记。';
+    warn.className = 'warn show';
+  }
 }
 
 var flagMap = {

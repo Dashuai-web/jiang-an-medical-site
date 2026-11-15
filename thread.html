@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>帖子详情 - 职场匿名区</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #f0f0f0; margin: 0; padding: 0; }
+  .top { background: #2b579a; color: #fff; padding: 10px 0; }
+  .top-inner { max-width: 760px; margin: 0 auto; padding: 0 14px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: 18px; font-weight: bold; }
+  .top-inner a { color: #cfe0f5; text-decoration: none; font-size: 13px; }
+  .main { max-width: 760px; margin: 16px auto; background: #fff; border: 1px solid #ddd; }
+  .notice { background: #fff8e8; border: 1px solid #e8d0a0; color: #8a6a00; padding: 8px 14px; font-size: 12px; }
+  .post-head { padding: 18px; border-bottom: 1px solid #eee; }
+  .post-head .title { font-size: 18px; font-weight: bold; margin-bottom: 10px; line-height: 1.5; }
+  .post-head .meta { font-size: 12px; color: #999; }
+  .post-body { padding: 18px; line-height: 2; font-size: 14px; }
+  .post-body p { margin: 0 0 14px; }
+  .reply-box { padding: 18px; border-top: 1px solid #eee; }
+  .reply-box .panel-title { font-weight: bold; font-size: 13px; margin-bottom: 10px; }
+  .reply { padding: 10px 0; border-bottom: 1px dotted #eee; font-size: 13px; color: #555; line-height: 1.9; }
+  .reply:last-child { border-bottom: none; }
+  .reply .floor { color: #bbb; font-size: 11px; margin-right: 6px; }
+  .back { display: inline-block; margin: 0 0 20px 0; font-size: 13px; color: #2b579a; text-decoration: none; }
+  .login-mask { position: fixed; inset: 0; background: rgba(20,30,45,.92); display: none; align-items: center; justify-content: center; z-index: 99; padding: 20px; }
+  .login-mask.show { display: flex; }
+  .login-card { background: #fff; padding: 30px 26px; max-width: 340px; width: 100%; text-align: center; border-radius: 4px; }
+  .login-card h3 { margin: 0 0 10px; font-size: 17px; color: #2b579a; }
+  .login-card p { font-size: 13px; color: #888; line-height: 1.8; margin: 0 0 18px; }
+  .login-card button { padding: 9px 40px; background: #2b579a; color: #fff; border: none; border-radius: 3px; font-size: 14px; cursor: pointer; }
+  .login-card .note { font-size: 11px; color: #bbb; margin-top: 12px; }
+  .login-toast { position: fixed; left: 50%; top: 22%; transform: translateX(-50%); background: rgba(30,40,55,.94); color: #fff; padding: 14px 30px; border-radius: 3px; font-size: 15px; letter-spacing: 1px; z-index: 100; display: none; transition: opacity .6s; }
+  @media (max-width: 720px) {
+    .main { margin: 10px; }
+    .post-head .title { font-size: 16px; }
+    .post-head, .post-body, .reply-box { padding: 14px; }
+    .login-card { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-inner"><div class="logo">职场匿名区</div><a href="forum.html">&larr; 返回列表</a></div>
+</div>
+<div class="main">
+  <div class="notice" id="noticeBar" style="display:none;"></div>
+  <div class="post-head">
+    <div class="title" id="tTitle">加载中…</div>
+    <div class="meta" id="tMeta"></div>
+  </div>
+  <a href="forum.html" class="back" style="margin:14px 18px 0;">&larr; 返回职场匿名区</a>
+  <div class="post-body" id="tBody"></div>
+  <div class="reply-box">
+    <div class="panel-title" id="tReplyTitle">回复</div>
+    <div id="tReplies"></div>
+  </div>
+</div>
+
+<div class="login-mask" id="loginMask">
+  <div class="login-card">
+    <h3>职场匿名区</h3>
+    <p>浏览需先登录。<br>匿名登录，无需账号密码。</p>
+    <button onclick="forumLogin()">登录</button>
+    <div class="note">登录即表示同意《匿名区使用条款》</div>
+  </div>
+</div>
+<div class="login-toast" id="loginToast">欢迎回来，陈默！</div>
+
+<script>
+var THREADS = {
+  overtime: {
+    title: '面试被问能不能接受加班，怎么回？',
+    author: '匿名用户', date: '2024-11-12 20:15', views: 612, replies: 8,
+    body: ['上周面了一家，HR 问"能不能接受加班"，我说可以适当配合，她追问"适当是多少"。',
+           '感觉怎么答都不对。说能，进去就是白干；说不能，当场挂。',
+           '有经验的说说怎么回比较稳？'],
+    reply: ['1楼：问要不要加班费，反问她。', '2楼：说"按项目节奏来"，含糊过去。',
+            '3楼：我直接说的，"工作日可以，周末要看提前多久说"。过了。',
+            '4楼：这题考的是你会不会当场顶回去。']
+  },
+  bigcity: {
+    title: '应届生第一份工作选大厂还是小公司？',
+    author: '匿名用户', date: '2024-11-12 16:40', views: 1480, replies: 21,
+    body: ['手上两个 offer，一个大厂螺丝钉，一个小公司什么都干。工资差不多。',
+           '大厂稳定但卷，小公司杂但能学。纠结。'],
+    reply: ['1楼：先大厂，简历好看，跳的时候好谈。', '2楼：小公司学的东西多，但没人教。',
+            '3楼：看你缺不缺钱。', '4楼：大厂的话，三年后你只会写那一块。']
+  },
+  resign: {
+    title: '离职被卡流程，求助',
+    author: '匿名用户', date: '2024-11-11 10:02', views: 384, replies: 5,
+    body: ['提离职一个月了，交接单上领导一直不签字，HR 说要等"部门评估"。',
+           '新公司那边催得紧。这种情况正常吗，有没有办法？'],
+    reply: ['1楼：劳动法一个月，到期就能走。', '2楼：留好提离职的书面证据。',
+            '3楼：盖章的离职证明一定要拿到。']
+  },
+  probation: {
+    title: '试用期被辞退，有赔偿吗？',
+    author: '匿名用户', date: '2024-11-10 15:20', views: 903, replies: 12,
+    body: ['试用期第三个月被通知"不符合录用条件"，让当天走人。',
+           '没有赔偿，说试用期不算。是这样吗？'],
+    reply: ['1楼：不符合录用条件要举证，举证不了就是违法解除。', '2楼：0.5 个月工资，去仲裁。',
+            '3楼：试用期也是劳动关系。']
+  },
+  excel: {
+    title: '简历上写“精通Excel”会被问什么？',
+    author: '匿名用户', date: '2024-11-09 09:31', views: 741, replies: 7,
+    body: ['每次写"精通"都被追问，然后场面就尴尬了。',
+           '大家一般写"熟练"还是"精通"？被问到什么程度？'],
+    reply: ['1楼：问你 vlookup 会不会，你就说会。', '2楼：数据透视表，一问一个准。',
+            '3楼：我写"能熟练使用"，没人问过。']
+  },
+  physical: {
+    title: '入职体检一般查什么？',
+    author: '匿名用户', date: '2024-11-08 13:05', views: 522, replies: 4,
+    body: ['拿到 offer 了，让下周去体检。抽血、胸片、心电图这些都要做吗？',
+           '有乙肝会被拒吗？'],
+    reply: ['1楼：常规项，抽血+胸片+心电。', '2楼：乙肝不能查，入职体检禁止。',
+            '3楼：有的公司会加套餐，看他们买的项目。']
+  },
+  noncompete: {
+    title: '公司要求签竞业协议，正常吗？',
+    author: '匿名用户', date: '2024-11-07 18:44', views: 665, replies: 9,
+    body: ['入职签合同的时候附带一份竞业限制协议，说"统一都签"。',
+           '不签不给办入职。这个有法律效力吗？'],
+    reply: ['1楼：签了也有讲究，得给补偿金才生效。', '2楼：不签不给入职，那只能签。',
+            '3楼：看清楚范围，别写"全行业"。']
+  },
+  biotech: {
+    title: '有没有人面过杭州瑞和生物？',
+    author: '匿名用户', date: '2024-11-06 11:12', views: 210, replies: 3,
+    body: ['收到他家面试邀请，临床研究助理岗。',
+           '查了下规模不大，有人了解吗？'],
+    reply: ['1楼：小公司，加班一般。', '2楼：面试会问会不会写方案。']
+  },
+  inteviewJiangAn: {
+    title: '江安医药面试流程分享',
+    author: '匿名用户', date: '2023-06-12 10:04', views: 1330, replies: 3,
+    body: ['投的临床试验中心行政岗，两周内三轮：HR 初面、部门主管、总监。',
+           '没有笔试。行政岗问的都是流程类的，不会问专业。',
+           '入职体检是自己去做的，指定医院。'],
+    reply: ['1楼：感谢分享。', '2楼：这个岗好像年年招。', '3楼：面完多久给结果？']
+  },
+  offerJiangAn: {
+    title: '江安医药的offer值得去吗？',
+    author: '匿名用户', date: '2023-11-02 14:26', views: 2044, replies: 8,
+    body: ['拿到临床试验中心的offer，薪资一般，但是离家近。',
+           '网上关于这家公司信息很少，官网也就那么几页。'],
+    reply: ['1楼：本地企业，稳。', '2楼：临床试验中心加班不多。',
+            '3楼：福利体检做得挺勤的。', '4楼：听说内部系统挺老。']
+  },
+  zoneLab: {
+    title: '临床试验中心最近不对劲',
+    author: '江安老周', date: '2022-10-17 21:52', views: 88, replies: 3, notice: '该讨论区已被封禁。以下为缓存副本，内容可能不完整。',
+    body: ['说不上来哪里不对。上周开始，观察室三号的门锁换了，钥匙只有中心主任有。',
+           '我们组的排班表也不公开了，改成私下通知。',
+           '可能是我想多了。'],
+    reply: ['1楼（匿名）：别多问。', '2楼（匿名）：三号房间以前是储物间吧？', '3楼（匿名）：删了吧。']
+  },
+  zoneRecruit: {
+    title: '公司新项目招募，内部优先',
+    author: '匿名', date: '2022-10-15 09:18', views: 143, replies: 2, notice: '该讨论区已被封禁。以下为缓存副本，内容可能不完整。',
+    body: ['新项目在招"健康志愿者"，内部员工优先，说是补贴不少。',
+           '报名表在行政那边领。我看了下条件，挺宽松的。'],
+    reply: ['1楼（匿名）：补贴多少？', '2楼（匿名）：这种别乱签。']
+  },
+  zoneCheckup: {
+    title: '有没有人觉得体检项目变多了？',
+    author: '匿名', date: '2022-10-12 17:33', views: 176, replies: 4, notice: '该讨论区已被封禁。以下为缓存副本，内容可能不完整。',
+    body: ['今年的福利体检比往年多了好几项，抽了四管血。',
+           'HR 说是"升级套餐"，但没说升级了什么。'],
+    reply: ['1楼（匿名）：我们也多抽了。', '2楼（匿名）：说是预防医学。',
+            '3楼（匿名）：抽完有点晕。', '4楼（匿名）：正常，别瞎想。']
+  },
+  zone3months: {
+    title: '入职三个月，说说感受',
+    author: '匿名', date: '2022-10-08 12:07', views: 233, replies: 3, notice: '该讨论区已被封禁。以下为缓存副本，内容可能不完整。',
+    body: ['行政岗，事情不多，流程比较旧，很多东西还在纸上签。',
+           '同事都挺客气，但不太聊私事。',
+           '总体来说还行，能待。'],
+    reply: ['1楼（匿名）：哪个部门？', '2楼（匿名）：能待就待着。']
+  },
+  zoneNewbie: {
+    title: '临床试验中心新人报到',
+    author: '江安老周', date: '2022-09-30 08:55', views: 121, replies: 2, notice: '该讨论区已被封禁。以下为缓存副本，内容可能不完整。',
+    body: ['刚到临床试验中心，做行政助理。',
+           '有啥要注意的，前辈们提点一下。'],
+    reply: ['1楼（匿名）：别乱进观察室。', '2楼（匿名）：欢迎。']
+  }
+};
+
+function qs(k) {
+  var m = location.search.substring(1).split('&');
+  for (var i = 0; i < m.length; i++) {
+    var p = m[i].split('=');
+    if (decodeURIComponent(p[0]) === k) return decodeURIComponent(p[1] || '');
+  }
+  return '';
+}
+var key = qs('t') || 'overtime';
+var d = THREADS[key] || THREADS.overtime;
+document.title = d.title + ' - 职场匿名区';
+document.getElementById('tTitle').textContent = d.title;
+document.getElementById('tMeta').textContent = '作者：' + d.author + ' | ' + d.date + ' | 浏览 ' + d.views;
+document.getElementById('tBody').innerHTML = d.body.map(function (p) { return '<p>' + p + '</p>'; }).join('');
+document.getElementById('tReplyTitle').textContent = '回复（' + d.replies + '）';
+document.getElementById('tReplies').innerHTML = d.reply.map(function (r) {
+  var i = r.indexOf('：');
+  return '<div class="reply"><span class="floor">' + r.slice(0, i) + '</span>' + r.slice(i + 1) + '</div>';
+}).join('');
+if (d.notice) {
+  var nb = document.getElementById('noticeBar');
+  nb.textContent = d.notice;
+  nb.style.display = 'block';
+}
+
+var LOGIN_KEY = 'cm_forum_login';
+function isLogged() { try { return localStorage.getItem(LOGIN_KEY) === '1'; } catch (e) { return false; } }
+function forumLogin() {
+  try { localStorage.setItem(LOGIN_KEY, '1'); } catch (e) {}
+  var mask = document.getElementById('loginMask');
+  if (mask) mask.className = 'login-mask';
+  var t = document.getElementById('loginToast');
+  if (t) { t.style.display = 'block'; setTimeout(function () { t.style.opacity = '0'; setTimeout(function () { t.style.display = 'none'; }, 700); }, 2400); }
+}
+if (!isLogged()) document.getElementById('loginMask').className = 'login-mask show';
+</script>
+</body>
+</html>

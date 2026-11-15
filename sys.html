@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内部信息平台 v2.0</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", sans-serif; margin: 0; padding: 0; background: #f0f2f5; font-size: 14px; color: #333; }
+  .topbar { background: #1a6b4a; color: #fff; min-height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; flex-wrap: wrap; }
+  .topbar .left { display: flex; align-items: center; gap: 12px; }
+  .topbar .logo { font-size: 16px; font-weight: bold; letter-spacing: 2px; }
+  .topbar .ver { font-size: 11px; color: #a8d0b8; border: 1px solid #3a8a5a; padding: 1px 6px; border-radius: 2px; }
+  .topbar .right { font-size: 13px; color: #c8e8d8; }
+  .topbar .right a { color: #c8e8d8; text-decoration: none; margin-left: 14px; }
+  .layout { display: flex; min-height: calc(100vh - 52px); }
+  .sidebar { width: 190px; background: #fff; border-right: 1px solid #e0e0e0; padding: 12px 0; flex-shrink: 0; }
+  .sidebar a { display: block; padding: 10px 22px; color: #555; text-decoration: none; font-size: 14px; border-left: 3px solid transparent; }
+  .sidebar a:hover { background: #f5f9f7; color: #1a6b4a; }
+  .sidebar a.active { background: #eef7f2; color: #1a6b4a; border-left-color: #1a6b4a; font-weight: bold; }
+  .main { flex: 1; padding: 22px 26px; min-width: 0; }
+  .panel { background: #fff; border-radius: 4px; border: 1px solid #e8e8e8; margin-bottom: 16px; }
+  .panel-head { padding: 12px 20px; border-bottom: 1px solid #eee; font-size: 14px; font-weight: bold; }
+  .panel-body { padding: 4px 0; }
+  .row { padding: 11px 20px; border-bottom: 1px solid #f2f2f2; font-size: 13px; color: #555; display: flex; justify-content: space-between; gap: 12px; }
+  .row:last-child { border-bottom: none; }
+  .row a { color: #2b579a; text-decoration: none; }
+  .row a:hover { text-decoration: underline; }
+  .row .date { color: #aaa; font-size: 12px; white-space: nowrap; }
+  .art { padding: 18px 20px; line-height: 2; font-size: 13px; color: #444; }
+  .art p { margin: 0 0 12px; }
+  .art ul { padding-left: 20px; margin: 0 0 12px; }
+  .meta { font-size: 12px; color: #999; }
+  table.t { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.t th, table.t td { border: 1px solid #e6e6e6; padding: 8px 12px; text-align: left; }
+  table.t th { background: #f4f8f6; color: #1a6b4a; font-weight: normal; }
+  .reply { padding: 10px 20px; border-top: 1px solid #f4f4f4; font-size: 13px; color: #666; line-height: 1.9; }
+  .reply b { color: #1a6b4a; font-weight: normal; }
+  .back { display: inline-block; margin: 0 20px 14px; font-size: 13px; color: #1a6b4a; text-decoration: none; }
+  .footer { text-align: center; padding: 14px 0 22px; font-size: 11px; color: #bbb; }
+  @media (max-width: 720px) {
+    .layout { display: block; }
+    .sidebar { width: auto; border-right: none; border-bottom: 1px solid #e0e0e0; display: flex; flex-wrap: wrap; padding: 0; }
+    .sidebar a { border-left: none; border-bottom: 3px solid transparent; padding: 10px 12px; font-size: 13px; }
+    .sidebar a.active { border-left: none; border-bottom-color: #1a6b4a; }
+    .main { padding: 14px; }
+    .topbar { padding: 10px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="left"><div class="logo">江安医药 内部信息平台</div><div class="ver">v2.0</div></div>
+  <div class="right">admin（管理员）<a href="login.html">退出</a></div>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <a href="newhome.html">首页</a>
+    <a href="sys.html?p=notice" data-p="notice">公告</a>
+    <a href="sys.html?p=hr" data-p="hr">人事</a>
+    <a href="sys.html?p=finance" data-p="finance">财务</a>
+    <a href="sys.html?p=forum" data-p="forum">论坛</a>
+    <a href="sysinfo.html">系统管理</a>
+  </div>
+  <div class="main" id="main"></div>
+</div>
+
+<script>
+var NOTICES = {
+  n1: {
+    title: '关于新信息系统 v2.0 上线的通知', date: '2024-10-28', dept: '信息中心',
+    html: '<p>各部门、各位同事：</p><p>新信息系统 v2.0 已于 2024 年 10 月 28 日正式上线。现将有关事项通知如下：</p>'
+      + '<ul><li>检索模块统一升级，旧版入口不再维护。</li><li>数据迁移完成，旧系统数据已按新规则清洗并归档。</li>'
+      + '<li>临床试验受试者管理模块已并入新系统。</li><li>各部门账号权限保持不变，首次登录请重新设置密码。</li></ul>'
+      + '<p>新系统上线初期可能存在数据同步延迟，如有疑问请联系信息中心（内线 8021）。</p><p>特此通知。</p>'
+  },
+  n2: {
+    title: '2024年度员工体检安排通知', date: '2024-10-15', dept: '行政部',
+    html: '<p>本年度员工健康体检定于 11 月 4 日至 11 月 22 日进行，体检机构为杭州康泰体检中心（滨江店）。</p>'
+      + '<ul><li>体检时间：工作日 07:30–10:30，需空腹。</li><li>预约方式：在企业微信"体检预约"中自选日期。</li>'
+      + '<li>体检项目：基础套餐（血常规、肝肾功能、胸片、心电图、腹部 B 超）。</li>'
+      + '<li>40 岁以上员工增加颈动脉超声与肿瘤标志物筛查。</li></ul>'
+      + '<p>体检报告由行政部统一领取，个人可在体检机构小程序查询电子版。</p>'
+  },
+  n3: {
+    title: '关于开展消防安全演练的通知', date: '2024-10-08', dept: '安全环保部',
+    html: '<p>定于 10 月 18 日 15:00 在公司园区开展消防疏散演练，请各部门提前安排工作。</p>'
+      + '<ul><li>演练范围：A 座、B 座全体办公区域。</li><li>疏散集合点：园区西侧停车场。</li>'
+      + '<li>请勿乘坐电梯，按疏散指示图就近撤离。</li></ul>'
+      + '<p>演练结束后在原地点集合点名，未到场人员由部门负责人说明情况。</p>'
+  },
+  n4: {
+    title: '关于规范办公用品申领流程的通知', date: '2024-09-15', dept: '行政部',
+    html: '<p>自 10 月 1 日起，办公用品申领统一在 v2.0 系统"行政服务—用品申领"中提交，不再接收纸质单。</p>'
+      + '<ul><li>常规用品（笔、纸、文件夹）每月 1—5 日集中申领。</li><li>单价 200 元以上物品需部门负责人审批。</li>'
+      + '<li>领用后 3 个工作日内到行政部前台签收。</li></ul>'
+  }
+};
+var POSTS = {
+  p1: {
+    title: '食堂饭菜最近是不是变了？', author: '研发部 老李', date: '2024-11-05 12:10', replies: 6,
+    body: '这几周午餐的菜明显变少了，荤菜从两个变成一个。问了食堂说是在"调整供应商"。有人知道情况吗？',
+    reply: ['行政部回复：10 月起更换了团餐供应商，过渡期菜品会有调整，12 月恢复。',
+            '2楼：难怪，我说怎么红烧肉没了。', '3楼：米饭也硬了。', '4楼：将就吃吧。']
+  },
+  p2: {
+    title: 'B 座三层最近在装修？', author: '质量部 小王', date: '2024-11-01 09:22', replies: 4,
+    body: '这两天 B 座三层一直有电钻声，走廊还拉了警戒线。那边不是临床试验中心吗，装修不影响业务？',
+    reply: ['行政部回复：临床试验中心观察室局部改造，预计 11 月中旬完工。',
+            '2楼：改造什么？', '3楼：说是换门锁和通风。', '4楼：别乱进就行。']
+  },
+  p3: {
+    title: '新系统检索太慢了', author: '信息中心 小赵', date: '2024-10-30 15:40', replies: 3,
+    body: 'v2.0 的检索模块在数据量大的时候要等三四秒，已经提了优化需求。大家先忍一忍。',
+    reply: ['1楼：确实慢。', '2楼：比旧版还是快点的。', '3楼：能用就行。']
+  },
+  p4: {
+    title: '周末加班申请现在要走线上？', author: '生产部 老陈', date: '2024-10-26 08:05', replies: 5,
+    body: '以前找主管签个字就行，现在说要进系统提加班单，还得提前一天。太麻烦了。',
+    reply: ['人事部回复：自 11 月起加班统一线上申请，便于考勤核算。',
+            '2楼：提前一天谁知道要不要加。', '3楼：可以事后补。', '4楼：人事说了算。']
+  }
+};
+function qs(k) {
+  var m = location.search.substring(1).split('&');
+  for (var i = 0; i < m.length; i++) {
+    var p = m[i].split('=');
+    if (decodeURIComponent(p[0]) === k) return decodeURIComponent(p[1] || '');
+  }
+  return '';
+}
+var p = qs('p') || 'notice';
+var main = document.getElementById('main');
+var html = '';
+
+function head(t) { return '<div class="panel"><div class="panel-head">' + t + '</div><div class="panel-body">'; }
+function end() { return '</div></div>'; }
+
+if (p === 'notice') {
+  var n = qs('n');
+  if (n && NOTICES[n]) {
+    var d = NOTICES[n];
+    html = '<div class="panel"><div class="panel-head">' + d.title + '</div><div class="art">'
+      + '<p class="meta">发布部门：' + d.dept + ' &nbsp;|&nbsp; 发布时间：' + d.date + '</p>' + d.html
+      + '</div></div><a class="back" href="sys.html?p=notice">&larr; 返回公告列表</a>';
+  } else {
+    html = head('公告列表（4）');
+    html += '<div class="row"><a href="sys.html?p=notice&n=n1">关于新信息系统 v2.0 上线的通知</a><span class="date">2024-10-28</span></div>';
+    html += '<div class="row"><a href="sys.html?p=notice&n=n2">2024年度员工体检安排通知</a><span class="date">2024-10-15</span></div>';
+    html += '<div class="row"><a href="sys.html?p=notice&n=n3">关于开展消防安全演练的通知</a><span class="date">2024-10-08</span></div>';
+    html += '<div class="row"><a href="sys.html?p=notice&n=n4">关于规范办公用品申领流程的通知</a><span class="date">2024-09-15</span></div>';
+    html += end();
+  }
+} else if (p === 'hr') {
+  html = head('部门人员分布');
+  html += '<div class="art"><table class="t"><tr><th>部门</th><th>在编人数</th><th>负责人</th></tr>'
+    + '<tr><td>药物研究院</td><td>82</td><td>刘振国</td></tr>'
+    + '<tr><td>临床试验中心</td><td>41</td><td>沈立群</td></tr>'
+    + '<tr><td>质量与注册部</td><td>36</td><td>陈慧</td></tr>'
+    + '<tr><td>生产管理部</td><td>96</td><td>王海涛</td></tr>'
+    + '<tr><td>行政部</td><td>28</td><td>周敏</td></tr>'
+    + '<tr><td>信息中心</td><td>17</td><td>赵启明</td></tr>'
+    + '<tr><td>安全环保部</td><td>12</td><td>许强</td></tr>'
+    + '<tr><td>财务部</td><td>8</td><td>李红</td></tr></table>'
+    + '<p class="meta">数据同步时间：2024-11-10 08:00。人员异动请以人事部出具的正式文件为准。</p></div>';
+  html += end();
+  html += head('近期人事动态');
+  html += '<div class="row"><a href="#">10 月新入职 6 人，其中实习生 3 人</a><span class="date">2024-11-01</span></div>';
+  html += '<div class="row"><a href="#">11 月社保基数调整申报提醒</a><span class="date">2024-10-25</span></div>';
+  html += '<div class="row"><a href="#">年度绩效面谈安排（12 月）</a><span class="date">2024-10-20</span></div>';
+  html += end();
+} else if (p === 'finance') {
+  html = head('部门预算执行（截至 10 月）');
+  html += '<div class="art"><table class="t"><tr><th>部门</th><th>年度预算</th><th>已执行</th><th>执行率</th></tr>'
+    + '<tr><td>药物研究院</td><td>2,860 万元</td><td>2,140 万元</td><td>74.8%</td></tr>'
+    + '<tr><td>临床试验中心</td><td>1,950 万元</td><td>1,682 万元</td><td>86.3%</td></tr>'
+    + '<tr><td>生产管理部</td><td>1,220 万元</td><td>905 万元</td><td>74.2%</td></tr>'
+    + '<tr><td>行政部</td><td>380 万元</td><td>264 万元</td><td>69.5%</td></tr>'
+    + '<tr><td>信息中心</td><td>460 万元</td><td>411 万元</td><td>89.3%</td></tr></table></div>';
+  html += end();
+  html += head('报销流程');
+  html += '<div class="art"><p>1. 系统内提交报销单并上传发票原件照片；<br>2. 部门负责人审批（5,000 元以下）；<br>'
+    + '3. 财务部复核；<br>4. 每月 15 日、30 日集中打款。</p>'
+    + '<p class="meta">纸质发票请于审批通过后 3 个工作日内交财务部备案。</p></div>';
+  html += end();
+} else if (p === 'forum') {
+  var id = qs('id');
+  if (id && POSTS[id]) {
+    var po = POSTS[id];
+    html = '<div class="panel"><div class="panel-head">' + po.title + '</div><div class="art">'
+      + '<p class="meta">' + po.author + ' &nbsp;|&nbsp; ' + po.date + ' &nbsp;|&nbsp; ' + po.replies + ' 回复</p>'
+      + '<p>' + po.body + '</p></div>';
+    for (var i = 0; i < po.reply.length; i++) {
+      html += '<div class="reply">' + po.reply[i] + '</div>';
+    }
+    html += '</div><a class="back" href="sys.html?p=forum">&larr; 返回论坛列表</a>';
+  } else {
+    html = head('内部论坛 · 最新主题（4）');
+    html += '<div class="row"><a href="sys.html?p=forum&id=p1">食堂饭菜最近是不是变了？</a><span class="date">11-05</span></div>';
+    html += '<div class="row"><a href="sys.html?p=forum&id=p2">B 座三层最近在装修？</a><span class="date">11-01</span></div>';
+    html += '<div class="row"><a href="sys.html?p=forum&id=p3">新系统检索太慢了</a><span class="date">10-30</span></div>';
+    html += '<div class="row"><a href="sys.html?p=forum&id=p4">周末加班申请现在要走线上？</a><span class="date">10-26</span></div>';
+    html += end();
+  }
+} else {
+  html = head('页面不存在') + '<div class="art"><p>请从左侧菜单进入。</p></div>' + end();
+}
+main.innerHTML = html;
+document.title = '内部信息平台 v2.0';
+var links = document.querySelectorAll('.sidebar a[data-p]');
+for (var j = 0; j < links.length; j++) {
+  if (links[j].getAttribute('data-p') === p) links[j].className = 'active';
+}
+</script>
+</body>
+</html>

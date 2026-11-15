@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>关于开展信息系统安全培训的通知 - 江安医药科技有限公司</title>
 <style>
   body { font-family: "Microsoft YaHei", sans-serif; font-size: 14px; color: #333; background: #fff; margin: 0; padding: 0; }
@@ -24,22 +25,49 @@
   .news-detail .body ul { margin: 0 0 14px; padding-left: 24px; }
   .news-detail .body li { margin-bottom: 6px; }
   .back-link { display: inline-block; margin-top: 20px; font-size: 13px; color: #1a6b4a; text-decoration: none; }
+  /* ---- mobile ---- */
+  @media (max-width: 720px) {
+    body { -webkit-text-size-adjust: 100%; }
+    .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
+    .main { display: block !important; }
+    .right, .side-col { width: auto !important; }
+    .content { display: block !important; }
+    .layout { display: block !important; }
+    .sidebar { width: auto !important; border-right: none !important; display: flex; flex-wrap: wrap; padding: 0 !important; }
+    .sidebar a { border-left: none !important; border-bottom: 3px solid transparent; padding: 10px 12px !important; font-size: 13px; }
+    .sidebar a.active { border-left: none !important; border-bottom-color: #1a6b4a; }
+    .cards { display: block !important; }
+    .card { margin-bottom: 12px; }
+    .nav-inner { overflow-x: auto; }
+    .nav-inner a { padding: 11px 15px !important; font-size: 13px; }
+    .banner { padding: 30px 18px !important; }
+    .search-bar input { width: 100% !important; }
+    .box { margin: 14px; padding: 26px 20px !important; }
+    .main { margin: 10px auto !important; }
+    .content { margin: 20px auto !important; }
+    .post-head .title, .news-detail .title { font-size: 17px !important; }
+    .data-table { font-size: 12px; }
+    .data-table th, .data-table td { padding: 5px 7px; }
+    .panel { margin: 10px !important; }
+    table { max-width: 100%; }
+    .topbar .right { margin-left: 8px; }
+  }
 </style>
 </head>
 <body>
 <div class="topbar">
-  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688XXX</span></div>
+  <div class="topbar-inner"><span>欢迎访问江安医药科技有限公司官网</span><span>股票代码：688417</span></div>
 </div>
 <div class="header"><div class="logo">江安医药<span>JIANGAN PHARMA</span></div></div>
 <div class="nav">
   <div class="nav-inner">
     <a href="company.html">首页</a>
-    <a href="#">关于我们</a>
+    <a href="corp.html?p=about">关于我们</a>
     <a href="news.html">新闻中心</a>
-    <a href="#">产品研发</a>
-    <a href="#">临床试验</a>
-    <a href="#">加入我们</a>
-    <a href="#">联系我们</a>
+    <a href="corp.html?p=products">产品研发</a>
+    <a href="corp.html?p=clinical">临床试验</a>
+    <a href="corp.html?p=careers">加入我们</a>
+    <a href="corp.html?p=contact">联系我们</a>
   </div>
 </div>
 <div class="content">
