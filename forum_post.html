@@ -50,6 +50,13 @@
 </style>
 </head>
 <body>
+<script>
+(function () {
+  try { if (sessionStorage.getItem('ja_ending_ok') === '1') return; } catch (e) {}
+  location.replace('index.html');
+})();
+</script>
+
 <div class="top"><div class="top-inner"><div class="logo">职场匿名区</div></div></div>
 
 <div class="main" id="formView">
@@ -83,7 +90,7 @@
 document.getElementById('sendBtn').addEventListener('click', function () {
   document.getElementById('formView').style.display = 'none';
   document.getElementById('successView').className = 'main success show';
-  setTimeout(function () { window.location.href = 'ending_spread_result.html'; }, 2000);
+  setTimeout(function () { window.location.href = '7d2c94f0.html'; }, 2000);
 });
 </script>
 </body>

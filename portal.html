@@ -79,6 +79,22 @@
 </style>
 </head>
 <body>
+<script>
+(function () {
+  var ok = false;
+  try { ok = sessionStorage.getItem('ja_portal_ok') === '1'; } catch (e) {}
+  if (!ok) {
+    var m = /[?&]k=([^&]+)/.exec(location.search);
+    if (m && decodeURIComponent(m[1]) === 'v1.9.4') {
+      try { sessionStorage.setItem('ja_portal_ok', '1'); } catch (e) {}
+      ok = true;
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    }
+  }
+  if (!ok) location.replace('index.html');
+})();
+</script>
+
 
 <div id="homeView">
   <div class="header">江安医药 内部信息平台 v1.9.4（调试模式）</div>
@@ -132,22 +148,22 @@ function setFlag(n) { state.flags[n] = true; }
 
 var combos = {
   "0471周": function() {
-    return '<p><strong>隐藏记录（组合检索触发）：</strong></p><p>工号：0471 / 姓名：周* / 部门：行政部</p><p>注销类型：<strong>非离职</strong></p><p>注销时间：2022-10-19 23:47:03</p><p>备注：死亡注销。家属签字栏：空白（系统代签）。</p><p class="tiny">该记录未出现在任何常规检索结果中。</p>';
+    return '~PHA+PHN0cm9uZz7pmpDol4/orrDlvZXvvIjnu4TlkIjmo4DntKLop6blj5HvvInvvJo8L3N0cm9uZz48L3A+PHA+5bel5Y+377yaMDQ3MSAvIOWnk+WQje+8muWRqCogLyDpg6jpl6jvvJrooYzmlL/pg6g8L3A+PHA+5rOo6ZSA57G75Z6L77yaPHN0cm9uZz7pnZ7nprvogYw8L3N0cm9uZz48L3A+PHA+5rOo6ZSA5pe26Ze077yaMjAyMi0xMC0xOSAyMzo0NzowMzwvcD48cD7lpIfms6jvvJrmrbvkuqHms6jplIDjgILlrrblsZ7nrb7lrZfmoI/vvJrnqbrnmb3vvIjns7vnu5/ku6Pnrb7vvInjgII8L3A+PHAgY2xhc3M9InRpbnkiPuivpeiusOW9leacquWHuueOsOWcqOS7u+S9leW4uOinhOajgOe0oue7k+aenOS4reOAgjwvcD4=';
   },
   "周0471": function() { return combos["0471周"](); },
   "0471周*": function() { return combos["0471周"](); },
   "2022事故": function() {
-    return '<p><strong>交叉比对结果：</strong></p><p>事故编号：AQ-2022-10-19</p><p>原始版本（2022-10-19）：死亡原因 = 药物不良反应 / 地点 = 临床试验中心观察室</p><p>修订版本（2022-10-21）：死亡原因 = 突发意外 / 地点 = 办公楼三层</p><p class="meta">修订操作人：NULL。修订无人工复核记录。</p>';
+    return '~PHA+PHN0cm9uZz7kuqTlj4nmr5Tlr7nnu5PmnpzvvJo8L3N0cm9uZz48L3A+PHA+5LqL5pWF57yW5Y+377yaQVEtMjAyMi0xMC0xOTwvcD48cD7ljp/lp4vniYjmnKzvvIgyMDIyLTEwLTE577yJ77ya5q275Lqh5Y6f5ZugID0g6I2v54mp5LiN6Imv5Y+N5bqUIC8g5Zyw54K5ID0g5Li05bqK6K+V6aqM5Lit5b+D6KeC5a+f5a6kPC9wPjxwPuS/ruiuoueJiOacrO+8iDIwMjItMTAtMjHvvInvvJrmrbvkuqHljp/lm6AgPSDnqoHlj5HmhI/lpJYgLyDlnLDngrkgPSDlip7lhazmpbzkuInlsYI8L3A+PHAgY2xhc3M9Im1ldGEiPuS/ruiuouaTjeS9nOS6uu+8mk5VTEzjgILkv67orqLml6Dkurrlt6XlpI3moLjorrDlvZXjgII8L3A+';
   },
   "事故2022": function() { return combos["2022事故"](); },
   "2022-10-19": function() {
-    return '<p><strong>时间线汇总（系统自动生成）：</strong></p><table class="data-table"><tr><th>时间</th><th>事件</th></tr><tr><td>22:15</td><td>给药（CT-2021-03，受试者0471）</td></tr><tr><td>22:45</td><td>出现不良反应（过敏性休克）</td></tr><tr><td>23:47</td><td>抢救无效，宣告死亡</td></tr><tr><td>23:47:03</td><td>系统自动生成空编号</td></tr></table><p class="tiny">给药与死亡之间的92分钟，系统只记录了两条数据。</p>';
+    return '~PHA+PHN0cm9uZz7ml7bpl7Tnur/msYfmgLvvvIjns7vnu5/oh6rliqjnlJ/miJDvvInvvJo8L3N0cm9uZz48L3A+PHRhYmxlIGNsYXNzPSJkYXRhLXRhYmxlIj48dHI+PHRoPuaXtumXtDwvdGg+PHRoPuS6i+S7tjwvdGg+PC90cj48dHI+PHRkPjIyOjE1PC90ZD48dGQ+57uZ6I2v77yIQ1QtMjAyMS0wM++8jOWPl+ivleiAhTA0NzHvvIk8L3RkPjwvdHI+PHRyPjx0ZD4yMjo0NTwvdGQ+PHRkPuWHuueOsOS4jeiJr+WPjeW6lO+8iOi/h+aVj+aAp+S8keWFi++8iTwvdGQ+PC90cj48dHI+PHRkPjIzOjQ3PC90ZD48dGQ+5oqi5pWR5peg5pWI77yM5a6j5ZGK5q275LqhPC90ZD48L3RyPjx0cj48dGQ+MjM6NDc6MDM8L3RkPjx0ZD7ns7vnu5/oh6rliqjnlJ/miJDnqbrnvJblj7c8L3RkPjwvdHI+PC90YWJsZT48cCBjbGFzcz0idGlueSI+57uZ6I2v5LiO5q275Lqh5LmL6Ze055qEOTLliIbpkp/vvIzns7vnu5/lj6rorrDlvZXkuobkuKTmnaHmlbDmja7jgII8L3A+';
   },
   "给药0471": function() {
-    return '<p>给药记录：2022-10-19 22:15，受试者0471，药品批号JA-2021-033。</p><p>给药后30分钟出现不良反应。</p><p class="alert">给药时间与死亡时间之间相隔92分钟。在这92分钟里，没有人发起中止试验流程。</p>';
+    return '~PHA+57uZ6I2v6K6w5b2V77yaMjAyMi0xMC0xOSAyMjoxNe+8jOWPl+ivleiAhTA0NzHvvIzoja/lk4Hmibnlj7dKQS0yMDIxLTAzM+OAgjwvcD48cD7nu5noja/lkI4zMOWIhumSn+WHuueOsOS4jeiJr+WPjeW6lOOAgjwvcD48cCBjbGFzcz0iYWxlcnQiPue7meiNr+aXtumXtOS4juatu+S6oeaXtumXtOS5i+mXtOebuOmalDky5YiG6ZKf44CC5Zyo6L+ZOTLliIbpkp/ph4zvvIzmsqHmnInkurrlj5HotbfkuK3mraLor5XpqozmtYHnqIvjgII8L3A+';
   },
   "c-2024-110471": function() {
-    return '<p>批次 C-2024-11 中的 0471：</p><p>状态：已完成注销。</p><p>注销前最后操作：账号于2024-11-11 03:14:07转入受试者名单。</p><p class="meta">该批次共处理4条记录，0471是唯一被转入受试者名单的。</p>';
+    return '~PHA+5om55qyhIEMtMjAyNC0xMSDkuK3nmoQgMDQ3Me+8mjwvcD48cD7nirbmgIHvvJrlt7LlrozmiJDms6jplIDjgII8L3A+PHA+5rOo6ZSA5YmN5pyA5ZCO5pON5L2c77ya6LSm5Y+35LqOMjAyNC0xMS0xMSAwMzoxNDowN+i9rOWFpeWPl+ivleiAheWQjeWNleOAgjwvcD48cCBjbGFzcz0ibWV0YSI+6K+l5om55qyh5YWx5aSE55CGNOadoeiusOW9le+8jDA0NzHmmK/llK/kuIDooqvovazlhaXlj5for5XogIXlkI3ljZXnmoTjgII8L3A+';
   }
 };
 
@@ -253,7 +269,7 @@ var database = {
   "批次": '<p>2024年数据清洗批次：</p><table class="data-table"><tr><th>批次号</th><th>执行时间</th><th>状态</th></tr><tr><td>C-2024-11</td><td>2024-10-21</td><td>已归档</td></tr><tr><td>C-2024-03</td><td>2024-03-15</td><td>已完成</td></tr></table><p class="meta">C-2024-11 批次详情请检索该批次号。</p>',
   "c-2024-11": '<table class="data-table"><tr><th>编号</th><th>姓名</th><th>审批人</th><th>状态</th></tr><tr><td>0001</td><td>空</td><td>空</td><td>已完成</td></tr><tr><td>0002</td><td>空</td><td>空</td><td>已完成</td></tr><tr><td>0003</td><td>空</td><td>空</td><td>已完成</td></tr><tr><td>0471</td><td>空</td><td>空</td><td>已完成</td></tr><tr><td>NULL</td><td>空</td><td>NULL</td><td>已完成</td></tr></table><p class="meta">批次状态：已完成。执行时间：2024-10-21 02:00:00。</p>',
   "0471": function() {
-    var html = '<table class="data-table"><tr><th>字段</th><th>内容</th></tr><tr><td>通讯录</td><td>0471，周*，行政助理，在职</td></tr><tr><td>考勤表</td><td>无记录</td></tr><tr><td>离职审批</td><td>无审批人，流程状态：已完成</td></tr></table><p class="meta">创建时间：2022-10-19 23:47:03 / 最后修改：2024-10-21 02:00:00</p>';
+    var html = '~PHRhYmxlIGNsYXNzPSJkYXRhLXRhYmxlIj48dHI+PHRoPuWtl+autTwvdGg+PHRoPuWGheWuuTwvdGg+PC90cj48dHI+PHRkPumAmuiur+W9lTwvdGQ+PHRkPjA0NzHvvIzlkagq77yM6KGM5pS/5Yqp55CG77yM5Zyo6IGMPC90ZD48L3RyPjx0cj48dGQ+6ICD5Yuk6KGoPC90ZD48dGQ+5peg6K6w5b2VPC90ZD48L3RyPjx0cj48dGQ+56a76IGM5a6h5om5PC90ZD48dGQ+5peg5a6h5om55Lq677yM5rWB56iL54q25oCB77ya5bey5a6M5oiQPC90ZD48L3RyPjwvdGFibGU+PHAgY2xhc3M9Im1ldGEiPuWIm+W7uuaXtumXtO+8mjIwMjItMTAtMTkgMjM6NDc6MDMgLyDmnIDlkI7kv67mlLnvvJoyMDI0LTEwLTIxIDAyOjAwOjAwPC9wPg==';
     if (hasFlag('sawCanteen')) html += '<p>关联离岗记录：周*（食堂系统同步）。</p>';
     if (hasFlag('saw2022')) html += '<p>关联事故记录：AQ-2022-10-19。</p>';
     if (hasFlag('sawReusable')) html += '<p>该工号于2022-10-21被标记为“可复用”。</p>';
@@ -285,7 +301,7 @@ var database = {
     return html;
   },
   "事故": function() {
-    var html = '<p>安全事故记录（内部）：</p><table class="data-table"><tr><th>字段</th><th>内容</th></tr><tr><td>编号</td><td>AQ-2022-10-19</td></tr><tr><td>时间</td><td>2022年10月19日 23:47</td></tr>';
+    var html = '~PHA+5a6J5YWo5LqL5pWF6K6w5b2V77yI5YaF6YOo77yJ77yaPC9wPjx0YWJsZSBjbGFzcz0iZGF0YS10YWJsZSI+PHRyPjx0aD7lrZfmrrU8L3RoPjx0aD7lhoXlrrk8L3RoPjwvdHI+PHRyPjx0ZD7nvJblj7c8L3RkPjx0ZD5BUS0yMDIyLTEwLTE5PC90ZD48L3RyPjx0cj48dGQ+5pe26Ze0PC90ZD48dGQ+MjAyMuW5tDEw5pyIMTnml6UgMjM6NDc8L3RkPjwvdHI+';
     if (hasFlag('sawModifyLog')) {
       html += '<tr><td>地点</td><td>办公楼三层 <span class="meta">（原值：临床试验中心观察室）</span></td></tr><tr><td>死亡原因</td><td>突发意外 <span class="meta">（原值：药物不良反应）</span></td></tr>';
     } else {
@@ -297,7 +313,7 @@ var database = {
   },
   "安全事故": function() { return database["事故"](); },
   "修订": '<p>AQ-2022-10-19 记录修订信息：</p><p>修订次数：1次。</p><p>修订时间：2022-10-21 01:12。</p><p class="meta">修订字段：2个。修订操作人：NULL。</p><p class="tiny">详细修订内容请检索：修改日志</p>',
-  "修改日志": '<p>AQ-2022-10-19 修改记录：</p><table class="data-table"><tr><th>时间</th><th>字段</th><th>原值</th><th>修改后</th><th>操作人</th></tr><tr><td>2022-10-21 01:12</td><td>死亡原因</td><td>药物不良反应</td><td>突发意外</td><td>NULL</td></tr><tr><td>2022-10-21 01:15</td><td>地点</td><td>临床试验中心观察室</td><td>办公楼三层</td><td>NULL</td></tr></table><p class="meta">修改操作由系统临时权限执行。无人工复核记录。</p>',
+  "修改日志": '~PHA+QVEtMjAyMi0xMC0xOSDkv67mlLnorrDlvZXvvJo8L3A+PHRhYmxlIGNsYXNzPSJkYXRhLXRhYmxlIj48dHI+PHRoPuaXtumXtDwvdGg+PHRoPuWtl+autTwvdGg+PHRoPuWOn+WAvDwvdGg+PHRoPuS/ruaUueWQjjwvdGg+PHRoPuaTjeS9nOS6ujwvdGg+PC90cj48dHI+PHRkPjIwMjItMTAtMjEgMDE6MTI8L3RkPjx0ZD7mrbvkuqHljp/lm6A8L3RkPjx0ZD7oja/niankuI3oia/lj43lupQ8L3RkPjx0ZD7nqoHlj5HmhI/lpJY8L3RkPjx0ZD5OVUxMPC90ZD48L3RyPjx0cj48dGQ+MjAyMi0xMC0yMSAwMToxNTwvdGQ+PHRkPuWcsOeCuTwvdGQ+PHRkPuS4tOW6iuivlemqjOS4reW/g+inguWvn+WupDwvdGQ+PHRkPuWKnuWFrOalvOS4ieWxgjwvdGQ+PHRkPk5VTEw8L3RkPjwvdHI+PC90YWJsZT48cCBjbGFzcz0ibWV0YSI+5L+u5pS55pON5L2c55Sx57O757uf5Li05pe25p2D6ZmQ5omn6KGM44CC5peg5Lq65bel5aSN5qC46K6w5b2V44CCPC9wPg==',
   "修改记录": function() { return database["修改日志"]; },
   "药物不良反应": '<p>残留记录：</p><p>0471（周*），2022-10-19，参与CT-2021-03项目，出现严重药物不良反应。</p><p>症状：过敏性休克、多器官功能衰竭。</p><p>结果：抢救无效。</p><p class="meta">该记录未同步至正式事故报告。</p>',
   "不良反应": function() { return database["药物不良反应"]; },
@@ -322,14 +338,14 @@ var database = {
   "可复用": '<p>工号0471状态：可复用。</p><p>标记时间：2022-10-21。</p><p>标记原因：原使用人已注销（非离职）。</p><p class="meta">系统建议：分配至新入职员工。</p>',
   "工号保留": '<p>工号保留记录：0471</p><p>状态：保留（未注销）</p><p>保留原因：涉及未结事项</p><p>最后更新：2022-10-21</p>',
   "未结事项": '<p>未结事项：AQ-2022-10-19</p><p>状态：已结案（系统自动）</p><p>备注：结案后工号保留，用于后续数据处理。</p>',
-  "已注销": '<p>注销类型：</p><p>离职注销：正常流程。</p><p>死亡注销：需家属确认。</p><p>0471 注销类型：非离职（系统标记为“可复用”）。</p><p class="meta">非离职注销不释放工号，保留用于后续分配。</p>',
+  "已注销": '~PHA+5rOo6ZSA57G75Z6L77yaPC9wPjxwPuemu+iBjOazqOmUgO+8muato+W4uOa1geeoi+OAgjwvcD48cD7mrbvkuqHms6jplIDvvJrpnIDlrrblsZ7noa7orqTjgII8L3A+PHA+MDQ3MSDms6jplIDnsbvlnovvvJrpnZ7nprvogYzvvIjns7vnu5/moIforrDkuLrigJzlj6/lpI3nlKjigJ3vvInjgII8L3A+PHAgY2xhc3M9Im1ldGEiPumdnuemu+iBjOazqOmUgOS4jemHiuaUvuW3peWPt++8jOS/neeVmeeUqOS6juWQjue7reWIhumFjeOAgjwvcD4=',
   "非离职": '<p>0471 注销类型：非离职。</p><p>系统标记：可复用。</p><p class="meta">非离职注销记录不向员工公开。</p>',
   "身份变更": '<p>工号 0471 身份变更记录：</p><table class="data-table"><tr><th>时间</th><th>姓名</th><th>说明</th></tr><tr><td>2021-03 至 2022-10</td><td>周*</td><td>行政部在职，参与CT-2021-03</td></tr><tr><td>2022-10-21</td><td>空</td><td>系统清洗，姓名转为空</td></tr><tr><td>2024-01-15</td><td>已隐藏</td><td>分配至新入职员工</td></tr><tr><td>2024-10-21</td><td>空</td><td>覆盖操作，姓名丢失</td></tr><tr><td>2024-11-11</td><td>空</td><td>账号注销，转入受试者名单</td></tr></table>',
   "入职记录": '<p>入职记录：0471</p><p>入职时间：2024-01-15</p><p>姓名：已隐藏</p><p>部门：行政部</p><p>备注：该工号由系统自动分配。已签署员工健康知情同意书。</p>',
   "分配": '<p>工号分配记录：</p><p>0471 于 2024-01-15 分配至新入职员工。</p><p>分配方式：系统自动。</p><p class="meta">该工号原使用人：周*（已故）。</p>',
   "继承人": '<p>工号 0471 继承人字段：空。</p><p class="meta">系统自动分配，无人工确认记录。</p>',
   "锁定": '<p>帖子锁定记录：</p><table class="data-table"><tr><th>字段</th><th>内容</th></tr><tr><td>帖子ID</td><td>F-2024-11-10-001</td></tr><tr><td>锁定时间</td><td>2024-11-11 03:14:07</td></tr><tr><td>锁定原因</td><td>账号已注销</td></tr><tr><td>操作人</td><td>NULL</td></tr><tr><td>备注</td><td>关联工号0471。该工号状态：已入组。</td></tr></table>',
-  "账号注销": '<p>账号注销记录：</p><p>注销时间：2024-11-11 03:14:07。</p><p>注销原因：工号状态变更（员工转为受试者）。</p><p>操作人：NULL。</p><p class="meta">该账号关联工号：0471。</p>',
+  "账号注销": '~PHA+6LSm5Y+35rOo6ZSA6K6w5b2V77yaPC9wPjxwPuazqOmUgOaXtumXtO+8mjIwMjQtMTEtMTEgMDM6MTQ6MDfjgII8L3A+PHA+5rOo6ZSA5Y6f5Zug77ya5bel5Y+354q25oCB5Y+Y5pu077yI5ZGY5bel6L2s5Li65Y+X6K+V6ICF77yJ44CCPC9wPjxwPuaTjeS9nOS6uu+8mk5VTEzjgII8L3A+PHAgY2xhc3M9Im1ldGEiPuivpei0puWPt+WFs+iBlOW3peWPt++8mjA0NzHjgII8L3A+',
   "最后登录": '<p>0471 最后登录时间：2024-11-11 03:14:07。</p><p>登录设备：未知。</p><p>IP：已记录。</p><p>状态：会话已终止。</p>',
   "楼主": '<p>楼主账号信息：</p><p>账号状态：已注销。</p><p>注销时间：2024-11-11 03:14:07。</p><p>关联工号：0471。</p><p class="meta">该工号原使用人：周*（2022-10-19 已故）。当前使用人已转入受试者名单。</p>',
   "匿名用户": '<p>匿名用户（楼主）账号信息：</p><p>关联工号：0471。</p><p>账号状态：已注销。</p><p class="meta">注销原因：工号状态变更（员工转为受试者）。</p>',
@@ -337,32 +353,32 @@ var database = {
   "null": '<p>管理员账号不存在。</p><p>但该工号曾于 [未知时间] 执行过 1 次数据清洗。</p><p>关联记录：0471</p>',
   "NULL": '<p>临时权限账号。</p><p>由系统在检测到审批链断裂时自动生成。</p><p>无法登录，无法修改密码。</p><p class="meta">操作记录：数据清洗、修改事故报告、代签文件、分配工号、注销账号。</p>',
   "数据清洗": '<p>数据清洗规则 3.1：必填字段缺失的记录，进入待注销队列。</p><p class="meta">查看完整规则请检索：规则3.2</p>',
-  "规则3.1": '<p>必填字段缺失的记录，进入待注销队列。</p>',
-  "规则3.2": '<p>审批链断裂的记录，由临时权限 NULL 代为确认。</p>',
-  "规则3.3": '<p>所有检索行为均视为对系统的输入，需记录来源。</p>',
-  "规则3.4": '<p>异常输入源应在会话结束前归类。</p>',
-  "规则3.5": '<p>已注销记录不可恢复。工号可复用。</p>',
+  "规则3.1": '~PHA+5b+F5aGr5a2X5q6157y65aSx55qE6K6w5b2V77yM6L+b5YWl5b6F5rOo6ZSA6Zif5YiX44CCPC9wPg==',
+  "规则3.2": '~PHA+5a6h5om56ZO+5pat6KOC55qE6K6w5b2V77yM55Sx5Li05pe25p2D6ZmQIE5VTEwg5Luj5Li656Gu6K6k44CCPC9wPg==',
+  "规则3.3": '~PHA+5omA5pyJ5qOA57Si6KGM5Li65Z2H6KeG5Li65a+557O757uf55qE6L6T5YWl77yM6ZyA6K6w5b2V5p2l5rqQ44CCPC9wPg==',
+  "规则3.4": '~PHA+5byC5bi46L6T5YWl5rqQ5bqU5Zyo5Lya6K+d57uT5p2f5YmN5b2S57G744CCPC9wPg==',
+  "规则3.5": '~PHA+5bey5rOo6ZSA6K6w5b2V5LiN5Y+v5oGi5aSN44CC5bel5Y+35Y+v5aSN55So44CCPC9wPg==',
   "历史清洗记录": '<table class="data-table"><tr><th>年份</th><th>数量</th><th>备注</th></tr><tr><td>2022</td><td>3</td><td>其中1条：系统自动生成，无来源</td></tr><tr><td>2023</td><td>1</td><td>正常</td></tr><tr><td>2024</td><td>4</td><td>含人工干预 1 次</td></tr></table><p class="meta">2022年执行时间：2022-10-21 02:00:00。</p>',
   "人工干预": '<p>2024年人工干预记录：</p><p>操作员：NULL</p><p>目标：0471</p><p>结果：失败</p><p>原因：必填字段无法补齐</p><p>备注：该记录与空编号存在时间戳重叠，建议合并处理。</p>',
-  "合并": '<p>合并失败。</p><p>目标记录（空编号）姓名字段永久缺失。</p><p>源记录（0471）已被覆盖。</p><p>建议：两条记录均标记为封存。</p>',
-  "覆盖": '<p>覆盖操作不可逆。</p><p>源记录 0471 姓名字段已丢失。</p><p>目标记录 空编号 仍为空。</p><p class="meta">执行时间：2024-10-21 02:00:00。</p>',
-  "空编号": '<p>（该记录所有字段为空）</p><div class="alert">该记录不存在，但你已看到它。</div><p class="meta">创建时间：2022-10-19 23:47:03</p><p class="tiny">封存原因：人工干预失败</p>',
-  "必填字段": '<p>字段列表：工号、部门、状态、姓名。</p><p>其中「姓名」字段状态：永久缺失。</p><p class="tiny">姓名无法录入者，不视为存在。</p>',
+  "合并": '~PHA+5ZCI5bm25aSx6LSl44CCPC9wPjxwPuebruagh+iusOW9le+8iOepuue8luWPt++8ieWnk+WQjeWtl+auteawuOS5hee8uuWkseOAgjwvcD48cD7mupDorrDlvZXvvIgwNDcx77yJ5bey6KKr6KaG55uW44CCPC9wPjxwPuW7uuiuru+8muS4pOadoeiusOW9leWdh+agh+iusOS4uuWwgeWtmOOAgjwvcD4=',
+  "覆盖": '~PHA+6KaG55uW5pON5L2c5LiN5Y+v6YCG44CCPC9wPjxwPua6kOiusOW9lSAwNDcxIOWnk+WQjeWtl+auteW3suS4ouWkseOAgjwvcD48cD7nm67moIforrDlvZUg56m657yW5Y+3IOS7jeS4uuepuuOAgjwvcD48cCBjbGFzcz0ibWV0YSI+5omn6KGM5pe26Ze077yaMjAyNC0xMC0yMSAwMjowMDowMOOAgjwvcD4=',
+  "空编号": '~PHA+77yI6K+l6K6w5b2V5omA5pyJ5a2X5q615Li656m677yJPC9wPjxkaXYgY2xhc3M9ImFsZXJ0Ij7or6XorrDlvZXkuI3lrZjlnKjvvIzkvYbkvaDlt7LnnIvliLDlroPjgII8L2Rpdj48cCBjbGFzcz0ibWV0YSI+5Yib5bu65pe26Ze077yaMjAyMi0xMC0xOSAyMzo0NzowMzwvcD48cCBjbGFzcz0idGlueSI+5bCB5a2Y5Y6f5Zug77ya5Lq65bel5bmy6aKE5aSx6LSlPC9wPg==',
+  "必填字段": '~PHA+5a2X5q615YiX6KGo77ya5bel5Y+344CB6YOo6Zeo44CB54q25oCB44CB5aeT5ZCN44CCPC9wPjxwPuWFtuS4reOAjOWnk+WQjeOAjeWtl+auteeKtuaAge+8muawuOS5hee8uuWkseOAgjwvcD48cCBjbGFzcz0idGlueSI+5aeT5ZCN5peg5rOV5b2V5YWl6ICF77yM5LiN6KeG5Li65a2Y5Zyo44CCPC9wPg==',
   "封存记录": '<p>因人工干预失败，该记录已从所有业务表中剥离，仅保留于调试日志。</p>',
-  "调试日志": '<p>调试日志（片段）：</p><p>「0471 姓名字段为空，无法通过校验。」</p><p>「检测到记录冲突，已执行覆盖操作。源：0471，目标：空编号。结果：源记录姓名字段丢失。」</p><p>「已尝试人工补录，失败。」</p><p>「该记录已封存。」</p><p class="meta">日志末尾签名：NULL</p>',
+  "调试日志": '~PHA+6LCD6K+V5pel5b+X77yI54mH5q6177yJ77yaPC9wPjxwPuOAjDA0NzEg5aeT5ZCN5a2X5q615Li656m677yM5peg5rOV6YCa6L+H5qCh6aqM44CC44CNPC9wPjxwPuOAjOajgOa1i+WIsOiusOW9leWGsueqge+8jOW3suaJp+ihjOimhuebluaTjeS9nOOAgua6kO+8mjA0NzHvvIznm67moIfvvJrnqbrnvJblj7fjgILnu5PmnpzvvJrmupDorrDlvZXlp5PlkI3lrZfmrrXkuKLlpLHjgILjgI08L3A+PHA+44CM5bey5bCd6K+V5Lq65bel6KGl5b2V77yM5aSx6LSl44CC44CNPC9wPjxwPuOAjOivpeiusOW9leW3suWwgeWtmOOAguOAjTwvcD48cCBjbGFzcz0ibWV0YSI+5pel5b+X5pyr5bC+562+5ZCN77yaTlVMTDwvcD4=',
   "异常输入源": '<p>定义：与封存记录产生关联的访客。</p><p>关联记录：空编号</p>',
-  "admin": '<p>当前会话身份：admin（管理员）。</p><p>权限等级：管理员。</p><p>会话状态：正常（可能已变更）。</p>',
-  "待归类": '<p>当前访问状态：待归类。</p><p>请在会话结束前选择处理方式。</p>',
-  "归档": function() { return isUnlocked() ? "GO:ending_archive.html" : LOCKED_MSG; },
-  "外传": function() { return isUnlocked() ? "GO:ending_spread.html" : LOCKED_MSG; },
-  "退出": function() { return isUnlocked() ? "GO:ending_silent.html" : LOCKED_MSG; },
+  "admin": '~PHA+5b2T5YmN5Lya6K+d6Lqr5Lu977yaYWRtaW7vvIjnrqHnkIblkZjvvInjgII8L3A+PHA+5p2D6ZmQ562J57qn77ya566h55CG5ZGY44CCPC9wPjxwPuS8muivneeKtuaAge+8muato+W4uO+8iOWPr+iDveW3suWPmOabtO+8ieOAgjwvcD4=',
+  "待归类": '~PHA+5b2T5YmN6K6/6Zeu54q25oCB77ya5b6F5b2S57G744CCPC9wPjxwPuivt+WcqOS8muivnee7k+adn+WJjemAieaLqeWkhOeQhuaWueW8j+OAgjwvcD4=',
+  "归档": function() { return isUnlocked() ? "GO:9a3f1c7e.html" : LOCKED_MSG; },
+  "外传": function() { return isUnlocked() ? "GO:c47b0d92.html" : LOCKED_MSG; },
+  "退出": function() { return isUnlocked() ? "GO:e1b83a56.html" : LOCKED_MSG; },
   "受试者招募不足": '<p><strong>关于 CT-2024-02 受试者招募不足的补充公告</strong></p><p>项目编号：CT-2024-02 / 计划入组 36 例 / 已入组 28 例</p><p>缺口 8 例。外部招募渠道已连续两周无有效新增。</p><p>经伦理委员会备案，现面向公司在职员工开放内部招募，名额优先分配至行政部与临床试验中心。</p><p>参与方式：由系统从员工健康知情同意书中自动筛选，被选中者由部门主管口头通知。</p><p>补贴：完成全部访视 3000 元；中途退出按已完成访视比例发放。</p><p class="meta">发布日期：2024-11-08 / 发布部门：临床试验中心</p><p class="tiny">备注：员工无需另行报名。入职时签署的《员工健康知情同意书》第 4 条第 2 款已覆盖本项安排。</p>',
   "受试者招募": function() { return database["受试者招募不足"]; },
   "受试者不足": function() { return database["受试者招募不足"]; },
   "内部招募": function() { return database["受试者招募不足"]; },
   "招募公告": function() { return database["受试者招募不足"]; },
   "日志": '<p>系统日志索引（权限：管理员）：</p><table class="data-table"><tr><th>类别</th><th>检索词</th><th>状态</th></tr><tr><td>检索记录</td><td>我的访问记录</td><td>可查看</td></tr><tr><td>调试日志</td><td>调试日志</td><td>可查看</td></tr><tr><td>修改日志</td><td>修改日志</td><td>可查看</td></tr><tr><td>清洗日志</td><td>历史清洗记录</td><td>可查看</td></tr><tr><td>系统日志</td><td>检索日志</td><td>部分缺失</td></tr></table><p class="meta">日志按会话隔离。被标记的会话将单独归档，归档后不再计入任何列表。</p>',
-  "规则": '<p>系统运行规则（调试模式可见）：</p><table class="data-table"><tr><th>编号</th><th>摘要</th></tr><tr><td>规则3.1</td><td>必填字段缺失的记录，进入待注销队列。</td></tr><tr><td>规则3.2</td><td>审批链断裂的记录，由临时权限 NULL 代为确认。</td></tr><tr><td>规则3.3</td><td>所有检索行为均视为对系统的输入，需记录来源。</td></tr><tr><td>规则3.4</td><td>异常输入源应在会话结束前归类。</td></tr><tr><td>规则3.5</td><td>已注销记录不可恢复。工号可复用。</td></tr></table><p class="meta">规则由临时权限账号维护，修改不留痕。</p>'
+  "规则": '~PHA+57O757uf6L+Q6KGM6KeE5YiZ77yI6LCD6K+V5qih5byP5Y+v6KeB77yJ77yaPC9wPjx0YWJsZSBjbGFzcz0iZGF0YS10YWJsZSI+PHRyPjx0aD7nvJblj7c8L3RoPjx0aD7mkZjopoE8L3RoPjwvdHI+PHRyPjx0ZD7op4TliJkzLjE8L3RkPjx0ZD7lv4XloavlrZfmrrXnvLrlpLHnmoTorrDlvZXvvIzov5vlhaXlvoXms6jplIDpmJ/liJfjgII8L3RkPjwvdHI+PHRyPjx0ZD7op4TliJkzLjI8L3RkPjx0ZD7lrqHmibnpk77mlq3oo4LnmoTorrDlvZXvvIznlLHkuLTml7bmnYPpmZAgTlVMTCDku6PkuLrnoa7orqTjgII8L3RkPjwvdHI+PHRyPjx0ZD7op4TliJkzLjM8L3RkPjx0ZD7miYDmnInmo4DntKLooYzkuLrlnYfop4bkuLrlr7nns7vnu5/nmoTovpPlhaXvvIzpnIDorrDlvZXmnaXmupDjgII8L3RkPjwvdHI+PHRyPjx0ZD7op4TliJkzLjQ8L3RkPjx0ZD7lvILluLjovpPlhaXmupDlupTlnKjkvJror53nu5PmnZ/liY3lvZLnsbvjgII8L3RkPjwvdHI+PHRyPjx0ZD7op4TliJkzLjU8L3RkPjx0ZD7lt7Lms6jplIDorrDlvZXkuI3lj6/mgaLlpI3jgILlt6Xlj7flj6/lpI3nlKjjgII8L3RkPjwvdHI+PC90YWJsZT48cCBjbGFzcz0ibWV0YSI+6KeE5YiZ55Sx5Li05pe25p2D6ZmQ6LSm5Y+357u05oqk77yM5L+u5pS55LiN55WZ55eV44CCPC9wPg=='
 };
 
 var LOCKED_MSG = '<p>该操作需由系统在会话结束时自动执行。</p><p class="meta">当前会话状态：待归类。</p>';
@@ -394,14 +410,20 @@ var flagMap = {
   "受试者招募":"sawRecruit","受试者招募不足":"sawRecruit","内部招募":"sawRecruit"
 };
 
+function unseal(v) {
+  if (typeof v !== 'string' || v.charAt(0) !== '~') return v;
+  try { return decodeURIComponent(escape(atob(v.slice(1)))); } catch (e) { return v; }
+}
+
 function lookup(raw) {
   var n = norm(raw);
   var compact = n.replace(/\s+/g, '');
-  if (combos[compact]) return combos[compact]();
+  if (combos[compact]) return unseal(combos[compact]());
   for (var k in database) {
     if (norm(k) === n) {
       var v = database[k];
-      return typeof v === 'function' ? v() : v;
+      v = typeof v === 'function' ? v() : v;
+      return unseal(v);
     }
   }
   return null;
@@ -492,10 +514,11 @@ function doSearch(raw) {
 
     var content = lookup(raw);
     if (content === null) {
-      showFullscreen(raw, '检索结果', '未找到相关记录。请检查输入是否正确。', true);
+      showFullscreen(raw, '系统提示', '检索队列繁忙，请求未被处理。请稍后重试。', true);
       return;
     }
     if (content.indexOf('GO:') === 0) {
+      try { sessionStorage.setItem('ja_ending_ok', '1'); } catch (e) {}
       window.location.href = content.slice(3);
       return;
     }

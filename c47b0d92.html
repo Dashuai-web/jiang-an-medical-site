@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>处理完成 - 已外传</title>
-<style>body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;}.c{max-width:780px;margin:0 auto;background:#fff;border:1px solid #b0b0b0;padding:30px;line-height:2;}.chat{margin-top:20px;padding:14px;border:1px dashed #ccc;background:#fafafa;font-size:13px;}.chat p{margin:6px 0;}.f{margin-top:24px;border-top:1px solid #ccc;padding-top:10px;font-size:11px;color:#aaa;}  /* ---- mobile ---- */
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>外传 - 跳转中</title>
+<style>body{font-family:SimSun,宋体,serif;font-size:14px;color:#333;background:#e9e9e9;margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;}.c{text-align:center;color:#888;}  /* ---- mobile ---- */
   @media (max-width: 720px) {
     body { -webkit-text-size-adjust: 100%; }
     .top-inner, .topbar-inner, .nav-inner, .content, .main, .header, .search-inner, .box, .result-body { max-width: 100% !important; }
@@ -31,17 +31,13 @@
   }
 </style>
 </head>
-<body><div class="c">
-<p>检测到未授权导出。</p>
-<p>访问来源已标记：异常输入源。</p>
-<p>处理方式：社会性注销。</p>
-<div class="chat">
-<p>“你昨天发的那个截图我看了，挺吓人的。”</p>
-<p>“你还在吗？”</p>
-<p>“你的工牌怎么刷不出来了？”</p>
-<p>“系统里查不到你。”</p>
-<p style="color:#a00;">你想发帖求助。但系统显示：该用户不存在。</p>
-</div>
-<div class="f">你的账号状态：已注销 / 关联工号：0471</div>
-</div>
+<body>
+<script>
+(function () {
+  try { if (sessionStorage.getItem('ja_ending_ok') === '1') return; } catch (e) {}
+  location.replace('index.html');
+})();
+</script>
+<div class="c"><p>正在跳转…</p></div>
+<script>setTimeout(function(){window.location.href='forum_post.html';},800);</script>
 </body></html>

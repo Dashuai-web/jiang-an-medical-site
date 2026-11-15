@@ -43,6 +43,13 @@
 </style>
 </head>
 <body>
+<script>
+(function () {
+  try { if (sessionStorage.getItem('ja_ending_ok') === '1') return; } catch (e) {}
+  location.replace('index.html');
+})();
+</script>
+
 <div class="c">
   <div id="step1" class="step show">
     <p>正在生成调查文件…</p>
