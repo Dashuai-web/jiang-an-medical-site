@@ -33,7 +33,26 @@
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="lockView">
+  <style>
+    #lockView { max-width: 460px; margin: 90px auto; text-align: center; }
+    #lockView h1 { font-size: 22px; margin: 0 0 8px; }
+    #lockView .sub2 { font-size: 13px; color: #888; margin-bottom: 26px; }
+    #lockView .box2 { display: flex; gap: 8px; justify-content: center; }
+    #lockView input { flex: 1; max-width: 280px; padding: 9px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; outline: none; }
+    #lockView input:focus { border-color: #1a4a8a; }
+    #lockView button { padding: 9px 22px; background: #1a4a8a; color: #fff; border: none; border-radius: 4px; font-size: 14px; cursor: pointer; }
+    #lockView .err2 { color: #a33; font-size: 12px; margin-top: 12px; min-height: 18px; }
+  </style>
+  <h1>攻略文档</h1>
+  <div class="sub2">本文档需要验证后访问。</div>
+  <div class="box2">
+    <input id="guidePw" type="password" placeholder="输入密码" autocomplete="off">
+    <button onclick="tryGuidePw()">进入</button>
+  </div>
+  <div class="err2" id="guideErr"></div>
+</div>
+<div class="wrap" id="guideView" style="display:none">
   <h1>江安医药 · 攻略文档</h1>
   <div class="sub">普通版与困难版的完整解谜过程。建议卡住了再看。</div>
 
@@ -160,6 +179,63 @@ function sw(i, el) {
   for (var k = 0; k < panes.length; k++) panes[k].className = 'pane';
   document.getElementById('pane' + i).className = 'pane active';
 }
+</script>
+<script>
+function tryGuidePw() {
+  var v = document.getElementById('guidePw').value;
+  if (v === 'jianganyiyaomaybe202611152049') {
+    try { sessionStorage.setItem('ja_guide_ok', '1'); } catch (e) {}
+    showGuide();
+  } else {
+    document.getElementById('guideErr').textContent = '密码错误。';
+  }
+}
+function showGuide() {
+  document.getElementById('lockView').style.display = 'none';
+  document.getElementById('guideView').style.display = 'block';
+}
+try { if (sessionStorage.getItem('ja_guide_ok') === '1') showGuide(); } catch (e) {}
+var gi = document.getElementById('guidePw');
+if (gi) gi.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryGuidePw(); });
+</script>
+<script>
+/* ---- 访问保护 ---- */
+(function () {
+  var hits = 0, frozen = false;
+  function overlay(msg) {
+    var o = document.getElementById('dwGuard');
+    if (!o) {
+      o = document.createElement('div');
+      o.id = 'dwGuard';
+      o.style.cssText = 'position:fixed;inset:0;background:rgba(24,0,0,.95);color:#e6c4c4;z-index:2147483000;'
+        + 'display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;'
+        + 'font-family:SimSun,宋体,serif;font-size:15px;line-height:2.1;';
+      document.body.appendChild(o);
+    }
+    o.innerHTML = msg;
+  }
+  function mark() {
+    hits++;
+    if (hits === 1) overlay('检测到调试工具。<br>本次会话已被记录。<br><span style="font-size:12px;color:#8a6a6a;">关闭调试工具后刷新页面</span>');
+    if (hits >= 3) { frozen = true; overlay('会话已终止。<br><span style="font-size:12px;color:#8a6a6a;">你已经看得够多了。</span>'); }
+  }
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('keydown', function (e) {
+    var k = (e.key || '').toUpperCase();
+    if (k === 'F12'
+      || (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C'))
+      || (e.ctrlKey && (k === 'U' || k === 'S'))
+      || (e.metaKey && e.altKey && k === 'I')) {
+      e.preventDefault(); e.stopPropagation(); mark();
+    }
+  }, true);
+  setInterval(function () {
+    if (frozen) return;
+    var t = performance.now();
+    try { (function () { debugger; })(); } catch (e) {}
+    if (performance.now() - t > 150) mark();
+  }, 1500);
+})();
 </script>
 </body>
 </html>
