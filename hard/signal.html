@@ -47,7 +47,7 @@ var lamp = document.getElementById('lamp');
 var seq = [
   ['dot','dot','dot'], ['dot','dot'], ['dash','dot','dot','dash']
 ];
-var dotMs = 220, dashMs = 600, gapIn = 220, gapLetter = 700, gapLoop = 2400;
+var dotMs = 200, dashMs = 1000, gapIn = 260, gapLetter = 800, gapLoop = 3200;
 var i = 0, j = 0, phase = 'on', timer = null;
 
 function step() {
@@ -80,7 +80,7 @@ function playSound() {
   var idx = 0, off = 0;
   seq.forEach(function (letter, li) {
     letter.forEach(function (sym) {
-      var dur = sym === 'dot' ? 0.22 : 0.6;
+      var dur = sym === 'dot' ? 0.2 : 1.0;
       var o = audioCtx.createOscillator();
       var g = audioCtx.createGain();
       o.type = 'sine'; o.frequency.value = 700;
