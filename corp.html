@@ -28,7 +28,8 @@
   .grid { display: flex; gap: 18px; flex-wrap: wrap; }
   .g-card { flex: 1 1 260px; border: 1px solid #e6e6e6; padding: 18px; background: #fafcfb; }
   .g-card h4 { margin: 0 0 8px; font-size: 14px; color: #1a6b4a; }
-  .g-card p { margin: 0; font-size: 13px; color: #666; line-height: 1.9; }
+  .g-card p { margin: 0 0 4px; font-size: 13px; color: #666; line-height: 1.9; }
+  .g-card .meta { font-size: 12px; color: #999; }
   .info-table { border-collapse: collapse; width: 100%; max-width: 760px; }
   .info-table th, .info-table td { border: 1px solid #e2e2e2; padding: 10px 14px; text-align: left; font-size: 13px; }
   .info-table th { background: #f4f8f6; width: 140px; color: #1a6b4a; font-weight: normal; }
@@ -86,9 +87,9 @@ var SECTIONS = {
     title: '产品研发',
     html: '<p>公司聚焦心血管、内分泌、抗感染三大治疗领域，在研及已上市品种 26 个。</p>'
       + '<div class="grid">'
-      + '<div class="g-card"><h4>心血管类</h4><p>XX 片（5mg/10mg）——已完成一致性评价，2022 年上市。</p></div>'
-      + '<div class="g-card"><h4>内分泌类</h4><p>XX 缓释胶囊（0.5g）——处于 BE 试验阶段。</p></div>'
-      + '<div class="g-card"><h4>抗感染类</h4><p>XX 注射液（0.25g）——已完成 I 期临床，待申报。</p></div>'
+      + '<div class="g-card"><h4>心血管类</h4><p>苯磺酸氨氯地平片（5mg / 10mg）</p><p class="meta">国药准字 H20183452 · 2022 年通过仿制药一致性评价并上市</p><p class="meta">适应症：高血压、慢性稳定性心绞痛</p></div>'
+      + '<div class="g-card"><h4>内分泌类</h4><p>盐酸二甲双胍缓释片（0.5g）</p><p class="meta">国药准字 H20213876 · 生物等效性试验准备中（项目编号 CT-2024-05）</p><p class="meta">适应症：2 型糖尿病</p></div>'
+      + '<div class="g-card"><h4>抗感染类</h4><p>注射用头孢曲松钠（1.0g）</p><p class="meta">国药准字 H20192013 · 已完成 I 期临床试验，待申报生产</p><p class="meta">适应症：敏感菌所致的呼吸道、泌尿道感染</p></div>'
       + '</div>'
       + '<h3>研发平台</h3>'
       + '<p>药物研究院设有制剂研究室、分析检测室、稳定性考察室，配备高效液相色谱仪、溶出度测定仪等设备 60 余台（套）。</p>'
