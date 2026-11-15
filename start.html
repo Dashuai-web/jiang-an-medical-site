@@ -55,6 +55,11 @@
   .hard .tag { color: var(--frost); background: var(--frost-dim); }
 
   .card h2 { font-size: 20px; margin: 0 0 10px; letter-spacing: .06em; font-weight: 600; }
+  .card h2 .beta {
+    font-size: 10px; letter-spacing: 1px; padding: 1px 7px; border-radius: 4px;
+    background: #b06a3a; color: #fff; font-weight: normal; vertical-align: 3px; margin-left: 6px;
+  }
+  .card .warnline { font-size: 11px; color: #a0602a; margin-top: 12px; line-height: 1.7; }
   .card .desc { font-size: 13px; color: var(--muted); line-height: 1.9; min-height: 52px; }
   .card .go { display: flex; align-items: center; gap: 6px; margin-top: 22px; font-size: 13px; }
   .normal .go { color: var(--ice); }
@@ -93,8 +98,9 @@
 
     <a class="card hard" href="hard.html" onclick="setMode('hard')">
       <div class="tag">硬 核 解 谜</div>
-      <h2>困难版</h2>
+      <h2>困难版 <span class="beta">BETA</span></h2>
       <div class="desc">提示更少。旧电脑、服务器终端、电码、404……<br>你需要更多手段。</div>
+      <div class="warnline">测试版本，可能不稳定，建议优先尝试普通版。</div>
       <div class="go">进入 <span class="arr">→</span></div>
     </a>
   </div>
