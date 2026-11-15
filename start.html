@@ -5,55 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>江安医药</title>
 <style>
-  * { box-sizing: border-box; }
-  body { margin: 0; padding: 0; background: #101418; color: #d8e0e6;
-         font-family: "Microsoft YaHei", sans-serif; min-height: 100vh;
-         display: flex; align-items: center; justify-content: center; }
-  .wrap { max-width: 860px; width: 100%; padding: 40px 20px; text-align: center; }
-  .logo { font-size: 13px; letter-spacing: 6px; color: #5a6b78; margin-bottom: 26px; }
-  .title { font-size: 26px; letter-spacing: 3px; color: #cfe0ee; margin-bottom: 8px; }
-  .sub { font-size: 13px; color: #6b7a86; line-height: 1.9; margin-bottom: 38px; }
-  .cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-  .card {
-    flex: 1 1 240px; max-width: 320px; border: 1px solid #2a3540; border-radius: 8px;
-    padding: 30px 22px; cursor: pointer; text-align: left; transition: border-color .2s, transform .15s;
-    background: #161d23; text-decoration: none; color: inherit; display: block;
+  :root {
+    --bg: #0a0e13;
+    --green: #4bd08a;
+    --green-dim: #1a6b4a;
+    --red: #e06a6a;
+    --red-dim: #6b2a2a;
+    --text: #dbe4ec;
+    --muted: #6b7783;
   }
-  .card:hover { border-color: #4a7a5a; transform: translateY(-3px); }
-  .card .k { font-size: 17px; color: #cfe0ee; margin-bottom: 10px; letter-spacing: 1px; }
-  .card .d { font-size: 12px; color: #7a8a96; line-height: 1.9; }
-  .card .tag { display: inline-block; font-size: 10px; padding: 1px 7px; border: 1px solid #3a4a56;
-               border-radius: 10px; color: #8a9aa6; margin-bottom: 12px; }
-  .card.hard { border-color: #5a3a3a; }
-  .card.hard:hover { border-color: #a05a5a; }
-  .card.hard .k { color: #e0b0b0; }
-  .card.hard .tag { border-color: #6a4a4a; color: #c09a9a; }
-  .foot { margin-top: 34px; font-size: 11px; color: #4a5a66; letter-spacing: 1px; }
-  @media (max-width: 720px) {
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(26,107,74,.18), transparent 60%),
+      radial-gradient(800px 500px at 85% 110%, rgba(107,42,42,.12), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* 极淡的网格底纹 */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  }
+  .wrap { position: relative; max-width: 900px; width: 100%; text-align: center; }
+
+  .eyebrow { font-size: 12px; letter-spacing: .6em; color: var(--muted); margin-bottom: 22px; }
+  h1 { font-size: 44px; letter-spacing: .18em; margin: 0 0 10px; font-weight: 600; }
+  .tagline { font-size: 14px; color: var(--muted); line-height: 1.9; margin-bottom: 46px; }
+  .tagline b { color: #8fb0a0; font-weight: 400; }
+
+  .cards { display: flex; gap: 24px; justify-content: center; }
+  .card {
+    position: relative; flex: 1 1 300px; max-width: 340px;
+    border: 1px solid rgba(255,255,255,.08); border-radius: 16px;
+    padding: 34px 28px 30px; text-align: left; cursor: pointer; text-decoration: none; color: inherit;
+    background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
+    backdrop-filter: blur(6px);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .card:hover { transform: translateY(-5px); }
+  .card.normal:hover { border-color: rgba(75,208,138,.5); box-shadow: 0 14px 40px -18px rgba(75,208,138,.55); }
+  .card.hard:hover { border-color: rgba(224,106,106,.5); box-shadow: 0 14px 40px -18px rgba(224,106,106,.5); }
+
+  .icon {
+    width: 52px; height: 52px; border-radius: 13px; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 20px;
+  }
+  .normal .icon { background: rgba(75,208,138,.12); border: 1px solid rgba(75,208,138,.25); }
+  .hard .icon { background: rgba(224,106,106,.12); border: 1px solid rgba(224,106,106,.25); }
+
+  .tag {
+    display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 20px; letter-spacing: .12em;
+    margin-bottom: 14px;
+  }
+  .normal .tag { color: var(--green); border: 1px solid rgba(75,208,138,.3); }
+  .hard .tag { color: var(--red); border: 1px solid rgba(224,106,106,.3); }
+
+  .card h2 { font-size: 20px; margin: 0 0 10px; letter-spacing: .06em; font-weight: 600; }
+  .card .desc { font-size: 13px; color: var(--muted); line-height: 1.9; min-height: 52px; }
+  .card .go { display: flex; align-items: center; gap: 6px; margin-top: 22px; font-size: 13px; }
+  .normal .go { color: var(--green); }
+  .hard .go { color: var(--red); }
+  .go .arr { transition: transform .18s ease; }
+  .card:hover .go .arr { transform: translateX(5px); }
+
+  .foot { margin-top: 42px; font-size: 12px; color: #4a5561; }
+  .foot a { color: #4a5561; text-decoration: none; border-bottom: 1px solid #2a343d; padding-bottom: 1px; }
+  .foot a:hover { color: #8fb0a0; border-color: #4a5a53; }
+
+  @media (max-width: 700px) {
+    h1 { font-size: 32px; }
     .cards { flex-direction: column; align-items: center; }
-    .card { max-width: 420px; width: 100%; }
+    .card { max-width: 460px; width: 100%; }
+    .card .desc { min-height: 0; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="logo">JIANGAN</div>
-  <div class="title">你查到了这里</div>
-  <div class="sub">一段关于一家医药公司的故事。选择你要继续的方式。</div>
+  <div class="eyebrow">JIANGAN PHARMA</div>
+  <h1>江安医药</h1>
+  <div class="tagline">
+    一段关于一家医药公司的故事。<br>
+    选择你的方式，继续往下查。
+  </div>
+
   <div class="cards">
-    <a class="card" href="intro.html" onclick="setMode('normal')">
-      <div class="tag">标准</div>
-      <div class="k">普通版</div>
-      <div class="d">原有体验。顺着官网、论坛与内网，一路查下去。</div>
+    <a class="card normal" href="intro.html" onclick="setMode('normal')">
+      <div class="icon">▣</div>
+      <div class="tag">标 准</div>
+      <h2>普通版</h2>
+      <div class="desc">顺着官网、论坛与内网一路查下去。<br>提示完整，按图索骥即可。</div>
+      <div class="go">进入 <span class="arr">→</span></div>
     </a>
+
     <a class="card hard" href="hard.html" onclick="setMode('hard')">
-      <div class="tag">硬核解谜</div>
-      <div class="k">困难版</div>
-      <div class="d">提示更少。旧电脑、服务器、电码、404…… 你需要更多手段。</div>
+      <div class="icon">▤</div>
+      <div class="tag">硬 核 解 谜</div>
+      <h2>困难版</h2>
+      <div class="desc">提示更少。旧电脑、服务器终端、电码、404……<br>你需要更多手段。</div>
+      <div class="go">进入 <span class="arr">→</span></div>
     </a>
   </div>
-  <div class="foot">攻略文档：<a href="guide.html" style="color:#5a6b78;">guide.html</a></div>
+
+  <div class="foot">
+    卡住了？ <a href="guide.html">查看攻略文档</a>
+  </div>
 </div>
+
 <script>
 function setMode(m) {
   try { sessionStorage.setItem('ja_mode', m); } catch (e) {}
