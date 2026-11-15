@@ -86,11 +86,20 @@ function run(cmd) {
   var c = parts[0];
   var arg = parts[1] || '';
   if (c === 'help' || c === '?') {
-    out('out', '可用命令：ls [路径]   cat <文件>   cd <目录>   pwd   clear   verify <校验码>');
-  } else if (c === 'ls') {
+    out('out', '可用命令：');
+    out('out', '  ls [路径]    列出目录内容（dir 也可以）');
+    out('out', '  cat <文件>   查看文件内容（type 也可以）');
+    out('out', '  cd <目录>    进入目录');
+    out('out', '  pwd         显示当前路径');
+    out('out', '  clear       清屏');
+    out('out', '  verify <码>  提交校验码');
+    out('out', '  ?           显示本帮助');
+    out('out', '');
+    out('out', '提示：先 ls 看看有什么，再 cat 里面的文件。');
+  } else if (c === 'ls' || c === 'dir') {
     var r = ls(arg);
     out('out', r === null ? 'ls: 无此文件或目录' : r);
-  } else if (c === 'cat') {
+  } else if (c === 'cat' || c === 'type') {
     var r = cat(arg);
     out('out', r === null ? 'cat: 无此文件' : r);
   } else if (c === 'cd') {
@@ -113,13 +122,14 @@ function run(cmd) {
       out('out', 'verify: 校验码错误。');
     }
   } else {
-    out('out', 'command not found: ' + c);
+    out('out', 'command not found: ' + c + '（输入 help 查看命令）');
   }
 }
 
 out('boot', 'JIANGAN-PHARMA · 运维节点 2\n');
 out('boot', '连接已建立。最后登录：2022-10-19 22:15（终端 3F 观察室）\n');
-out('boot', '输入 help 开始。\n');
+out('boot', '输入 help 查看命令，Tab 可补全。\n');
+out('boot', '当前目录 / 的内容：\n' + FS['/'].join('  ') + '\n');
 
 var prow = document.createElement('div');
 prow.className = 'prow';
@@ -136,6 +146,15 @@ function refreshPrompt() { ps.textContent = 'jiangansrv:' + cwd + '$ '; }
 refreshPrompt();
 
 input.addEventListener('keydown', function (e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    var cmds = ['help', 'ls', 'cat', 'cd', 'pwd', 'clear', 'verify', 'dir', 'type'];
+    var v = input.value.trim();
+    for (var i = 0; i < cmds.length; i++) {
+      if (cmds[i].indexOf(v) === 0) { input.value = cmds[i]; break; }
+    }
+    return;
+  }
   if (e.key !== 'Enter') return;
   var v = input.value;
   input.value = '';
