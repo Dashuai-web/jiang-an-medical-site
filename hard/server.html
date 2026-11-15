@@ -71,6 +71,7 @@ var DIRS = { '/': '', '/etc': '', '/etc/security': '', '/var': '', '/var/log': '
 var cwd = '/';
 var root = false;
 var unlocked = false;
+var sawVerify = false;
 
 var RITUAL = '仪式流程（解密）\n\n一、择人：入职三个月内、体检合格、无近亲同城\n二、换名：以受试者编号代称，姓名栏置空\n三、开场：以临床试验名义给药\n四、收：死亡登记为事故，编号封存 24 个月\n五、续：编号启用，承者簿添一行\n\n第 7 次：编号 0472，入职日 2024-11-18。\n收尾校验码在 /root，用 su 提权读取。\n';
 
@@ -150,14 +151,17 @@ function run(cmd) {
       out('err', '权限不足：/root 需要管理员权限（su）。');
     } else if (r !== null) {
       out('out', r);
+      if (normPath(arg) === '/root/verify.txt') sawVerify = true;
     } else {
       var hits = [];
       for (var k in FS) {
         if (typeof FS[k] !== 'string') continue;
         if (k.split('/').pop().toLowerCase() === arg.toLowerCase()) hits.push(k);
       }
-      if (hits.length === 1) out('out', cat(hits[0]));
-      else if (hits.length > 1) out('out', '找到多个同名文件，请写完整路径：\n' + hits.join('\n'));
+      if (hits.length === 1) {
+        out('out', cat(hits[0]));
+        if (hits[0] === '/root/verify.txt') sawVerify = true;
+      } else if (hits.length > 1) out('out', '找到多个同名文件，请写完整路径：\n' + hits.join('\n'));
       else out('out', 'cat: 无此文件（先用 ls 看看目录里有什么）');
     }
   } else if (c === 'cd') {
@@ -185,6 +189,13 @@ function run(cmd) {
     }
   } else if (c === 'verify') {
     if (arg === '220471') {
+      if (!sawVerify) {
+        out('err', '你真的好好玩了吗？？？？');
+        out('err', '攻略这波立大功了。');
+        out('warn', '系统记录：本次会话未发现任何勘察痕迹。');
+        out('out', '这个码从哪来的？先去把服务器翻一遍，再来。');
+        return;
+      }
       unlocked = true;
       out('warn', '校验通过。会话已标记为「异常输入源」。处理方式：');
       out('warn', '  归档 ->  9a3f1c7e.html');
