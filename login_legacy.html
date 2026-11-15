@@ -75,7 +75,7 @@ function tryLogin() {
   var err = document.getElementById('errorMsg');
   if (u === 'admin' && p === 'jianganyiliao20240815') {
     try { sessionStorage.setItem('ja_portal_ok', '1'); } catch (e) {}
-    window.location.href = 'portal.html?k=v1.9.4';
+    window.location.href = 'portal.html';
     return;
   }
   err.textContent = '账号或密码错误。';

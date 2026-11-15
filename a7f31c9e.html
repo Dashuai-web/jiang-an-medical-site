@@ -121,16 +121,8 @@
 
 <script>
 (function () {
-  var ok = false;
-  try { ok = sessionStorage.getItem('ja_spread_done') === '1'; } catch (e) {}
-  if (!ok) {
-    var m = /[?&]k=([^&]+)/.exec(location.search);
-    if (m && decodeURIComponent(m[1]) === '0x7F') {
-      ok = true;
-      try { sessionStorage.setItem('ja_spread_done', '1'); } catch (e) {}
-    }
-  }
-  if (!ok) location.replace('index.html');
+  try { if (sessionStorage.getItem('ja_spread_done') === '1') return; } catch (e) {}
+  location.replace('index.html');
 })();
 
 var _K=[106,97,110,103,97,110];
@@ -143,11 +135,6 @@ var DATA=_d('MRpMDENUMUNeU1ZfSDxCRRVMUEOJ2/eL5dZOV1VZW0GL/P+I/teGydGL1/RMS0MDSFt
 
 var STAGE_TOTAL = 3 + 9 + 6 + 4;
 var stage = 1;
-var _s = qs('s');
-if (_s) {
-  var _n = parseInt(_s, 10);
-  if (_n >= 1 && _n <= 4) stage = _n;
-}
 var searched = {};
 var seen = {};
 var unlockedLock = false;
@@ -326,7 +313,6 @@ document.getElementById('q').focus();
 <script>
 /* ---- 访问保护 ---- */
 (function () {
-  if (/[?&]nodev=1/.test(location.search)) return;
   var hits = 0, frozen = false;
   function overlay(msg) {
     var o = document.getElementById('dwGuard');

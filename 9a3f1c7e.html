@@ -45,17 +45,8 @@
 <body>
 <script>
 (function () {
-  var ok = false;
-  try { ok = sessionStorage.getItem('ja_ending_ok') === '1'; } catch (e) {}
-  if (!ok) {
-    var m = /[?&]k=([^&]+)/.exec(location.search);
-    if (m && (decodeURIComponent(m[1]) === '0x7F' || decodeURIComponent(m[1]) === 'v1.9.4')) {
-      ok = true;
-      try { sessionStorage.setItem('ja_ending_ok', '1'); } catch (e) {}
-      try { history.replaceState(null, '', location.pathname); } catch (e) {}
-    }
-  }
-  if (!ok) location.replace('index.html');
+  try { if (sessionStorage.getItem('ja_ending_ok') === '1') return; } catch (e) {}
+  location.replace('index.html');
 })();
 </script>
 
