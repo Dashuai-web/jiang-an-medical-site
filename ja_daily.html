@@ -128,7 +128,7 @@
 var ta = document.getElementById('ta');
 var send = document.getElementById('send');
 var tip = document.getElementById('tip');
-var typed = '别问了。你不是在江安上班吗。去查一个叫「第七次」的东西。地址我留在下面。查完别回来。';
+var typed = '我在江安医药上班。这条新闻里的人，我好像见过。';
 
 function addComment(html) {
   var d = document.createElement('div');
@@ -137,13 +137,13 @@ function addComment(html) {
   document.getElementById('cmCount').textContent = document.querySelectorAll('#cmList .cmt').length + ' 条';
 }
 
-/* 1. 焦点自己跳到输入框 */
+/* 1. 光标自己跳进输入框 */
 setTimeout(function () {
   ta.focus();
   tip.textContent = '正在输入……';
 }, 2600);
 
-/* 2. 一个字一个字打出来 */
+/* 2. 一个字一个字打出来，作者是张青 */
 setTimeout(function () {
   var i = 0;
   var t = setInterval(function () {
@@ -153,21 +153,25 @@ setTimeout(function () {
     if (i >= typed.length) {
       clearInterval(t);
       setTimeout(function () {
-        /* 3. 自动发布，署名匿名，带地址 */
         ta.style.display = 'none';
         send.style.display = 'none';
         tip.style.display = 'none';
         addComment(
-          '<div class="cmt anon"><span class="who">匿名用户</span><span class="when">03:14</span>' +
-          '<div class="txt">' + typed.replace('地址我留在下面。', '地址我留在下面：<a href="a7f31c9e.html">镜像 0x7F</a>') + '</div></div>'
+          '<div class="cmt"><span class="who">张青<span class="badge">江安医药 · 在职</span></span>' +
+          '<span class="when">11:58</span><div class="txt">' + typed + '</div></div>'
         );
-        var s = document.getElementById('sysline');
-        s.style.display = 'block';
-        s.textContent = '该评论发布于 03:14:07。';
+        /* 3. 三秒后，有人回复张青 */
         setTimeout(function () {
-          location.href = 'a7f31c9e.html';
-        }, 9000);
-      }, 1500);
+          addComment(
+            '<div class="cmt anon"><span class="who">匿名用户</span><span class="when">03:14</span>' +
+            '<div class="txt">别问了。你不是在江安上班吗。去查一个叫「第七次」的东西。地址我留在下面：' +
+            '<a href="a7f31c9e.html">镜像 0x7F</a>。查完别回来。</div></div>'
+          );
+          var s = document.getElementById('sysline');
+          s.style.display = 'block';
+          s.textContent = '该回复发布于 03:14:07。';
+        }, 2400);
+      }, 1200);
     }
   }, 55);
 }, 4200);
