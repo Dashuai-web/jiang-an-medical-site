@@ -264,6 +264,36 @@
   #shut .sm { font-size: 12px; color: #888; }
   #shut button { font-size: 12px; padding: 4px 14px; }
 
+  /* 记事本菜单 */
+  .np { position: relative; }
+  .np .menu2 span { cursor: pointer; padding: 1px 5px; }
+  .np .menu2 span:hover, .np .menu2 span.on { background: #2f5d8a; color: #fff; }
+  .np-drop { position: absolute; left: 8px; top: 23px; background: #f6f6f6; border: 1px solid #a0a0a0;
+             box-shadow: 2px 2px 5px rgba(0,0,0,.35); display: none; z-index: 6; min-width: 148px; font-size: 12px; }
+  .np-drop.show { display: block; }
+  .np-drop .mi { padding: 5px 24px 5px 12px; color: #222; cursor: pointer; white-space: nowrap; }
+  .np-drop .mi:hover { background: #2f5d8a; color: #fff; }
+  .np-drop .sep2 { height: 1px; background: #d0d0d0; margin: 3px 0; }
+
+  /* 关于对话框 */
+  .np-about { position: absolute; inset: 0; background: rgba(0,0,0,.22); display: flex;
+              align-items: center; justify-content: center; z-index: 9; }
+  .np-about .box3 { background: #ece9d8; border: 1px solid #333; padding: 16px 18px; width: 292px;
+                    box-shadow: 3px 3px 10px rgba(0,0,0,.45); font-size: 12px; color: #222; }
+  .np-about img { width: 64px; height: 64px; border: 1px solid #888; float: left;
+                  margin: 0 12px 8px 0; cursor: pointer; border-radius: 4px; background: #fff; }
+  .np-about .tt { font-size: 14px; font-weight: bold; margin-bottom: 3px; }
+  .np-about .vv { color: #666; font-size: 11px; }
+  .np-about .aa { margin-top: 10px; color: #1a4a8a; }
+  .np-about .yy { color: #888; font-size: 11px; }
+  .np-about .hidden { display: none; color: #8a2020; margin-top: 8px; font-size: 11px; line-height: 1.8; }
+  .np-about .hidden.show { display: block; }
+  .np-about .okrow { clear: both; text-align: right; margin-top: 12px; }
+
+  /* 保存到桌面的文件 */
+  #noteIcons { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+  .icon.saved .lb { font-size: 10px; }
+
   @media (max-width: 720px) {
     body { -webkit-text-size-adjust: 100%; -webkit-touch-callout: none; }
     .icon { width: 62px; }
@@ -305,6 +335,7 @@
 
   <div class="icon" style="left:14px;  top:208px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
   <div class="icon" style="left:100px; top:208px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
+  <div id="noteIcons"></div>
 </div><div class="lb">记事本</div></div>
 </div>
 
@@ -626,16 +657,110 @@ function openWin(k) {
   if (k === 'notepad') {
     var ta = w.querySelector('#npText');
     var stt = w.querySelector('#npStatus');
+    var drop = w.querySelector('#npDrop');
+    var menu = w.querySelector('#npMenu');
+    var titleEl = w.querySelector('.tbtxt');
+    var snaps = [];
+
     try { ta.value = localStorage.getItem('ja_notes') || ''; } catch (e) {}
+    snaps = [ta.value];
+
     var upd = function () {
       var v = ta.value;
       stt.textContent = '字符数：' + v.length + '　行数：' + (v ? v.split('\n').length : 0);
       try { localStorage.setItem('ja_notes', v); } catch (e) {}
     };
-    ta.addEventListener('input', upd);
+    var egg = function () {
+      w._egg = true;
+      titleEl.textContent = '无标题 - 你找到了';
+      addDeskNote('献给还在查的你.txt',
+        '如果你能看到这一行，说明你把这个游戏翻到了底。\n\n—— maybe0406\n2026');
+    };
+    ta.addEventListener('input', function () {
+      var v = ta.value;
+      if (snaps[snaps.length - 1] !== v) { snaps.push(v); if (snaps.length > 300) snaps.shift(); }
+      upd();
+      if (!w._egg && v.indexOf('maybe0406') >= 0) egg();
+    });
+
+    var MENUS = {
+      file: [['新建', 'new'], ['保存到桌面', 'save'], ['-'], ['退出', 'exit']],
+      edit: [['撤销', 'undo'], ['-'], ['剪切', 'cut'], ['复制', 'copy'], ['粘贴', 'paste'], ['-'], ['全选', 'all'], ['时间/日期', 'time']],
+      fmt: [['自动换行', 'wrap'], ['-'], ['字体：小', 'fs'], ['字体：中', 'fm'], ['字体：大', 'fl']],
+      view: [['状态栏', 'statusbar']],
+      help: [['关于记事本', 'about']]
+    };
+    var closeMenu = function () {
+      drop.classList.remove('show');
+      menu.querySelectorAll('span').forEach(function (s2) { s2.classList.remove('on'); });
+    };
+    var openMenu = function (key, el) {
+      drop.innerHTML = (MENUS[key] || []).map(function (it) {
+        return it[0] === '-' ? '<div class="sep2"></div>'
+          : '<div class="mi" data-a="' + it[1] + '">' + it[0] + '</div>';
+      }).join('');
+      drop.style.left = el.offsetLeft + 'px';
+      drop.classList.add('show');
+      menu.querySelectorAll('span').forEach(function (s2) { s2.classList.remove('on'); });
+      el.classList.add('on');
+    };
+    var nowStr = function () {
+      var n = new Date();
+      return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' +
+        String(n.getDate()).padStart(2, '0') + ' ' + String(n.getHours()).padStart(2, '0') +
+        ':' + String(n.getMinutes()).padStart(2, '0');
+    };
+    var insert = function (txt) {
+      var a = ta.selectionStart, b = ta.selectionEnd;
+      ta.value = ta.value.slice(0, a) + txt + ta.value.slice(b);
+      ta.selectionStart = ta.selectionEnd = a + txt.length;
+      snaps.push(ta.value);
+      upd();
+    };
+    var act = function (a) {
+      if (a === 'new') { ta.value = ''; snaps = ['']; upd(); ta.focus(); }
+      else if (a === 'save') {
+        var first = (ta.value.split('\n')[0] || '').trim().slice(0, 14) || '未命名';
+        addDeskNote(first + '.txt', ta.value || '（空白）');
+      }
+      else if (a === 'exit') { closeWin(w); }
+      else if (a === 'undo') { if (snaps.length > 1) { snaps.pop(); ta.value = snaps[snaps.length - 1]; upd(); } }
+      else if (a === 'cut') { ta.focus(); document.execCommand('cut'); }
+      else if (a === 'copy') { ta.focus(); document.execCommand('copy'); }
+      else if (a === 'paste') { ta.focus(); document.execCommand('paste'); }
+      else if (a === 'all') { ta.focus(); ta.select(); }
+      else if (a === 'time') { insert(nowStr()); }
+      else if (a === 'wrap') {
+        ta.wrap = (ta.wrap === 'off') ? 'soft' : 'off';
+        ta.style.whiteSpace = (ta.wrap === 'off') ? 'pre' : 'pre-wrap';
+      }
+      else if (a === 'fs') { ta.style.fontSize = '12px'; }
+      else if (a === 'fm') { ta.style.fontSize = '14px'; }
+      else if (a === 'fl') { ta.style.fontSize = '16px'; }
+      else if (a === 'statusbar') { stt.style.display = (stt.style.display === 'none') ? 'flex' : 'none'; }
+      else if (a === 'about') { showAbout(w); }
+    };
+    menu.addEventListener('click', function (e) {
+      var sp = e.target.closest('span');
+      if (!sp) return;
+      e.stopPropagation();
+      if (drop.classList.contains('show')) { closeMenu(); return; }
+      openMenu(sp.getAttribute('data-m'), sp);
+    });
+    drop.addEventListener('click', function (e) {
+      var mi = e.target.closest('.mi');
+      if (!mi) return;
+      act(mi.getAttribute('data-a'));
+      closeMenu();
+    });
+    document.addEventListener('click', function (e) {
+      if (!w.contains(e.target)) closeMenu();
+    });
+
     upd();
     setTimeout(function () { ta.focus(); }, 60);
   }
+
   if (k === 'audio') {
     var ab = w.querySelector('#audioBtn');
     var rec = w.querySelector('#rec');
@@ -756,9 +881,16 @@ var WIN = {
   server: { t: '服务器 - 远程终端', w: 840, h: 560, frame: 1, html:
     '<iframe src="server.html" title="服务器"></iframe>' },
 
-  notepad: { t: '无标题 - 记事本', w: 540, html:
+  notepad: { t: '无标题 - 记事本', w: 560, html:
     '<div class="np">' +
-    '<div class="menu2"><span>文件(F)</span><span>编辑(E)</span><span>格式(O)</span><span>查看(V)</span><span>帮助(H)</span></div>' +
+    '<div class="menu2" id="npMenu">' +
+    '<span data-m="file">文件(F)</span>' +
+    '<span data-m="edit">编辑(E)</span>' +
+    '<span data-m="fmt">格式(O)</span>' +
+    '<span data-m="view">查看(V)</span>' +
+    '<span data-m="help">帮助(H)</span>' +
+    '</div>' +
+    '<div class="np-drop" id="npDrop"></div>' +
     '<textarea id="npText" spellcheck="false" placeholder="在这里记线索……"></textarea>' +
     '<div class="status2" id="npStatus">字符数：0　行数：0</div>' +
     '</div>' }
@@ -849,6 +981,62 @@ function askLock(w, e) {
   setTimeout(function () { inp.focus(); }, 60);
 }
 
+
+/* ================= 记事本：保存到桌面 / 关于 ================= */
+function addDeskNote(name, text) {
+  var notes = [];
+  try { notes = JSON.parse(localStorage.getItem('ja_desk_notes') || '[]'); } catch (e) {}
+  notes.push({ n: name, t: text });
+  try { localStorage.setItem('ja_desk_notes', JSON.stringify(notes)); } catch (e) {}
+  renderDeskNotes();
+}
+
+function renderDeskNotes() {
+  var box = document.getElementById('noteIcons');
+  if (!box) return;
+  var notes = [];
+  try { notes = JSON.parse(localStorage.getItem('ja_desk_notes') || '[]'); } catch (e) {}
+  box.innerHTML = '';
+  notes.forEach(function (nt, i) {
+    var el = document.createElement('div');
+    el.className = 'icon saved';
+    el.style.left = (372 + (i % 3) * 86) + 'px';
+    el.style.top = (8 + Math.floor(i / 3) * 96) + 'px';
+    el.innerHTML = '<div class="img">📄</div><div class="lb">' + nt.n + '</div>';
+    el.addEventListener('click', function () { openNoteViewer(nt.n, nt.t); });
+    box.appendChild(el);
+  });
+}
+
+function openNoteViewer(name, text) {
+  WIN.__note = { t: name + ' - 记事本', w: 480, plain: 1, html: text };
+  openWin('__note');
+  delete WIN.__note;
+}
+
+function showAbout(w) {
+  var mask = document.createElement('div');
+  mask.className = 'np-about';
+  mask.innerHTML = '<div class="box3">' +
+    '<img src="images/avatar.jpg" id="npAv" alt="作者头像">' +
+    '<div class="tt">记事本</div>' +
+    '<div class="vv">版本 5.1 (Build 2600)</div>' +
+    '<div class="aa">作者：maybe0406</div>' +
+    '<div class="yy">2026</div>' +
+    '<div class="hidden" id="npHidden">这个游戏是他一个人写的。<br>凌晨四点。</div>' +
+    '<div class="okrow"><button id="npOk">确定</button></div></div>';
+  w.appendChild(mask);
+  var clicks = 0;
+  mask.querySelector('#npAv').addEventListener('click', function () {
+    clicks++;
+    if (clicks >= 3) {
+      var hd = mask.querySelector('#npHidden');
+      if (hd) hd.classList.add('show');
+    }
+  });
+  mask.querySelector('#npOk').addEventListener('click', function () { mask.remove(); });
+}
+
 document.querySelectorAll('.icon').forEach(function (el) {
   el.addEventListener('click', function () { openWin(el.getAttribute('data-w')); });
 });
@@ -915,6 +1103,7 @@ startMenu.addEventListener('click', function (e) {
 
 bootBios();
 tick();
+renderDeskNotes();
 setInterval(tick, 30000);
 </script>
 <script>
