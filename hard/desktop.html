@@ -6,15 +6,23 @@
 <title>周明的电脑</title>
 <style>
   * { box-sizing: border-box; }
-  body { margin: 0; height: 100vh; overflow: hidden; background: #3a6ea5;
+  body { margin: 0; height: 100vh; overflow: hidden; background: #000;
          font-family: "Microsoft YaHei", "SimSun", sans-serif; }
+  /* ---- BIOS 自检 ---- */
+  #bios { position: fixed; inset: 0; background: #000; color: #c8c8c8;
+          font-family: Consolas, monospace; font-size: 13px; line-height: 1.8;
+          padding: 40px 48px; z-index: 50; }
+  #bios .ln { opacity: 0; transition: opacity .15s; white-space: pre-wrap; }
+  #bios .ok { color: #7fb07f; }
+  /* ---- 桌面 ---- */
   #desktop { position: relative; width: 100%; height: 100%;
-             background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); padding: 18px; }
-  .icon { position: absolute; width: 84px; text-align: center; cursor: pointer; color: #fff;
+             background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); padding: 18px;
+             display: none; }
+  .icon { position: absolute; width: 80px; text-align: center; cursor: pointer; color: #fff;
           text-shadow: 1px 1px 2px rgba(0,0,0,.6); user-select: none; }
-  .icon .img { font-size: 32px; line-height: 1; }
-  .icon .lb { font-size: 12px; margin-top: 4px; }
-  #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 34px;
+  .icon .img { font-size: 30px; line-height: 1; }
+  .icon .lb { font-size: 11px; margin-top: 4px; }
+  #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 32px;
              background: #24507d; border-top: 1px solid #1a3f66; display: flex;
              align-items: center; padding: 0 10px; color: #fff; font-size: 12px; z-index: 20; }
   #taskbar .start { background: #3a8a3a; padding: 4px 14px; border-radius: 3px; font-weight: bold; }
@@ -28,65 +36,269 @@
   .win .ct .note { color: #7a5a00; }
   .win .ct .del { color: #8a2020; }
   .win .ct .me { color: #1a4a8a; }
-  .win .ct .other { color: #333; }
   .chat { border-left: 3px solid #c8c8b8; padding-left: 10px; margin: 8px 0; }
   .chat .m { margin: 5px 0; }
   .chat .who { color: #888; font-size: 11px; }
+  .win button { font-family: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer;
+                background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080; }
+  .win button:active { border-color: #808080 #f4f1ea #f4f1ea #808080; }
+  .win input { font-family: inherit; font-size: 12px; padding: 3px 6px; width: 120px;
+               border: 2px solid #808080; border-top-color: #4a4a4a; border-left-color: #4a4a4a; }
+  .row2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #ccc; }
+  .row2:last-child { border-bottom: none; }
+  .cap { font-size: 11px; color: #888; margin-top: 6px; }
+  .rec { min-height: 18px; }
+  .rec .ln { opacity: 0; transition: opacity .25s; }
   @media (max-width: 720px) {
-    .icon { width: 70px; }
-    .win { max-width: 92vw; }
+    body { -webkit-text-size-adjust: 100%; }
+    .icon { width: 68px; }
+    .icon .img { font-size: 26px; }
+    .win { max-width: 92vw !important; }
+    #bios { padding: 24px 18px; font-size: 11px; }
   }
 </style>
 </head>
 <body>
+
+<div id="bios"></div>
+
 <div id="desktop">
-  <div class="icon" style="left:18px; top:14px;" data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
-  <div class="icon" style="left:120px; top:14px;" data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
-  <div class="icon" style="left:222px; top:14px;" data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
-  <div class="icon" style="left:324px; top:14px;" data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
-  <div class="icon" style="left:18px; top:150px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
-  <div class="icon" style="left:120px; top:150px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
-  <div class="icon" style="left:222px; top:150px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
-  <div class="icon" style="left:324px; top:150px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+  <div class="icon" style="left:16px;  top:12px;"  data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
+  <div class="icon" style="left:110px; top:12px;"  data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
+  <div class="icon" style="left:204px; top:12px;"  data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
+  <div class="icon" style="left:298px; top:12px;"  data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+
+  <div class="icon" style="left:16px;  top:132px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
+  <div class="icon" style="left:110px; top:132px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
+  <div class="icon" style="left:204px; top:132px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
+  <div class="icon" style="left:298px; top:132px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+
+  <div class="icon" style="left:16px;  top:252px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
+  <div class="icon" style="left:110px; top:252px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
+  <div class="icon" style="left:204px; top:252px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
 </div>
-<div id="taskbar">
+
+<div id="taskbar" style="display:none">
   <span class="start">开始</span>
   <span style="margin-left:12px;">周明</span>
   <span class="clock" id="clock"></span>
 </div>
 
 <script>
+/* ================= BIOS 自检 ================= */
+var BIOS_LINES = [
+  'JiangAn BIOS v2.03  Copyright (C) 2015',
+  'CPU : Intel Pentium III 866MHz',
+  'Memory Test : 262144K OK',
+  'Detecting IDE Primary Master ... ST380021A',
+  'Detecting IDE Secondary Master ... None',
+  'Keyboard ... Detected',
+  'Mouse ... Detected',
+  'System time : 2022-10-19 22:10:31',
+  'Loading OS ...'
+];
+
+function bootBios() {
+  var box = document.getElementById('bios');
+  var i = 0;
+  function step() {
+    if (i >= BIOS_LINES.length) {
+      setTimeout(function () {
+        box.style.display = 'none';
+        document.getElementById('desktop').style.display = 'block';
+        document.getElementById('taskbar').style.display = 'flex';
+      }, 450);
+      return;
+    }
+    var d = document.createElement('div');
+    d.className = 'ln' + (i >= BIOS_LINES.length - 2 ? ' ok' : '');
+    d.textContent = BIOS_LINES[i];
+    box.appendChild(d);
+    setTimeout(function () { d.style.opacity = '1'; }, 10);
+    i++;
+    setTimeout(step, 180);
+  }
+  step();
+}
+
+/* ================= 窗口内容 ================= */
 var WIN = {
-  memo: { t: '备忘录.txt', c: '如果我回不来了，说明被他们发现了。\n\n我的工号，工牌上还挂着。\n\n别报警。去查。' },
-  trash: { t: '回收站', c: '一封被删除的邮件（草稿）：\n\n「小陈，如果我出事，去查 10 月 19 日那天的事故。\n死亡原因那一栏被人改过。\n原始报告在观察室，改后的是办公楼三层。」\n\n<span class="del">（该草稿从未发出）</span>' },
-  computer: { t: '我的电脑', c: '本地磁盘 (C:)\n  └ 江安\\\n      ├ 备份\\\n      │    └ 旧版入口.txt  ← 见「江安备份」图标\n      └ 员工资料\\\n           └ 已加密，无法打开\n\n<span class="note">旧版入口见「江安备份」。</span>' },
-  backup: { t: '江安备份', c: '旧版入口.txt：\n\n「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n口令怎么拼，去服务器看口令策略。」\n\n<span class="note">※ 便签上写着一台服务器的地址。</span>' },
-  wechat: { t: '微信', c: '<div class="chat"><div class="m"><span class="who">行政-小刘</span></div><div class="m other">周哥，这周体检抽了四管血，往年才两管。</div><div class="m me">我这也是。说是升级套餐。</div><div class="m other">升级什么了也不说。算了。</div></div><div class="chat"><div class="m"><span class="who">陈默（外甥）</span></div><div class="m me">小陈，舅舅可能出事了。我的工号，工牌上还挂着。</div><div class="m note">（未发送）</div></div>' },
-  qq: { t: 'QQ', c: '【江安医药同事群】\n\n有人说凌晨三点又被叫去加班吗？\n\n— 又来了。这个月第几次了。\n— 别问，问就是系统维护。\n— 我听见观察室三号有动静。\n— 闭嘴。\n\n<span class="note">（群消息停在 2022-10-19 之后，再没人说话。）</span>' },
-  browser: { t: '浏览器', c: '地址栏：http://www.jiangan-pharma.com\n\n收藏夹：\n  · 江安医药官网\n  · 新闻中心\n  · 内部信息平台 v2.0 登录\n  · QQ邮箱\n\n最近访问：\n  2022-10-19 22:10  内部信息平台\n  2022-10-19 22:12  受试者管理系统\n\n<span class="note">※ QQ邮箱里有一封没删的邮件。</span>' },
-  mail: { t: 'QQ邮箱', c: '收件箱（1）\n\n【江安医药 · 人事】入职体检安排\n「新员工请于 11 月 4 日—22 日前往指定机构体检。\n项目：采血、心电图、生命体征监测。」\n\n草稿箱（1）\n\n【未发出】小陈，如果我出事，去查 10 月 19 日那天的事故。' }
+  memo: { t: '我的文档', html:
+    '备忘录.txt\n\n' +
+    '如果我回不来了，说明被他们发现了。\n\n' +
+    '我的工号，工牌上还挂着。\n\n' +
+    '别报警。去查。\n' },
+
+  trash: { t: '回收站', html:
+    '<div id="trashBody">' +
+    '<div class="row2"><span class="del">草稿_给陈默.txt</span><button data-restore="1">还原</button></div>' +
+    '<div class="row2"><span class="del">体检单_2022.jpg</span><button data-restore="2">还原</button></div>' +
+    '<div class="row2"><span class="del">观察室排班.xls</span><button data-restore="3">还原</button></div>' +
+    '<div class="cap">共 3 项</div></div>' },
+
+  computer: { t: '我的电脑', html:
+    '本地磁盘 (C:)\n' +
+    '  └ 江安\\\n' +
+    '      ├ 备份\\        ← 见「江安备份」\n' +
+    '      └ 员工资料\\    ← 已加密（见「加密文件夹」）\n\n' +
+    '<span class="note">旧版入口，从服务器里找。</span>\n' },
+
+  backup: { t: '江安备份', html:
+    '旧版入口.txt\n\n' +
+    '「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n' +
+    '口令怎么拼，去服务器看口令策略。」\n\n' +
+    '<span class="note">※ 便签上写着一台服务器的地址。</span>\n' },
+
+  wechat: { t: '微信', html:
+    '<div class="chat"><div class="m"><span class="who">行政-小刘</span></div>' +
+    '<div class="m">周哥，这周体检抽了四管血，往年才两管。</div>' +
+    '<div class="m me">我这也是。说是升级套餐。</div>' +
+    '<div class="m">升级什么了也不说。算了。</div></div>' +
+    '<div class="chat"><div class="m"><span class="who">陈默（外甥）</span></div>' +
+    '<div class="m me">小陈，舅舅可能出事了。我的工号，工牌上还挂着。</div>' +
+    '<div class="m note">（未发送）</div></div>' },
+
+  qq: { t: 'QQ', html:
+    '【江安医药同事群】\n\n' +
+    '有人说凌晨三点又被叫去加班吗？\n\n' +
+    '— 又来了。这个月第几次了。\n' +
+    '— 别问，问就是系统维护。\n' +
+    '— 我听见观察室三号有动静。\n' +
+    '— 闭嘴。\n\n' +
+    '<span class="note">（群消息停在 2022-10-19 之后，再没人说话。）</span>\n' },
+
+  browser: { t: '浏览器', html:
+    '地址栏：http://www.jiangan-pharma.com\n\n' +
+    '收藏夹：\n' +
+    '  · 江安医药官网\n  · 新闻中心\n  · 内部信息平台 v2.0 登录\n  · QQ邮箱\n\n' +
+    '最近访问：\n' +
+    '  2022-10-19 22:10  内部信息平台\n' +
+    '  2022-10-19 22:12  受试者管理系统\n\n' +
+    '<span class="note">※ QQ邮箱里有一封没删的邮件。</span>\n' },
+
+  mail: { t: 'QQ邮箱', html:
+    '收件箱（1）\n\n' +
+    '【江安医药 · 人事】入职体检安排\n' +
+    '「新员工请于 11 月 4 日—22 日前往指定机构体检。\n' +
+    '项目：采血、心电图、生命体征监测。」\n\n' +
+    '草稿箱（1）\n\n' +
+    '【未发出】小陈，如果我出事，去查 10 月 19 日那天的事故。\n' },
+
+  vault: { t: '加密文件夹', html:
+    '<div id="vaultBody">' +
+    '<div>该文件夹已加密。</div>' +
+    '<div class="cap">请输入密码：</div>' +
+    '<div style="margin-top:8px;"><input id="vaultPw" type="password"> <button id="vaultBtn">打开</button></div>' +
+    '<div class="cap" id="vaultMsg"></div></div>' },
+
+  cam: { t: '监控截图.jpg', html:
+    '<div style="text-align:center;">' +
+    '<svg viewBox="0 0 400 240" width="100%" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect width="400" height="240" fill="#1b1f22"/>' +
+    '<rect x="0" y="150" width="400" height="90" fill="#2a2f33"/>' +
+    '<rect x="60" y="60" width="90" height="130" fill="#3a4045"/>' +
+    '<rect x="250" y="70" width="100" height="120" fill="#3a4045"/>' +
+    '<text x="20" y="30" font-family="Consolas" font-size="13" fill="#c0392b">CAM 3F-03  2022-10-19 22:15:07</text>' +
+    '<text x="20" y="225" font-family="Consolas" font-size="11" fill="#7a8a8a">OBSERVATION ROOM / EAST CORRIDOR</text>' +
+    '<rect x="180" y="110" width="16" height="60" fill="#555e63"/>' +
+    '<circle cx="188" cy="100" r="9" fill="#555e63"/>' +
+    '</svg>' +
+    '<div class="cap">画面模糊，时间戳清晰：2022-10-19 22:15:07</div></div>' },
+
+  audio: { t: '录音.mp3', html:
+    '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
+    '<div class="rec" id="rec" style="margin-top:10px;"></div>' }
 };
 
+/* ================= 窗口系统 ================= */
+function closeWin() {
+  var w = document.querySelector('.win');
+  if (w) w.remove();
+}
+
 function openWin(k) {
-  var old = document.querySelector('.win');
-  if (old) old.remove();
+  closeWin();
   var d = WIN[k];
   var w = document.createElement('div');
   w.className = 'win';
   w.style.left = (70 + Math.random() * 90) + 'px';
-  w.style.top = (50 + Math.random() * 70) + 'px';
-  w.innerHTML = '<div class="tb"><span>' + d.t + '</span><span class="x" onclick="this.parentNode.parentNode.remove()">✕</span></div>'
-    + '<div class="ct">' + d.c + '</div>';
+  w.style.top = (46 + Math.random() * 70) + 'px';
+  w.innerHTML = '<div class="tb"><span>' + d.t + '</span><span class="x" onclick="closeWin()">✕</span></div>'
+    + '<div class="ct">' + d.html + '</div>';
   document.getElementById('desktop').appendChild(w);
+
+  if (k === 'trash') {
+    var body = w.querySelector('#trashBody');
+    w.querySelectorAll('[data-restore]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var row = b.parentNode;
+        row.innerHTML = '<span style="color:#1a6b4a;">已还原：' + row.querySelector('span').textContent + '</span>';
+      });
+    });
+  }
+  if (k === 'vault') {
+    var btn = w.querySelector('#vaultBtn');
+    var pw = w.querySelector('#vaultPw');
+    var open = function () {
+      if (pw.value.trim() === '0471') {
+        body.innerHTML = '给陈默.txt\n\n' +
+          '「小陈，如果有一天你看到这个，说明我没能活着回来。\n\n' +
+          '公司有一个『承者簿』，在临床试验中心的服务器里。\n\n' +
+          '记住：日期那一栏，从来不是真的日期。」\n\n' +
+          '<span class="note">—— 舅舅</span>';
+      } else {
+        w.querySelector('#vaultMsg').textContent = '密码错误。';
+        w.querySelector('#vaultMsg').className = 'cap del';
+      }
+    };
+    var body = w.querySelector('#vaultBody');
+    btn.addEventListener('click', open);
+    pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') open(); });
+  }
+  if (k === 'audio') {
+    var ab = w.querySelector('#audioBtn');
+    var rec = w.querySelector('#rec');
+    var st = w.querySelector('#audioState');
+    var LINES = [
+      '（杂音）…我是周明…',
+      '（杂音）如果这段录音有人听到…',
+      '三号观察室，那天晚上…',
+      '他们改了我的体检记录…',
+      '…（杂音）…',
+      '不要相信系统里的日期。'
+    ];
+    ab.addEventListener('click', function () {
+      ab.disabled = true;
+      ab.textContent = '■ 播放中';
+      var i = 0;
+      var sec = 0;
+      var timer = setInterval(function () {
+        sec += 1;
+        st.textContent = '00:' + String(sec).padStart(2, '0') + ' / 00:12';
+        if (i >= LINES.length) { clearInterval(timer); return; }
+        var d2 = document.createElement('div');
+        d2.className = 'ln';
+        d2.textContent = LINES[i];
+        rec.appendChild(d2);
+        setTimeout(function () { d2.style.opacity = '1'; }, 20);
+        i++;
+      }, 900);
+    });
+  }
 }
+
 document.querySelectorAll('.icon').forEach(function (el) {
   el.addEventListener('click', function () { openWin(el.getAttribute('data-w')); });
 });
+
 function tick() {
   var n = new Date();
   document.getElementById('clock').textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2, '0');
 }
-tick(); setInterval(tick, 30000);
+
+bootBios();
+tick();
+setInterval(tick, 30000);
 </script>
 <script>
 /* ---- 访问保护 ---- */

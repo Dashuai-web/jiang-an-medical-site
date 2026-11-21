@@ -46,32 +46,55 @@
 var term = document.getElementById('term');
 var prow = null;
 
+/* ---------- 输出队列（打字机效果） ---------- */
+var queue = [];
+var flushing = false;
 function out(cls, txt) {
+  queue.push({ c: cls, t: txt });
+  if (!flushing) flushQueue();
+}
+function flushQueue() {
+  if (!queue.length) { flushing = false; return; }
+  flushing = true;
+  var item = queue.shift();
   var d = document.createElement('div');
-  d.className = 'line ' + (cls || 'out');
-  d.textContent = txt;
+  d.className = 'line ' + (item.c || 'out');
+  d.textContent = item.t;
+  d.style.opacity = '0';
+  d.style.transition = 'opacity .12s';
   if (prow && prow.parentNode === term) term.insertBefore(d, prow);
   else term.appendChild(d);
+  setTimeout(function () { d.style.opacity = '1'; }, 10);
+  window.scrollTo(0, document.body.scrollHeight);
+  setTimeout(flushQueue, 45);
 }
 
+/* ---------- 文件系统 ---------- */
 var FS = {
-  '/': ['etc', 'var', 'home', 'srv', 'root', 'README'],
-  '/README': '本节点所有时间字段使用 Unix 时间戳（自 1970-01-01 00:00:00 UTC 起算的秒数）。\n\n线索在哪：/srv/clinical（临床试验中心）、/var/log（日志）。\n管理员的文件在 /root，需要 su 提权。\n',
-  '/etc': ['config', 'passwd', 'security', 'hosts'],
+  '/': ['etc', 'var', 'home', 'srv', 'opt', 'root', 'README'],
+  '/README': '本节点所有时间字段使用 Unix 时间戳（自 1970-01-01 00:00:00 UTC 起算的秒数）。\n\n线索在哪：/srv/clinical（临床试验中心）、/var/log（日志）、/var/mail（邮件）。\n\n权限说明：\n  访客 —— 只能看公开目录\n  admin —— su 提升，可看 /var/mail、/etc/shadow、/home/zhouming/.ssh\n  root  —— sudo 提升，可看 /root\n',
+  '/etc': ['config', 'passwd', 'security', 'hosts', 'shadow'],
   '/etc/config': 'V2_BUILD_TS=1730073600\nLEGACY_BUILD_TS=1723680000\n',
   '/etc/passwd': 'admin:x:0:0:管理员:/root:/bin/sh\nzhouming:x:1001:1001:行政部:/home/zhouming:/bin/sh\n',
+  '/etc/shadow': 'admin:$6$jA9x$0f1c...:19200:0:99999:7:::\nzhouming:$6$K2q$9b3e...:19200:0:99999:7:::\n# 口令策略见 /etc/security/pwpolicy\n',
   '/etc/security': ['pwpolicy'],
   '/etc/security/pwpolicy': '管理员口令 = 公司名拼音 + 构建日期(YYYYMMDD)\n构建日期见 /etc/config。\n',
   '/etc/hosts': '10.8.4.71  legacy-portal\n10.8.4.72  v2-portal\n',
-  '/var': ['log'],
-  '/var/log': ['clean.log', 'sys.log', 'incident.log'],
+  '/var': ['log', 'mail'],
+  '/var/log': ['clean.log', 'sys.log', 'incident.log', 'auth.log'],
   '/var/log/clean.log': '2022-10-21 02:00 数据清洗\n[NULL] 覆盖记录：源=0471，目标=空编号\n[NULL] 补录失败：姓名字段永久缺失\n# 该记录已封存\n',
   '/var/log/sys.log': '2024-11-11 03:14:07 0471 转入受试者名单\n2024-11-11 03:14:07 账号注销\n',
   '/var/log/incident.log': '事故编号 AQ-2022-10-19\n原始：药物不良反应 / 观察室 3 号\n修订(2022-10-21)：突发意外 / 办公楼三层\n修订人：NULL\n',
+  '/var/log/auth.log': '2022-10-19 22:10:11 sudo: admin : TTY=pts/0 ; USER=root ; COMMAND=/bin/sh\n2022-10-19 23:47:03 system: session terminated by signal 15\n# root 权限走 sudo，不用 su。\n',
+  '/var/mail': ['admin'],
+  '/var/mail/admin': '发件人：沈立群（临床试验中心）\n收件人：admin\n主题：第 7 次准备\n\n名单已确认。0472 的入职流程按常规走，体检数据由中心归档。\n重申：系统里的日期字段一律填对外公告日，不要填实际完成日。\n上次就是这里出过问题。\n\n—— 沈\n',
   '/home': ['zhouming'],
-  '/home/zhouming': ['note.txt'],
+  '/home/zhouming': ['note.txt', '.ssh'],
   '/home/zhouming/note.txt': '小陈：\n我可能是第 6 次。\n记住编号 0471。\n—— 舅舅\n',
-  '/srv': ['clinical', 'intranet'],
+  '/home/zhouming/.ssh': ['id_rsa', 'known_hosts'],
+  '/home/zhouming/.ssh/id_rsa': '-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn\n（密钥正文略）\n# unlock: <工号>-<次数>\n-----END OPENSSH PRIVATE KEY-----\n',
+  '/home/zhouming/.ssh/known_hosts': '10.8.4.71 ssh-rsa AAAAB3NzaC1yc2E...\n10.8.4.72 ssh-rsa AAAAB3NzaC1yc2E...\n',
+  '/srv': ['clinical', 'intranet', 'hr'],
   '/srv/clinical': ['subjects.txt', 'consent.txt', 'roster.txt', 'ritual.enc', 'trial.log'],
   '/srv/clinical/subjects.txt': 'CT-2024-02 受试者名单（部分）\nS-001 外部   S-002 外部   S-003 外部   S-004 外部\n0471  内部（员工转入）  2024-11-11\n',
   '/srv/clinical/consent.txt': '员工健康知情同意书 · 第 4 条第 2 款：\n「员工同意公司根据项目需要安排其参与临床试验。」\n签署：入职时统一签署，全员。\n',
@@ -80,19 +103,29 @@ var FS = {
   '/srv/clinical/trial.log': 'CT-2024-02 给药记录：\n2022-10-19 22:15 给药（0471，批号 JA-2021-033）\n22:45 出现不良反应\n23:47 宣告死亡\n23:47:03 系统自动生成空编号\n',
   '/srv/intranet': ['notice.txt'],
   '/srv/intranet/notice.txt': 'v2.0 上线公告（2024-10-28）\n年度体检项目：采血、心电图、生命体征监测。\n',
-  '/root': ['verify.txt']
+  '/srv/hr': ['reviews.txt'],
+  '/srv/hr/reviews.txt': '2019 年度考评 · 行政部\n\n周明（0471）  考评：良好\n  备注：本年度请假 0 天。年度体检未参加，已安排补检。\n\n（下一行被涂黑）\n',
+  '/opt': ['backup'],
+  '/opt/backup': ['enc.bak'],
+  '/opt/backup/enc.bak': '（加密备份）\n用 decrypt 解密需要另一组密钥，本节点未提供。\n# 该备份已转存离线介质。\n',
+  '/root': ['verify.txt', '.history']
 };
 FS['/root/verify.txt'] = '校验码 = 年份后两位 + 编号 = 22 + 0471 = 220471\n\n收尾：verify 220471\n要往更深处走，选「外传」。\n';
+FS['/root/.history'] = 'cat /srv/clinical/ritual.enc\ndecrypt ritual.enc 31415918\nsudo 0471-6\ncat /root/verify.txt\nverify 220471\n';
 
-var DIRS = { '/': '', '/etc': '', '/etc/security': '', '/var': '', '/var/log': '',
-             '/home': '', '/home/zhouming': '', '/srv': '', '/srv/clinical': '', '/srv/intranet': '', '/root': '' };
+var DIRS = { '/': '', '/etc': '', '/etc/security': '', '/var': '', '/var/log': '', '/var/mail': '',
+             '/home': '', '/home/zhouming': '', '/home/zhouming/.ssh': '', '/srv': '',
+             '/srv/clinical': '', '/srv/intranet': '', '/srv/hr': '', '/opt': '', '/opt/backup': '', '/root': '' };
 
 var cwd = '/';
-var root = false;
+var lv = 0;              // 0 访客 / 1 admin / 2 root
 var unlocked = false;
 var sawVerify = false;
+var filesRead = {};
+var suFails = 0;
+var suLockUntil = 0;
 
-var RITUAL = '仪式流程（解密）\n\n一、择人：入职三个月内、体检合格、无近亲同城\n二、换名：以受试者编号代称，姓名栏置空\n三、开场：以临床试验名义给药\n四、收：死亡登记为事故，编号封存 24 个月\n五、续：编号启用，承者簿添一行\n\n第 7 次：编号 0472，入职日 2024-11-18。\n收尾校验码在 /root，用 su 提权读取。\n';
+var RITUAL = '仪式流程（解密）\n\n一、择人：入职三个月内、体检合格、无近亲同城\n二、换名：以受试者编号代称，姓名栏置空\n三、开场：以临床试验名义给药\n四、收：死亡登记为事故，编号封存 24 个月\n五、续：编号启用，承者簿添一行\n\n第 7 次：编号 0472，入职日 2024-11-18。\n校验码在 /root，需要 root 权限（sudo）。\n';
 
 function resolve(p) {
   if (p === '/') return '/';
@@ -110,17 +143,27 @@ function normPath(p) {
   if (r.length > 1 && r.endsWith('/')) r = r.slice(0, -1);
   return r || '/';
 }
-function underRoot(p) { return p === '/root' || p.indexOf('/root/') === 0; }
+function needLv(path) {
+  if (path === '/root' || path.indexOf('/root/') === 0) return 2;
+  if (path === '/var/mail' || path.indexOf('/var/mail/') === 0) return 1;
+  if (path === '/etc/shadow') return 1;
+  if (path.indexOf('/home/zhouming/.ssh') === 0) return 1;
+  return 0;
+}
+function denyText(path) {
+  var need = needLv(path) === 2 ? 'root（sudo）' : 'admin（su）';
+  return '权限不足：该路径需要 ' + need + ' 权限。';
+}
 function ls(p) {
   var path = normPath(p);
-  if (underRoot(path) && !root) return '__DENY__';
+  if (lv < needLv(path)) return '__DENY__';
   if (Array.isArray(FS[path])) return FS[path].join('  ');
   if (typeof FS[path] === 'string') return path.split('/').pop();
   return null;
 }
 function cat(p) {
   var path = normPath(p);
-  if (underRoot(path) && !root) return '__DENY__';
+  if (lv < needLv(path)) return '__DENY__';
   return typeof FS[path] === 'string' ? FS[path] : null;
 }
 
@@ -153,31 +196,35 @@ function run(cmd) {
   var parts = cmd.trim().split(/\s+/);
   var c = parts[0];
   var arg = parts[1] || '';
+  var arg2 = parts[2] || '';
+
   if (c === 'help' || c === '?') {
     out('out', '可用命令：');
-    out('out', '  ls [路径]       列出目录内容（dir 同义）');
-    out('out', '  cat <文件>      查看文件内容（type/open/read 同义，可直接写文件名）');
-    out('out', '  cd <目录>       进入目录');
-    out('out', '  pwd            显示当前路径');
-    out('out', '  su <口令>       提升为管理员权限');
-    out('out', '  decrypt <文件> <密钥>  解密文件');
+    out('out', '  ls [路径]       列出目录（dir 同义）');
+    out('out', '  cat <文件>      查看文件（type/open/read 同义，可只写文件名）');
+    out('out', '  cd <目录>  pwd  切换/显示路径');
+    out('out', '  su <口令>       提升为 admin');
+    out('out', '  sudo <口令>     提升为 root');
+    out('out', '  decrypt <文件> <密钥>  解密');
+    out('out', '  status          查看当前状态');
+    out('out', '  whoami / last / uptime  环境信息');
     out('out', '  verify <码>     提交校验码');
-    out('out', '  归档 / 外传 / 退出   通过校验后，直接输入进入结局');
-    out('out', '  clear          清屏');
-    out('out', '  ?              显示本帮助');
+    out('out', '  clear           清屏');
     out('out', '');
-    out('out', '提示：先 cat README，再看 /srv/clinical 和 /var/log。');
+    out('out', '提示：先 cat README。');
   } else if (c === 'ls' || c === 'dir') {
     var r = ls(arg);
-    if (r === '__DENY__') out('err', '权限不足：/root 需要管理员权限（su）。');
+    if (r === '__DENY__') out('err', denyText(normPath(arg)));
     else out('out', r === null ? 'ls: 无此文件或目录' : r);
   } else if (c === 'cat' || c === 'type' || c === 'open' || c === 'read') {
     var r = cat(arg);
     if (r === '__DENY__') {
-      out('err', '权限不足：/root 需要管理员权限（su）。');
+      out('err', denyText(normPath(arg)));
     } else if (r !== null) {
       out('out', r);
-      if (normPath(arg) === '/root/verify.txt') sawVerify = true;
+      var np = normPath(arg);
+      filesRead[np] = 1;
+      if (np === '/root/verify.txt') sawVerify = true;
     } else {
       var hits = [];
       for (var k in FS) {
@@ -186,33 +233,74 @@ function run(cmd) {
       }
       if (hits.length === 1) {
         out('out', cat(hits[0]));
+        filesRead[hits[0]] = 1;
         if (hits[0] === '/root/verify.txt') sawVerify = true;
-      } else if (hits.length > 1) out('out', '找到多个同名文件，请写完整路径：\n' + hits.join('\n'));
-      else out('out', 'cat: 无此文件（先用 ls 看看目录里有什么）');
+      } else if (hits.length > 1) {
+        out('out', '找到多个同名文件，请写完整路径：\n' + hits.join('\n'));
+      } else {
+        out('out', 'cat: 无此文件（先用 ls 看看目录里有什么）');
+      }
     }
   } else if (c === 'cd') {
     var target = normPath(arg);
-    if (underRoot(target) && !root) out('err', '权限不足：/root 需要管理员权限（su）。');
+    if (lv < needLv(target)) out('err', denyText(target));
     else if (DIRS.hasOwnProperty(target)) cwd = target;
     else out('out', 'cd: 无此目录');
   } else if (c === 'pwd') {
     out('out', cwd);
   } else if (c === 'su') {
+    var now = Date.now();
+    if (now < suLockUntil) {
+      out('err', '账户已锁定，请 ' + Math.ceil((suLockUntil - now) / 1000) + ' 秒后再试。');
+      return;
+    }
     if (arg === 'jianganyiliao20241028') {
-      root = true;
-      out('warn', '身份已切换为 admin。现在可以访问 /root 了。');
+      lv = 1;
+      suFails = 0;
+      out('warn', '身份已切换为 admin。可访问 /var/mail、/etc/shadow、/home/zhouming/.ssh。');
     } else {
-      out('err', 'su: 口令错误。');
+      suFails++;
+      if (suFails >= 3) {
+        suLockUntil = now + 30000;
+        suFails = 0;
+        out('err', '认证失败次数过多，账户锁定 30 秒。');
+        out('out', 'auth.log 已记录本次尝试。');
+      } else {
+        out('err', 'su: 口令错误。（' + (3 - suFails) + ' 次后锁定）');
+      }
+    }
+  } else if (c === 'sudo') {
+    if (lv < 1) {
+      out('err', 'sudo: 需要先 su 到 admin。');
+    } else if (arg === '0471-6' || arg === '04716') {
+      lv = 2;
+      out('warn', 'root 权限已获取。可访问 /root。');
+      out('out', '（提示：/root/.history 里有上一位管理员的命令记录）');
+    } else {
+      out('err', 'sudo: 口令错误。');
     }
   } else if (c === 'decrypt') {
-    var f = normPath(parts[1] || '');
-    var key = parts[2] || '';
-    if (f === '/srv/clinical/ritual.enc' || f.endsWith('ritual.enc')) {
-      if (key === '31415918') { out('warn', RITUAL); }
+    var f = normPath(arg);
+    var key = arg2;
+    if (f.indexOf('ritual.enc') !== -1) {
+      if (key === '31415918') out('warn', RITUAL);
       else out('err', 'decrypt: 密钥错误。');
+    } else if (f.indexOf('enc.bak') !== -1) {
+      out('err', 'decrypt: 密钥缺失（该备份的密钥不在本节点）。');
     } else {
       out('out', 'decrypt: 无此加密文件。');
     }
+  } else if (c === 'status') {
+    out('out', '权限：' + (lv === 2 ? 'root' : (lv === 1 ? 'admin' : '访客')));
+    out('out', '已读文件：' + Object.keys(filesRead).length + ' 个');
+    out('out', '工作目录：' + cwd);
+    out('out', '会话标记：' + (unlocked ? '已通过校验' : '未通过校验'));
+  } else if (c === 'whoami') {
+    out('out', lv === 2 ? 'root' : (lv === 1 ? 'admin' : 'guest'));
+  } else if (c === 'last') {
+    out('out', 'zhouming  pts/0  2022-10-19 22:15 (10.8.4.71)\nadmin     pts/0  2022-10-19 22:10 (10.8.4.72)');
+  } else if (c === 'uptime') {
+    out('out', ' 22:15:07 up 2190 days,  3:14,  1 user,  load average: 0.04, 0.03, 0.00');
   } else if (c === 'verify') {
     if (arg === '220471') {
       if (!sawVerify) {
@@ -242,6 +330,7 @@ function run(cmd) {
     if (!unlocked) out('err', '尚未通过校验。');
     else ending('../e1b83a56.html');
   } else if (c === 'clear') {
+    queue.length = 0;
     var lines = term.querySelectorAll('.line');
     for (var i = 0; i < lines.length; i++) lines[i].remove();
   } else {
@@ -295,9 +384,13 @@ function connectAnim() {
 function startTerminal() {
   document.getElementById('conn').style.display = 'none';
   document.getElementById('term').style.display = 'block';
-  out('boot', 'JIANGAN-PHARMA · 运维节点 2\n');
-  out('boot', '连接已建立。最后登录：2022-10-19 22:15（终端 3F 观察室）\n');
-  out('boot', '输入 help 查看命令，Tab 可补全。\n');
+  out('boot', 'JIANGAN-PHARMA · 运维节点 2 (10.8.4.71)\n');
+  out('boot', 'Last login: 2022-10-19 22:15 from 10.8.4.72\n');
+  out('boot', '\n* * * * * * * * * * * * * * * * * * * * * * * *\n');
+  out('boot', '*  维护通知：本节点仅限内部使用。             *\n');
+  out('boot', '*  所有操作将被记录。                         *\n');
+  out('boot', '* * * * * * * * * * * * * * * * * * * * * * * *\n');
+  out('boot', '\n输入 help 查看命令，Tab 可补全。\n');
 
   var prow_el = document.createElement('div');
   prow_el.className = 'prow';
@@ -311,7 +404,11 @@ function startTerminal() {
   term.appendChild(prow_el);
   prow = prow_el;
 
-  function refreshPrompt() { ps.textContent = 'jiangansrv:' + cwd + '$ '; }
+  function promptText() {
+    var u = lv === 2 ? 'root' : (lv === 1 ? 'admin' : 'guest');
+    return u + '@jiangansrv:' + cwd + '$ ';
+  }
+  function refreshPrompt() { ps.textContent = promptText(); }
   refreshPrompt();
 
   input.addEventListener('keydown', function (e) {
@@ -320,7 +417,9 @@ function startTerminal() {
       var val = input.value;
       var sp = val.lastIndexOf(' ');
       if (sp === -1) {
-        var cmds = ['help', 'ls', 'cat', 'open', 'read', 'cd', 'pwd', 'clear', 'verify', 'su', 'decrypt', 'dir', 'type', '归档', '外传', '退出'];
+        var cmds = ['help', 'ls', 'cat', 'open', 'read', 'cd', 'pwd', 'clear', 'verify',
+                    'su', 'sudo', 'decrypt', 'status', 'whoami', 'last', 'uptime',
+                    'dir', 'type', '归档', '外传', '退出'];
         var vv = val.trim();
         for (var i = 0; i < cmds.length; i++) {
           if (cmds[i].indexOf(vv) === 0) { input.value = cmds[i]; break; }
@@ -339,7 +438,7 @@ function startTerminal() {
     if (v.trim() === '') return;
     var echo = document.createElement('div');
     echo.className = 'line in';
-    echo.textContent = 'jiangansrv:' + cwd + '$ ' + v;
+    echo.textContent = promptText() + v;
     term.insertBefore(echo, prow);
     run(v);
     refreshPrompt();

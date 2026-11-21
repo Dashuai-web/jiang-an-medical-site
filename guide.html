@@ -117,52 +117,72 @@
   <!-- ===================== 困难版 ===================== -->
   <div class="pane" id="pane1">
     <details open>
-      <summary>① 核心：服务器命令行探案</summary>
+      <summary>① 核心：服务器命令行探案（三级权限）</summary>
       <div class="inner">
-        <p>困难版不使用门户，也不依赖官网/匿名区。服务器终端就是整个调查界面。</p>
+        <p>困难版不使用门户。服务器终端就是整个调查界面：访客 → <b>su</b>（admin）→ <b>sudo</b>（root）。</p>
         <h4>命令</h4>
-        <p><code>ls</code>/<code>dir</code>　<code>cat</code>/<code>type</code>　<code>cd</code>　<code>pwd</code>　<code>su &lt;口令&gt;</code>　<code>decrypt &lt;文件&gt; &lt;密钥&gt;</code>　<code>verify &lt;码&gt;</code></p>
+        <p><code>ls</code>/<code>dir</code>　<code>cat</code>/<code>type</code>/<code>open</code>　<code>cd</code>　<code>pwd</code>　<code>su &lt;口令&gt;</code>　<code>sudo &lt;口令&gt;</code>　<code>decrypt &lt;文件&gt; &lt;密钥&gt;</code>　<code>status</code>　<code>whoami</code>　<code>last</code>　<code>uptime</code>　<code>verify &lt;码&gt;</code></p>
         <h4>调查链</h4>
-        <p>1. <code>cat README</code> → 时间戳规则 + 线索在哪</p>
+        <p>1. <code>cat README</code> → 时间戳规则 + 权限说明</p>
         <p>2. <code>cat /etc/config</code> → <code>1730073600</code> / <code>1723680000</code></p>
         <p>3. <code>cat /etc/security/pwpolicy</code> → 口令 = 公司名拼音 + 构建日期</p>
-        <p>4. 时间戳 1730073600 → 2024-10-28 → 口令 <code>jianganyiliao20241028</code></p>
-        <p>5. <code>su jianganyiliao20241028</code> → 解锁 /root</p>
-        <p>6. <code>cat /srv/clinical/roster.txt</code> → 承者簿（印 3 1 4 1 5 9 + 第 7 行 2024-11-18）</p>
-        <p>7. <code>decrypt ritual.enc 31415918</code> → 仪式流程</p>
-        <p>8. <code>cat /root/verify.txt</code> → 校验码 <code>220471</code></p>
-        <p>9. <code>verify 220471</code> → 三个结局</p>
+        <p>4. <code>su jianganyiliao20241028</code> → 拿到 admin</p>
+        <p>5. <code>cat /var/mail/admin</code> → 邮件重申「日期字段一律填公告日」</p>
+        <p>6. <code>cat /home/zhouming/.ssh/id_rsa</code> → 尾部注释 <code># unlock: &lt;工号&gt;-&lt;次数&gt;</code></p>
+        <p>7. <code>sudo 0471-6</code> → 工号 0471 + 第 6 次 → root</p>
+        <p>8. <code>cat /srv/clinical/roster.txt</code> → 承者簿（印 3 1 4 1 5 9 + 第 7 行 2024-11-18）</p>
+        <p>9. <code>decrypt ritual.enc 31415918</code> → 仪式流程</p>
+        <p>10. <code>cat /root/verify.txt</code> → 校验码 <code>220471</code></p>
+        <p>11. <code>verify 220471</code> → 直接输入 归档 / 外传 / 退出</p>
+        <p class="cap" style="font-size:12px;color:#888;">su 连续输错 3 次会锁定 30 秒；<code>status</code> 可随时查看权限与已读文件数。</p>
       </div>
     </details>
 
     <details>
-      <summary>② 其他载体</summary>
+      <summary>② 旧电脑取证</summary>
       <div class="inner">
-        <h4>目标画像（hard/dossier.html）</h4><p>OSINT：组织架构、周明 0471、异常点。</p>
-        <h4>旧电脑（hard/desktop.html）</h4><p>工牌 0471、10 月 19 日事故、入口指向服务器。</p>
-        <h4>员工之家镜像（hard/forum.html）</h4><p>9 死 1 活，活帖把「承者」拆字谜。</p>
-        <h4>摩斯（hard/signal.html）</h4><p>点红灯听声：S I X —— 第六次。</p>
-        <h4>扫描件（hard/notice.html）</h4><p>招聘启事「2024年10月__日」+ 印章里的 28；工牌 0471。</p>
-        <h4>404（根目录 404.html）</h4><p><code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>。</p>
+        <h4>开机自检（hard/desktop.html）</h4>
+        <p>进入先跑一段 BIOS 自检，随后进入 Win2000 桌面，共 11 个图标。</p>
+        <h4>回收站</h4>
+        <p>3 个已删除文件，可逐个「还原」。</p>
+        <h4>加密文件夹</h4>
+        <p>密码 <code>0471</code>（工号）。解开后是舅舅留的一封信，提到「承者簿」与「日期那一栏，从来不是真的日期」。</p>
+        <h4>监控截图 / 录音</h4>
+        <p>监控时间戳 <code>2022-10-19 22:15:07</code>；录音点播放后文字逐句出现。</p>
+        <h4>其他</h4>
+        <p>我的文档 / 我的电脑 / 江安备份 / 微信 / QQ / 浏览器 / QQ邮箱。</p>
       </div>
     </details>
 
     <details>
-      <summary>③ 密码速查</summary>
+      <summary>③ 其他载体</summary>
+      <div class="inner">
+        <p><b>目标画像</b> hard/dossier.html：OSINT 组织架构、周明 0471、异常点。</p>
+        <p><b>员工之家镜像</b> hard/forum.html：9 死 1 活，活帖把「承者」拆成字谜。</p>
+        <p><b>摩斯</b> hard/signal.html：点红灯听声，长=划、短=点 → S I X（第六次）。</p>
+        <p><b>扫描件</b> hard/notice.html：招聘启事「2024年10月__日」+ 印章里的 28；工牌 0471。</p>
+        <p><b>404</b> 根目录 404.html：<code>/0471</code>、<code>/AQ-2022-10-19</code>、<code>/server.log</code>、<code>/six</code>。</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>④ 口令速查</summary>
       <div class="inner">
         <table>
           <tr><th>用途</th><th>值</th><th>来源</th></tr>
-          <tr><td>服务器 su 提权</td><td><code>jianganyiliao20241028</code></td><td>时间戳 1730073600 → 2024-10-28</td></tr>
-          <tr><td>解密 ritual.enc</td><td><code>31415918</code></td><td>承者簿 314159 + 入职日 18</td></tr>
-          <tr><td>收尾校验码</td><td><code>220471</code></td><td>22（年份）+ 0471</td></tr>
+          <tr><td>su（admin）</td><td><code>jianganyiliao20241028</code></td><td>时间戳 1730073600 → 2024-10-28</td></tr>
+          <tr><td>sudo（root）</td><td><code>0471-6</code></td><td>id_rsa 注释 + 工号 + 第 6 次</td></tr>
+          <tr><td>decrypt ritual.enc</td><td><code>31415918</code></td><td>承者簿 314159 + 入职日 18</td></tr>
+          <tr><td>verify</td><td><code>220471</code></td><td>22（年份）+ 0471</td></tr>
         </table>
       </div>
     </details>
 
     <details>
-      <summary>④ 暗网（困难版）：14 / 30 / 42</summary>
+      <summary>⑤ 暗网（困难版）：14 / 30 / 42 + 6 条专属</summary>
       <div class="inner">
-        <p>外传结局 → 报纸 → 点「镜像 0x7F」→ 暗网。层级门槛 <b>14 / 30 / 42</b>，解锁提示不列关键词。</p>
+        <p>外传 → 报纸 → 点「镜像 0x7F」→ 暗网。门槛 <b>14 / 30 / 42</b>。</p>
+        <p>困难版会多出 6 条只在困难版出现的记录：<b>2019 年的第 7 次预案 / 承者中途死亡的处置 / 张青 / 监控日志 / 录音文字稿 / 董事会决议</b>。</p>
       </div>
     </details>
 

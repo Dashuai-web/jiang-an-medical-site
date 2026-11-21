@@ -264,5 +264,15 @@ observer.observe(document.getElementById('phase5'), { attributes: true, attribut
   }, 1500);
 })();
 </script>
+<script>
+(function () {
+  try { if (sessionStorage.getItem('ja_mode') !== 'hard') return; } catch (e) { return; }
+  var box = document.querySelector('.c') || document.querySelector('.main') || document.body;
+  var d = document.createElement('div');
+  d.style.cssText = 'margin-top:26px;padding-top:14px;border-top:1px dashed #a00;color:#8a2020;font-size:12px;line-height:2;font-family:SimSun,宋体,serif;';
+  d.innerHTML = '（困难版）你退出的那一刻，<br>会话编号被写进了第 8 次的预备名单。';
+  box.appendChild(d);
+})();
+</script>
 </body>
 </html>
