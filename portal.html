@@ -27,6 +27,25 @@
   .quick a:hover { color: #a00; border-bottom-color: #a00; }
   .counter { font-size: 11px; color: #a0b0c0; margin-top: 4px; }
   .warn { color: #a00; font-size: 12px; margin-top: 6px; display: none; }
+  #endingHint {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+    background: #a00000; color: #fff; font-size: 13px; line-height: 1.6;
+    padding: 9px 44px 9px 14px; text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,.35); display: none;
+    font-family: SimSun, 宋体, serif; letter-spacing: .5px;
+  }
+  #endingHint.show { display: block; }
+  body.has-hint { padding-top: 46px; }
+  #endingHint b { color: #ffe08a; font-weight: bold; }
+  #endingHint a {
+    color: #fff; font-weight: bold; text-decoration: underline;
+    margin: 0 2px; text-underline-offset: 3px; cursor: pointer;
+  }
+  #endingHint .cls {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    cursor: pointer; opacity: .75; font-size: 15px; padding: 0 6px;
+  }
+
   .warn.show { display: block; }
   .footer { padding: 10px 14px; border-top: 1px solid #d0d8e0; font-size: 11px; color: #90a0b0; text-align: center; }
   #resultView { display: none; min-height: 100vh; background: #fff; }
@@ -387,9 +406,6 @@ var HARD = false;
 try { HARD = sessionStorage.getItem('ja_mode') === 'hard'; } catch (e) {}
 
 function isUnlocked() {
-  var list = Object.keys(state.searched);
-  var need = HARD ? 25 : 15;
-  if (list.length < need) return false;
   var keyFlags = HARD
     ? ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock', 'sawRecruit']
     : ['saw0471', 'sawDrugReaction', 'sawModifyLog', 'sawSubjectList', 'sawLock'];
@@ -397,12 +413,40 @@ function isUnlocked() {
   return true;
 }
 
+function chooseEnding(k) {
+  var i = document.getElementById('searchInput');
+  if (i) i.value = k;
+  doSearch(k);
+}
+
+function showEndingHint() {
+  var el = document.getElementById('endingHint');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'endingHint';
+    el.innerHTML = '检测到异常输入源 · 请检索 '
+      + '<a onclick="chooseEnding(\'归档\')">归档</a> / '
+      + '<a onclick="chooseEnding(\'外传\')">外传</a> / '
+      + '<a onclick="chooseEnding(\'退出\')">退出</a>'
+      + ' 以选择处理方式<span class="cls" onclick="hideEndingHint()">✕</span>';
+    document.body.appendChild(el);
+  }
+  el.classList.add('show');
+  document.body.classList.add('has-hint');
+}
+
+function hideEndingHint() {
+  var el = document.getElementById('endingHint');
+  if (el) el.classList.remove('show');
+  document.body.classList.remove('has-hint');
+}
+
 function checkThresholds() {
   var warn = document.getElementById('warn');
   if (state.count >= 20 && state.count < 40) document.getElementById('footer').textContent = '系统版本 1.9.4 / 维护状态：正常 / 会话记录已达阈值';
   if (state.count >= 40 && state.count < 60) { warn.textContent = '检测到持续检索行为。本次会话可能被标记。'; warn.className = 'warn show'; }
   if (state.count >= 60) {
-    warn.textContent = isUnlocked() ? '检测到持续检索行为。建议处理方式：归档 / 外传 / 退出。' : '检测到持续检索行为。本次会话可能被标记。';
+    warn.textContent = isUnlocked() ? '检测到异常输入源。请检索：归档 / 外传 / 退出。' : '检测到持续检索行为。本次会话可能被标记。';
     warn.className = 'warn show';
   }
 }
@@ -518,6 +562,7 @@ function doSearch(raw) {
     var f = flagMap[n];
     if (f) setFlag(f);
     checkThresholds();
+    if (isUnlocked()) showEndingHint();
 
     if (n === '我的访问记录' || n === '访问记录') {
       showFullscreen(raw, '访问记录', buildLog(), false);
