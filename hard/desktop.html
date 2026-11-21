@@ -36,18 +36,18 @@
   .win { position: absolute; background: #f0f0f0; border: 1px solid #4a4a4a;
          box-shadow: 2px 2px 12px rgba(0,0,0,.5); display: flex; flex-direction: column;
          max-width: 92vw; z-index: 10; overflow: hidden; }
-  .win .tb { height: 27px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 10px;
-             font-size: 12px; color: #fff; cursor: move; user-select: none;
-             background: linear-gradient(#3a6ea5,#24476e); flex: none; }
+  .win .tb { position: relative; height: 27px; display: flex; align-items: center;
+             padding: 0 80px 0 10px; font-size: 12px; color: #fff; cursor: move;
+             user-select: none; background: linear-gradient(#3a6ea5,#24476e); flex: none; }
   .win.max { left: 0 !important; top: 0 !important; width: 100vw !important; height: calc(100vh - 30px) !important; }
   .win .tb.wx { background: linear-gradient(#3a3a3a,#2b2b2b); }
   .win .tb.qq { background: linear-gradient(#5a9fdc,#2f6fb0); }
   .win .tb.ie { background: linear-gradient(#6a9ad5,#3a6a9a); }
   .win .tb.ml { background: linear-gradient(#3f8ad8,#1f5fa8); }
-  .win .tb .tbtxt { font-weight: bold; letter-spacing: 1px; }
-  .win .tb .tbtxt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .win .tb .ctrl { flex: none; display: flex; gap: 0; margin-left: 0; }
-  .win .tb .ctrl span { width: 25px; height: 21px; display: flex; align-items: center; justify-content: center;
+  .win .tb .tbtxt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+                    font-weight: bold; letter-spacing: 1px; }
+  .win .tb .ctrl { position: absolute; top: 0; right: 0; bottom: 0; display: flex; gap: 0; }
+  .win .tb .ctrl span { width: 26px; height: 100%; display: flex; align-items: center; justify-content: center;
                         background: rgba(255,255,255,.16); border-left: 1px solid rgba(255,255,255,.25);
                         font-size: 11px; cursor: pointer; line-height: 1; }
   .win .tb .ctrl span:hover { background: rgba(255,255,255,.35); }
