@@ -407,24 +407,25 @@ var MAILS = {
 };
 
 var PAGES = {
-  home: '<div class="pg-co"><div class="h">江安医药科技有限公司</div>' +
+  home: '<div class="pg-co">' +
+        '<div class="h">江安医药科技有限公司</div>' +
         '<div class="nav2">首页　|　关于我们　|　新闻中心　|　产品研发　|　临床试验　|　联系我们</div>' +
         '<div class="bd"><b>专注创新药物研发，守护生命健康</b><br><br>' +
         '江安医药成立于 2015 年，主营仿制药研发、临床药物试验、健康产品开发。<br><br>' +
-        '<b>新闻中心</b><br>· 关于新信息系统 v2.0 上线的通知　<span class="cap">2024-10-28</span><br>' +
-        '· 2024 年度员工体检安排通知　<span class="cap">2024-10-15</span><br>' +
-        '· 关于开展消防安全演练的通知　<span class="cap">2024-10-08</span></div></div>',
+        '<b>公司新闻</b><br>· 2022 年度员工体检安排通知　<span class="cap">2022-09-20</span><br>' +
+        '· 关于开展消防安全演练的通知　<span class="cap">2022-09-15</span><br>' +
+        '· 2022 年中秋节放假安排　<span class="cap">2022-08-25</span></div></div>',
   news: '<div class="pg-news"><div class="h2">新闻中心</div><ul>' +
-        '<li><span>关于新信息系统 v2.0 上线的通知</span><span class="d">2024-10-28</span></li>' +
-        '<li><span>2024 年度员工体检安排通知</span><span class="d">2024-10-15</span></li>' +
-        '<li><span>关于开展消防安全演练的通知</span><span class="d">2024-10-08</span></li>' +
-        '<li><span>第三季度工作总结会议纪要</span><span class="d">2024-09-28</span></li>' +
+        '<li><span>2022 年度员工体检安排通知</span><span class="d">2022-09-20</span></li>' +
+        '<li><span>关于开展消防安全演练的通知</span><span class="d">2022-09-15</span></li>' +
+        '<li><span>2022 年中秋节放假安排</span><span class="d">2022-08-25</span></li>' +
+        '<li><span>第三季度工作总结会议纪要</span><span class="d">2022-07-05</span></li>' +
         '</ul></div>',
-  portal: '<div class="pg-login"><div class="ttl">江安医药 内部信息平台 v1.9.4</div>' +
-        '<label>工号 / 账号</label><input value="zhouming" readonly>' +
-        '<label>密码</label><input type="password" value="00000000" readonly>' +
-        '<button class="go">登 录</button>' +
-        '<div class="cap" style="margin-top:14px;">上次登录：2022-10-19 22:10 · IP 10.8.4.72</div></div>'
+  blocked: '<div style="padding:44px 34px;font-family:SimSun,serif;color:#333;">' +
+        '<div style="font-size:18px;margin-bottom:14px;">无法显示该网页</div>' +
+        '<p style="font-size:12px;line-height:2.1;color:#555;margin:0;">你可以尝试以下操作：<br>' +
+        '· 检查网络连接<br>· 确认该地址未被公司内部网络限制<br><br>' +
+        '<span style="color:#888;">此站点仅限公司内网访问，当前网络不可达。</span></p></div>'
 };
 
 /* ================= 渲染 ================= */
@@ -728,15 +729,15 @@ var WIN = {
     '</div><div class="inputbar"><div class="fakeinput">输入消息…</div><div class="sendrow"><button>发送</button></div></div>' +
     '</div></div></div>' },
 
-  browser: { t: '江安医药 内部信息平台 - Windows Internet Explorer', w: 720, tb: 'ie', html:
+  browser: { t: '江安医药科技有限公司 - Windows Internet Explorer', w: 720, tb: 'ie', html:
     '<div class="ie">' +
     '<div class="menu"><span>文件(F)</span><span>编辑(E)</span><span>查看(V)</span><span>收藏(A)</span><span>工具(T)</span><span>帮助(H)</span></div>' +
-    '<div class="tabs"><div class="tab">江安医药 内部信息平台</div></div>' +
+    '<div class="tabs"><div class="tab">江安医药科技有限公司</div></div>' +
     '<div class="toolbar"><div class="tbtn">←</div><div class="tbtn">→</div><div class="tbtn">✕</div><div class="tbtn">↻</div><div class="tbtn">⌂</div>' +
-    '<div class="addr"><span class="lbl">地址(D)</span><span class="url">http://portal.jiangan-pharma.com/v194</span></div>' +
+    '<div class="addr"><span class="lbl">地址(D)</span><span class="url">http://www.jiangan-pharma.com/</span></div>' +
     '<button class="go">转到</button></div>' +
-    '<div class="bm">收藏夹：<span data-p="home">江安官网</span><span data-p="news">新闻中心</span><span data-p="portal">内部系统</span></div>' +
-    '<div class="page">' + PAGES.portal + '</div>' +
+    '<div class="bm">收藏夹：<span data-p="home">江安官网</span><span data-p="news">新闻中心</span><span data-p="blocked">内部系统</span></div>' +
+    '<div class="page">' + PAGES.home + '</div>' +
     '<div class="status"><span>完成</span><span>Internet | 保护模式: 关</span></div>' +
     '</div>' },
 
