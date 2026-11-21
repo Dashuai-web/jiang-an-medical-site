@@ -7,126 +7,234 @@
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; height: 100vh; overflow: hidden; background: #000;
-         font-family: "Microsoft YaHei", "SimSun", sans-serif; }
+         font-family: "Microsoft YaHei", "Segoe UI", "SimSun", sans-serif; font-size: 12px; }
+
+  /* ---------- BIOS ---------- */
   #bios { position: fixed; inset: 0; background: #000; color: #c8c8c8;
           font-family: Consolas, monospace; font-size: 13px; line-height: 1.8;
-          padding: 40px 48px; z-index: 50; }
+          padding: 40px 48px; z-index: 60; }
   #bios .ln { opacity: 0; transition: opacity .15s; white-space: pre-wrap; }
   #bios .ok { color: #7fb07f; }
+
+  /* ---------- 桌面 ---------- */
   #desktop { position: relative; width: 100%; height: 100%;
-             background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); padding: 18px;
-             display: none; }
-  .icon { position: absolute; width: 80px; text-align: center; cursor: pointer; color: #fff;
-          text-shadow: 1px 1px 2px rgba(0,0,0,.6); user-select: none; }
-  .icon .img { font-size: 30px; line-height: 1; }
+             background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); display: none; }
+  .icon { position: absolute; width: 74px; text-align: center; cursor: pointer; color: #fff;
+          text-shadow: 1px 1px 2px rgba(0,0,0,.7); user-select: none; padding: 4px 2px; }
+  .icon:hover { background: rgba(255,255,255,.08); }
+  .icon .img { font-size: 28px; line-height: 1; }
   .icon .lb { font-size: 11px; margin-top: 4px; }
-  #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 32px;
-             background: #24507d; border-top: 1px solid #1a3f66; display: flex;
-             align-items: center; padding: 0 10px; color: #fff; font-size: 12px; z-index: 20; }
-  #taskbar .start { background: #3a8a3a; padding: 4px 14px; border-radius: 3px; font-weight: bold; }
-  #taskbar .clock { margin-left: auto; padding: 0 8px; border-left: 1px solid #1a3f66; }
+  #taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 30px;
+             background: linear-gradient(#2a5a8a,#1f4a75); border-top: 1px solid #4a7aa8;
+             display: flex; align-items: center; padding: 0 8px; color: #fff; font-size: 11px; z-index: 40; }
+  #taskbar .start { background: linear-gradient(#4a9a3a,#2f7a22); padding: 3px 12px; border-radius: 3px; font-weight: bold; }
+  #taskbar .tasks { display: flex; gap: 6px; margin-left: 12px; }
+  #taskbar .task { background: #2f6396; border: 1px solid #4a7aa8; padding: 3px 12px; border-radius: 3px; cursor: pointer; max-width: 160px; overflow: hidden; white-space: nowrap; }
+  #taskbar .clock { margin-left: auto; padding: 0 8px; border-left: 1px solid #4a7aa8; }
 
-  .win { position: absolute; background: #ece9d8; border: 2px solid #0a2a4a;
-         box-shadow: 3px 3px 0 rgba(0,0,0,.3); min-width: 300px; max-width: 92vw; z-index: 10;
-         display: flex; flex-direction: column; }
-  .win .tb { background: #0a2a4a; color: #fff; padding: 4px 8px; font-size: 12px;
-             display: flex; align-items: center; flex: none; }
-  .win .tb .x { margin-left: auto; background: #c33; border: 1px solid #fff; padding: 0 7px; cursor: pointer; }
-  .win .ct { padding: 12px 14px; font-size: 13px; color: #222; line-height: 1.9; max-height: 340px; overflow: auto; white-space: pre-wrap; }
-  .win .ct.app { padding: 0; white-space: normal; max-height: none; overflow: hidden; }
-  .win .ct .note { color: #7a5a00; }
-  .win .ct .del { color: #8a2020; }
-  .cap { font-size: 11px; color: #888; margin-top: 6px; }
+  /* ---------- 窗口 ---------- */
+  .win { position: absolute; background: #f0f0f0; border: 1px solid #4a4a4a;
+         box-shadow: 2px 2px 12px rgba(0,0,0,.5); display: flex; flex-direction: column;
+         max-width: 92vw; z-index: 10; }
+  .win .tb { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 6px;
+             font-size: 12px; color: #fff; cursor: move; user-select: none;
+             background: linear-gradient(#3a6ea5,#24476e); flex: none; }
+  .win .tb.wx { background: linear-gradient(#3a3a3a,#2b2b2b); }
+  .win .tb.qq { background: linear-gradient(#5a9fdc,#2f6fb0); }
+  .win .tb.ie { background: linear-gradient(#6a9ad5,#3a6a9a); }
+  .win .tb.ml { background: linear-gradient(#3f8ad8,#1f5fa8); }
+  .win .tb .tbtxt { font-weight: bold; letter-spacing: 1px; }
+  .win .tb .ctrl { margin-left: auto; display: flex; gap: 2px; }
+  .win .tb .ctrl span { width: 20px; height: 18px; display: flex; align-items: center; justify-content: center;
+                        background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
+                        font-size: 11px; cursor: pointer; line-height: 1; }
+  .win .tb .ctrl span:hover { background: rgba(255,255,255,.35); }
+  .win .tb .ctrl span.close { background: #c0392b; }
+  .win .tb .ctrl span.close:hover { background: #e04a3a; }
+  .win .ct { flex: 1; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+  .win .ct.plain { padding: 12px 14px; font-size: 13px; color: #222; line-height: 1.9;
+                   overflow: auto; white-space: pre-wrap; max-height: 320px; }
+  .cap { font-size: 11px; color: #888; }
+  .note { color: #7a5a00; }
+  .del { color: #8a2020; }
   .win button { font-family: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer;
-                background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080; }
+                background: #e6e6e6; border: 1px solid #b0b0b0; border-radius: 2px; }
+  .win button:hover { background: #d8d8d8; }
   .win input { font-family: inherit; font-size: 12px; padding: 3px 6px;
-               border: 2px solid #808080; border-top-color: #4a4a4a; border-left-color: #4a4a4a; }
-  .row2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #ccc; }
+               border: 1px solid #b0b0b0; }
 
-  /* ============ 微信 ============ */
-  .wx { display: flex; height: 330px; font-size: 12px; background: #f5f5f5; }
-  .wx .side { width: 146px; background: #ededed; border-right: 1px solid #d6d6d6; display: flex; flex-direction: column; flex: none; }
-  .wx .me { display: flex; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid #dcdcdc; }
-  .wx .search { padding: 8px; }
-  .wx .search div { background: #fff; border: 1px solid #dcdcdc; border-radius: 3px; padding: 3px 6px; color: #aaa; font-size: 11px; }
-  .wx .contact { display: flex; align-items: center; gap: 8px; padding: 8px 10px; cursor: pointer; }
-  .wx .contact:hover { background: #e5e5e5; }
-  .wx .contact.on { background: #d4d4d4; }
-  .av { width: 26px; height: 26px; border-radius: 3px; background: #7ab8f0; color: #fff;
+  /* ---------- 微信 ---------- */
+  .wx { display: flex; height: 400px; font-size: 12px; background: #f5f5f5; }
+  .wx .side { width: 190px; background: #2e2e2e; display: flex; flex-direction: column; flex: none; }
+  .wx .me { display: flex; align-items: center; gap: 8px; padding: 12px 10px; }
+  .wx .me .nm { color: #ddd; font-size: 12px; }
+  .wx .searchbox { margin: 0 8px 8px; background: #3a3a3a; border-radius: 3px; padding: 3px 6px; color: #888; font-size: 11px; }
+  .wx .list { flex: 1; overflow: auto; }
+  .wx .item { display: flex; align-items: center; gap: 8px; padding: 9px 10px; cursor: pointer; }
+  .wx .item:hover { background: #3a3a3a; }
+  .wx .item.on { background: #3f3f3f; }
+  .wx .item .tx { flex: 1; min-width: 0; }
+  .wx .item .t1 { color: #ddd; font-size: 12px; }
+  .wx .item .t2 { color: #7a7a7a; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  .wx .badge { background: #f03b3b; color: #fff; font-size: 10px; border-radius: 8px; padding: 0 5px; line-height: 14px; }
+  .av { width: 26px; height: 26px; border-radius: 3px; background: #3f7fbf; color: #fff;
         display: flex; align-items: center; justify-content: center; font-size: 11px; flex: none; }
-  .av.g { background: #8bc34a; }
-  .wx .main2 { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .wx .hdr { padding: 8px 12px; border-bottom: 1px solid #dcdcdc; font-size: 12px; color: #333; background: #f5f5f5; flex: none; }
-  .wx .msgs { flex: 1; overflow: auto; padding: 12px; }
-  .wx .msg { display: flex; gap: 8px; margin-bottom: 12px; }
+  .av.big { width: 34px; height: 34px; font-size: 13px; }
+  .av.g { background: #4a9a5a; }
+  .av.o { background: #d08a3a; }
+  .av.p { background: #8a6ab8; }
+  .wx .main2 { flex: 1; display: flex; flex-direction: column; min-width: 0; background: #f5f5f5; }
+  .wx .chathead { height: 40px; display: flex; align-items: center; justify-content: space-between;
+                  padding: 0 14px; border-bottom: 1px solid #dcdcdc; font-size: 13px; color: #333; background: #f5f5f5; flex: none; }
+  .wx .chathead .dots { color: #999; letter-spacing: 2px; cursor: pointer; }
+  .wx .msgs { flex: 1; overflow: auto; padding: 12px 14px; }
+  .wx .time { text-align: center; color: #aaa; font-size: 11px; margin: 6px 0 12px; }
+  .wx .msg { display: flex; gap: 8px; margin-bottom: 14px; align-items: flex-start; }
   .wx .msg.me { flex-direction: row-reverse; }
-  .wx .bubble { background: #fff; padding: 7px 10px; border-radius: 4px; max-width: 210px; line-height: 1.7; }
-  .wx .msg.me .bubble { background: #95ec69; }
-  .wx .draft { color: #a00; font-size: 11px; margin-top: 4px; }
-  .wx .inputbar { border-top: 1px solid #dcdcdc; height: 34px; display: flex; align-items: center; padding: 0 10px; color: #aaa; font-size: 11px; flex: none; }
+  .wx .bubble { position: relative; background: #fff; padding: 7px 10px; border-radius: 4px;
+                max-width: 220px; line-height: 1.65; font-size: 12px; color: #222;
+                border: 1px solid #e8e8e8; }
+  .wx .msg.me .bubble { background: #95ec69; border-color: #8ada5f; }
+  .wx .bubble::after { content: ''; position: absolute; top: 10px; left: -5px;
+                       border: 5px solid transparent; border-right-color: #fff; border-left: 0; }
+  .wx .msg.me .bubble::after { left: auto; right: -5px; border-right: 0; border-left-color: #95ec69; }
+  .wx .draft { color: #c0392b; font-size: 10px; margin-top: 3px; }
+  .wx .inputbar { border-top: 1px solid #dcdcdc; background: #f5f5f5; flex: none; }
+  .wx .tools { padding: 4px 12px; color: #666; letter-spacing: 8px; font-size: 13px; }
+  .wx .box2 { padding: 0 12px 6px; }
+  .wx .fakeinput { height: 52px; background: #fff; border: 1px solid #e0e0e0; border-radius: 3px;
+                   padding: 6px 8px; color: #bbb; font-size: 12px; }
+  .wx .sendrow { text-align: right; padding: 0 12px 8px; }
+  .wx .sendrow button { background: #f5f5f5; border: 1px solid #dcdcdc; color: #999; padding: 3px 12px; }
 
-  /* ============ QQ ============ */
-  .qq { display: flex; height: 330px; font-size: 12px; background: #f0f6ff; }
-  .qq .side { width: 140px; background: #eaf2ff; border-right: 1px solid #cfe0f5; flex: none; }
-  .qq .head2 { padding: 10px; border-bottom: 1px solid #cfe0f5; display: flex; align-items: center; gap: 8px; }
-  .qq .grp { padding: 7px 10px; cursor: pointer; color: #33557a; }
-  .qq .grp.on { background: #d6e6ff; }
+  /* ---------- QQ ---------- */
+  .qq { display: flex; flex-direction: column; height: 400px; background: #f0f6ff; }
+  .qq .top { display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+             background: linear-gradient(#e8f2ff,#dcebff); border-bottom: 1px solid #cfe0f5; flex: none; }
+  .qq .nm { font-size: 13px; color: #1a4a7a; }
+  .qq .st { font-size: 10px; color: #4a9a4a; }
+  .qq .body2 { display: flex; flex: 1; min-height: 0; }
+  .qq .side { width: 160px; background: #eaf2ff; border-right: 1px solid #cfe0f5; flex: none; }
+  .qq .gtitle { padding: 6px 10px; font-size: 11px; color: #6a8aa8; }
+  .qq .grp { display: flex; align-items: center; gap: 8px; padding: 7px 10px; cursor: pointer; }
+  .qq .grp:hover { background: #dbe9ff; }
+  .qq .grp.on { background: #cfe2ff; }
   .qq .main2 { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .qq .hdr { padding: 8px 12px; border-bottom: 1px solid #cfe0f5; background: #f7fbff; flex: none; }
-  .qq .msgs { flex: 1; overflow: auto; padding: 10px 12px; }
-  .qq .m { margin-bottom: 10px; line-height: 1.7; }
-  .qq .who2 { color: #1a6bb8; font-size: 11px; }
-  .qq .sys { color: #8a9ab0; font-size: 11px; text-align: center; margin: 8px 0; }
+  .qq .chathead { height: 36px; display: flex; align-items: center; justify-content: space-between;
+                  padding: 0 12px; border-bottom: 1px solid #cfe0f5; background: #f7fbff; font-size: 12px; color: #1a4a7a; flex: none; }
+  .qq .msgs { flex: 1; overflow: auto; padding: 10px 12px; background: #f7fbff; }
+  .qq .sys { color: #8a9ab0; font-size: 11px; text-align: center; margin-bottom: 10px; }
+  .qq .m { display: flex; gap: 8px; margin-bottom: 12px; }
+  .qq .m .tx { line-height: 1.7; color: #222; }
+  .qq .who2 { color: #1a6bb8; font-size: 11px; margin-bottom: 2px; }
+  .qq .inputbar { border-top: 1px solid #cfe0f5; background: #f7fbff; padding: 6px 10px; flex: none; }
+  .qq .fakeinput { height: 42px; background: #fff; border: 1px solid #cfe0f5; border-radius: 2px;
+                   color: #bbb; padding: 5px 8px; }
+  .qq .sendrow { text-align: right; margin-top: 6px; }
+  .qq .sendrow button { background: #4a90d9; color: #fff; border: 1px solid #2f6fb0; padding: 3px 16px; }
 
-  /* ============ 浏览器 ============ */
-  .ie .chrome { background: #efefef; border-bottom: 1px solid #c8c8c8; padding: 4px 6px; display: flex; gap: 6px; align-items: center; flex: none; }
-  .ie .btn2 { width: 20px; height: 20px; border: 1px solid #c0c0c0; background: #f8f8f8; text-align: center; line-height: 18px; color: #666; font-size: 11px; }
-  .ie .addr { flex: 1; background: #fff; border: 1px solid #b0b0b0; padding: 2px 6px; font-size: 11px; color: #333; }
-  .ie .bm { background: #f7f7f7; border-bottom: 1px solid #ddd; padding: 3px 8px; font-size: 11px; display: flex; gap: 12px; flex: none; }
-  .ie .bm span { color: #1a4a8a; cursor: pointer; }
+  /* ---------- 浏览器 ---------- */
+  .ie { display: flex; flex-direction: column; height: 430px; background: #fff; }
+  .ie .menu { display: flex; gap: 14px; padding: 3px 10px; background: #f4f4f4;
+              border-bottom: 1px solid #dcdcdc; font-size: 11px; color: #333; flex: none; }
+  .ie .menu span { cursor: default; }
+  .ie .tabs { display: flex; gap: 2px; padding: 4px 6px 0; background: #dfe7f0; border-bottom: 1px solid #b8c8d8; flex: none; }
+  .ie .tab { background: #fff; border: 1px solid #b8c8d8; border-bottom: none; padding: 3px 14px;
+             font-size: 11px; color: #333; border-radius: 3px 3px 0 0; }
+  .ie .toolbar { display: flex; align-items: center; gap: 4px; padding: 4px 6px;
+                 background: #eef2f6; border-bottom: 1px solid #d8e0e8; flex: none; }
+  .ie .tbtn { width: 24px; height: 22px; display: flex; align-items: center; justify-content: center;
+              border: 1px solid #c0ccd8; background: #fafcfe; color: #4a6a8a; font-size: 12px; }
+  .ie .addr { flex: 1; display: flex; align-items: center; gap: 6px; background: #fff;
+              border: 1px solid #a8b8c8; padding: 2px 6px; font-size: 11px; }
+  .ie .addr .lbl { color: #6a7a8a; }
+  .ie .addr .url { color: #1a4a8a; }
+  .ie .go { background: #f0f4f8; border: 1px solid #a8b8c8; padding: 2px 10px; font-size: 11px; }
+  .ie .bm { padding: 3px 10px; background: #f4f7fa; border-bottom: 1px solid #dce4ec; font-size: 11px; color: #6a7a8a; flex: none; }
+  .ie .bm span { color: #1a4a8a; cursor: pointer; margin-right: 12px; }
   .ie .bm span:hover { text-decoration: underline; }
-  .ie .page { background: #fff; height: 268px; overflow: auto; font-size: 12px; }
+  .ie .page { flex: 1; overflow: auto; background: #fff; }
+  .ie .status { height: 20px; display: flex; align-items: center; justify-content: space-between;
+                padding: 0 10px; background: #eef2f6; border-top: 1px solid #d8e0e8; font-size: 10px; color: #6a7a8a; flex: none; }
 
-  .pg-co { font-family: "Microsoft YaHei"; }
-  .pg-co .h { background: #1a6b4a; color: #fff; padding: 12px 16px; font-size: 15px; letter-spacing: 1px; }
-  .pg-co .nav2 { background: #14553a; color: #cfe8d8; padding: 5px 16px; font-size: 11px; }
-  .pg-co .bd { padding: 14px 16px; color: #333; line-height: 1.9; }
-  .pg-login { padding: 26px 30px; }
-  .pg-login label { display: block; font-size: 12px; color: #555; margin: 10px 0 4px; }
-  .pg-login input { width: 100%; padding: 4px 6px; border: 1px solid #bbb; font-size: 12px; }
-  .pg-login .go { margin-top: 16px; background: #1a6b4a; color: #fff; padding: 6px 22px; font-size: 12px; border: none; cursor: pointer; }
-  .pg-news { padding: 12px 16px; }
-  .pg-news li { font-size: 12px; padding: 6px 0; border-bottom: 1px dotted #ddd; list-style: none; }
+  .pg-co .h { background: linear-gradient(#1a6b4a,#14553a); color: #fff; padding: 14px 18px; font-size: 16px; letter-spacing: 2px; }
+  .pg-co .nav2 { background: #14553a; color: #cfe8d8; padding: 5px 18px; font-size: 11px; }
+  .pg-co .bd { padding: 16px 18px; color: #333; line-height: 2; font-size: 12px; }
+  .pg-login { padding: 26px 40px; max-width: 340px; }
+  .pg-login .ttl { font-size: 15px; color: #1a4a8a; margin-bottom: 16px; }
+  .pg-login label { display: block; font-size: 11px; color: #666; margin: 10px 0 4px; }
+  .pg-login input { width: 100%; padding: 4px 6px; border: 1px solid #bbb; font-size: 12px; background: #f7f7f7; }
+  .pg-login .go { margin-top: 18px; background: #1a6b4a; color: #fff; padding: 6px 26px; font-size: 12px; border: none; border-radius: 2px; }
+  .pg-news { padding: 14px 18px; }
+  .pg-news .h2 { font-size: 14px; color: #1a6b4a; border-bottom: 2px solid #1a6b4a; padding-bottom: 6px; margin-bottom: 10px; }
   .pg-news ul { margin: 0; padding: 0; }
+  .pg-news li { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 0; border-bottom: 1px dotted #ddd; list-style: none; }
+  .pg-news li .d { color: #999; font-size: 11px; }
 
-  /* ============ QQ邮箱 ============ */
-  .ml { display: flex; height: 330px; font-size: 12px; }
-  .ml .folders { width: 112px; background: #fafafa; border-right: 1px solid #e2e2e2; flex: none; }
-  .ml .folder { padding: 7px 10px; color: #444; cursor: pointer; }
-  .ml .folder.on { background: #e8f1fb; color: #1a4a8a; font-weight: bold; }
-  .ml .list { width: 190px; border-right: 1px solid #e2e2e2; overflow: auto; flex: none; }
-  .ml .item { padding: 7px 9px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
-  .ml .item:hover { background: #f4f8ff; }
-  .ml .item.on { background: #eef5ff; }
-  .ml .item .s { font-size: 11px; color: #999; }
-  .ml .preview { flex: 1; padding: 12px 14px; overflow: auto; line-height: 1.85; min-width: 0; }
-  .ml .preview .pm { font-size: 11px; color: #888; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 8px; }
+  /* ---------- QQ邮箱 ---------- */
+  .ml { display: flex; flex-direction: column; height: 430px; background: #fff; }
+  .ml .head { height: 44px; display: flex; align-items: center; gap: 14px; padding: 0 14px;
+              background: linear-gradient(#3f8ad8,#2f74c0); color: #fff; flex: none; }
+  .ml .logo { font-size: 15px; font-weight: bold; letter-spacing: 1px; }
+  .ml .searchbar { flex: 1; max-width: 260px; background: rgba(255,255,255,.9); border-radius: 12px;
+                   padding: 3px 10px; font-size: 11px; color: #888; }
+  .ml .body2 { display: flex; flex: 1; min-height: 0; }
+  .ml .side { width: 132px; background: #f7f9fc; border-right: 1px solid #e4e8ee; flex: none; padding-top: 8px; }
+  .ml .write { display: block; margin: 0 10px 10px; background: #3f8ad8; color: #fff; border: none;
+               padding: 5px 0; width: calc(100% - 20px); border-radius: 2px; cursor: pointer; font-size: 12px; }
+  .ml .folder { display: flex; justify-content: space-between; padding: 6px 12px; color: #444; cursor: pointer; font-size: 12px; }
+  .ml .folder:hover { background: #eef3fa; }
+  .ml .folder.on { background: #e2ecf8; color: #1a4a8a; font-weight: bold; }
+  .ml .folder b { color: #c0392b; font-weight: normal; }
+  .ml .list { width: 210px; border-right: 1px solid #e4e8ee; overflow: auto; flex: none; }
+  .ml .colhead { display: flex; justify-content: space-between; padding: 6px 10px; background: #f7f9fc;
+                 border-bottom: 1px solid #e4e8ee; font-size: 11px; color: #888; }
+  .ml .item { padding: 8px 10px; border-bottom: 1px solid #f0f2f5; cursor: pointer; }
+  .ml .item:hover { background: #f4f8fd; }
+  .ml .item.on { background: #eaf2fb; }
+  .ml .item .s1 { font-size: 12px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ml .item .s2 { font-size: 11px; color: #999; margin-top: 2px; display: flex; justify-content: space-between; }
+  .ml .preview { flex: 1; padding: 14px 18px; overflow: auto; min-width: 0; }
+  .ml .preview .ph { font-size: 15px; color: #222; margin-bottom: 8px; }
+  .ml .preview .pm { font-size: 11px; color: #888; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; }
+  .ml .preview .pb { font-size: 12px; line-height: 2; color: #333; }
+  .ml .preview .acts { margin-top: 18px; display: flex; gap: 8px; }
+  .ml .preview .acts button { background: #f5f7fa; border: 1px solid #d8e0e8; padding: 3px 12px; font-size: 11px; }
 
-  /* ============ 资源管理器 ============ */
-  .ex .bar { background: #f0f0f0; border-bottom: 1px solid #ccc; padding: 3px 8px; font-size: 11px; color: #444; flex: none; }
-  .ex .files { background: #fff; height: 210px; overflow: auto; padding: 10px; }
-  .ex .file { display: inline-block; width: 86px; text-align: center; font-size: 11px; margin: 6px 4px; cursor: pointer; color: #222; }
-  .ex .file .ic2 { font-size: 22px; }
+  /* ---------- 资源管理器 ---------- */
+  .ex { display: flex; flex-direction: column; height: 360px; background: #fff; }
+  .ex .menu { display: flex; gap: 12px; padding: 3px 8px; background: #f4f4f4; border-bottom: 1px solid #dcdcdc; font-size: 11px; flex: none; }
+  .ex .toolbar { display: flex; gap: 6px; padding: 4px 8px; background: #eef2f6; border-bottom: 1px solid #d8e0e8; font-size: 11px; color: #3a5a7a; flex: none; }
+  .ex .toolbar span { border: 1px solid #c8d4e0; background: #fafcfe; padding: 2px 8px; }
+  .ex .addrbar { display: flex; align-items: center; gap: 6px; padding: 3px 8px; background: #f7fafc;
+                 border-bottom: 1px solid #d8e0e8; font-size: 11px; color: #6a7a8a; flex: none; }
+  .ex .addrbar .path { flex: 1; background: #fff; border: 1px solid #c8d4e0; padding: 1px 6px; color: #333; }
+  .ex .body2 { display: flex; flex: 1; min-height: 0; }
+  .ex .pane { width: 150px; background: #eef4fa; border-right: 1px solid #d8e0e8; padding: 10px; font-size: 11px; color: #33557a; flex: none; }
+  .ex .pane b { display: block; margin-bottom: 6px; color: #1a4a7a; }
+  .ex .pane div { padding: 2px 0; cursor: default; }
+  .ex .files { flex: 1; overflow: auto; }
+  .ex .colhead { display: flex; background: #f4f7fa; border-bottom: 1px solid #e0e6ec; font-size: 11px; color: #666; }
+  .ex .colhead span { padding: 4px 8px; flex: 1; border-right: 1px solid #e0e6ec; }
+  .ex .row { display: flex; border-bottom: 1px solid #f4f6f8; font-size: 12px; color: #222; cursor: default; }
+  .ex .row:hover { background: #eaf2fb; }
+  .ex .row span { padding: 5px 8px; flex: 1; overflow: hidden; white-space: nowrap; }
+  .ex .row .ic3 { width: 20px; flex: none; padding-right: 0; }
+  .ex .status { height: 20px; display: flex; align-items: center; padding: 0 10px;
+                background: #eef2f6; border-top: 1px solid #d8e0e8; font-size: 10px; color: #6a7a8a; flex: none; }
+
+  .rec { min-height: 18px; line-height: 1.9; }
 
   @media (max-width: 720px) {
     body { -webkit-text-size-adjust: 100%; }
-    .icon { width: 68px; }
-    .icon .img { font-size: 26px; }
+    .icon { width: 62px; }
+    .icon .img { font-size: 24px; }
     #bios { padding: 24px 18px; font-size: 11px; }
-    .wx, .qq, .ml { height: 300px; }
-    .wx .side { width: 110px; }
-    .ml .list { width: 140px; }
-    .ml .folders { width: 90px; }
+    .wx { height: 340px; } .wx .side { width: 120px; }
+    .qq { height: 340px; } .qq .side { width: 120px; }
+    .ie { height: 380px; } .ml { height: 380px; }
+    .ml .side { width: 100px; } .ml .list { width: 150px; }
+    .ex { height: 320px; } .ex .pane { display: none; }
   }
 </style>
 </head>
@@ -135,24 +243,24 @@
 <div id="bios"></div>
 
 <div id="desktop">
-  <div class="icon" style="left:16px;  top:12px;"  data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
-  <div class="icon" style="left:110px; top:12px;"  data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
-  <div class="icon" style="left:204px; top:12px;"  data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
-  <div class="icon" style="left:298px; top:12px;"  data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+  <div class="icon" style="left:14px;  top:10px;" data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
+  <div class="icon" style="left:100px; top:10px;" data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
+  <div class="icon" style="left:186px; top:10px;" data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
+  <div class="icon" style="left:272px; top:10px;" data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
 
-  <div class="icon" style="left:16px;  top:132px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
-  <div class="icon" style="left:110px; top:132px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
-  <div class="icon" style="left:204px; top:132px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
-  <div class="icon" style="left:298px; top:132px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+  <div class="icon" style="left:14px;  top:120px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
+  <div class="icon" style="left:100px; top:120px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
+  <div class="icon" style="left:186px; top:120px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
+  <div class="icon" style="left:272px; top:120px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
 
-  <div class="icon" style="left:16px;  top:252px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
-  <div class="icon" style="left:110px; top:252px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
-  <div class="icon" style="left:204px; top:252px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
+  <div class="icon" style="left:14px;  top:230px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
+  <div class="icon" style="left:100px; top:230px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
+  <div class="icon" style="left:186px; top:230px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
 </div>
 
 <div id="taskbar" style="display:none">
   <span class="start">开始</span>
-  <span style="margin-left:12px;">周明</span>
+  <span class="tasks" id="tasks"></span>
   <span class="clock" id="clock"></span>
 </div>
 
@@ -194,92 +302,163 @@ function bootBios() {
 
 /* ================= 数据 ================= */
 var WX_CHATS = {
-  liu: { name: '行政-小刘', msgs: [
-    { who: 'o', t: '周哥，这周体检抽了四管血，往年才两管。' },
-    { who: 'm', t: '我这也是。说是升级套餐。' },
-    { who: 'o', t: '升级什么了也不说。算了。' }
-  ] },
-  chen: { name: '陈默（外甥）', msgs: [
-    { who: 'm', t: '小陈，舅舅可能出事了。我的工号，工牌上还挂着。', draft: true }
-  ] }
+  liu: { name: '行政-小刘', av: '刘', avc: '', unread: 2,
+    preview: '升级什么了也不说。算了。',
+    msgs: [
+      { who: 'o', t: '周哥，这周体检抽了四管血，往年才两管。' },
+      { who: 'm', t: '我这也是。说是升级套餐。' },
+      { who: 'o', t: '升级什么了也不说。算了。' }
+    ] },
+  chen: { name: '陈默（外甥）', av: '陈', avc: 'o', unread: 0,
+    preview: '小陈，舅舅可能出事了…',
+    msgs: [
+      { who: 'm', t: '小陈，舅舅可能出事了。我的工号，工牌上还挂着。', draft: true }
+    ] },
+  group: { name: '江安行政部', av: '群', avc: 'p', unread: 0,
+    preview: '[图片]',
+    msgs: [
+      { who: 'o', t: '明天所有人 8:30 到 B 座三层开会。', whoName: '行政部' },
+      { who: 'm', t: '收到。' }
+    ] }
 };
 
 var QQ_GROUPS = {
-  g: { name: '江安医药同事群', msgs: [
-    { who: '同事A', t: '有人说凌晨三点又被叫去加班吗？' },
-    { who: '同事B', t: '又来了。这个月第几次了。' },
-    { who: '同事C', t: '别问，问就是系统维护。' },
-    { who: '同事D', t: '我听见观察室三号有动静。' },
-    { who: '同事A', t: '闭嘴。' }
-  ] }
+  g: { name: '江安医药同事群', n: 12,
+    msgs: [
+      { who: '同事A', t: '有人说凌晨三点又被叫去加班吗？' },
+      { who: '同事B', t: '又来了。这个月第几次了。' },
+      { who: '同事C', t: '别问，问就是系统维护。' },
+      { who: '同事D', t: '我听见观察室三号有动静。' },
+      { who: '同事A', t: '闭嘴。' }
+    ] }
 };
 
 var MAILS = {
-  inbox: [{ from: '江安医药 · 人事', subj: '入职体检安排', date: '2022-09-28',
+  inbox: [{ from: '江安医药 · 人事', subj: '入职体检安排', date: '2022-09-28 09:12',
+    to: 'zhouming@jiangan-pharma.com',
     body: '新员工请于 11 月 4 日—22 日前往指定机构体检。\n\n项目：采血、心电图、生命体征监测。\n\n体检报告由行政部统一领取。' }],
-  draft: [{ from: '草稿箱', subj: '未发出', date: '2022-10-19',
+  draft: [{ from: '周明', subj: '（未发出）', date: '2022-10-19 22:20',
+    to: '（未填写）',
     body: '小陈，如果我出事，去查 10 月 19 日那天的事故。\n\n死亡原因那一栏被人改过。' }],
-  sent: [], trash: []
+  sent: [],
+  trash: []
 };
 
 var PAGES = {
   home: '<div class="pg-co"><div class="h">江安医药科技有限公司</div>' +
-        '<div class="nav2">首页　关于我们　新闻中心　产品研发　临床试验　联系我们</div>' +
-        '<div class="bd">专注创新药物研发，守护生命健康。<br><br>' +
-        '公司新闻：<br>· 关于新信息系统 v2.0 上线的通知（2024-10-28）<br>' +
-        '· 2024 年度员工体检安排通知<br>· 关于开展消防安全演练的通知</div></div>',
-  news: '<div class="pg-news"><b>新闻中心</b><ul>' +
-        '<li>关于新信息系统 v2.0 上线的通知　<span class="cap">2024-10-28</span></li>' +
-        '<li>2024 年度员工体检安排通知　<span class="cap">2024-10-15</span></li>' +
-        '<li>关于开展消防安全演练的通知　<span class="cap">2024-10-08</span></li>' +
-        '<li>第三季度工作总结会议纪要　<span class="cap">2024-09-28</span></li>' +
+        '<div class="nav2">首页　|　关于我们　|　新闻中心　|　产品研发　|　临床试验　|　联系我们</div>' +
+        '<div class="bd"><b>专注创新药物研发，守护生命健康</b><br><br>' +
+        '江安医药成立于 2015 年，主营仿制药研发、临床药物试验、健康产品开发。<br><br>' +
+        '<b>新闻中心</b><br>· 关于新信息系统 v2.0 上线的通知　<span class="cap">2024-10-28</span><br>' +
+        '· 2024 年度员工体检安排通知　<span class="cap">2024-10-15</span><br>' +
+        '· 关于开展消防安全演练的通知　<span class="cap">2024-10-08</span></div></div>',
+  news: '<div class="pg-news"><div class="h2">新闻中心</div><ul>' +
+        '<li><span>关于新信息系统 v2.0 上线的通知</span><span class="d">2024-10-28</span></li>' +
+        '<li><span>2024 年度员工体检安排通知</span><span class="d">2024-10-15</span></li>' +
+        '<li><span>关于开展消防安全演练的通知</span><span class="d">2024-10-08</span></li>' +
+        '<li><span>第三季度工作总结会议纪要</span><span class="d">2024-09-28</span></li>' +
         '</ul></div>',
-  portal: '<div class="pg-login"><b>江安医药 内部信息平台 v1.9.4</b>' +
+  portal: '<div class="pg-login"><div class="ttl">江安医药 内部信息平台 v1.9.4</div>' +
         '<label>工号 / 账号</label><input value="zhouming" readonly>' +
         '<label>密码</label><input type="password" value="00000000" readonly>' +
         '<button class="go">登 录</button>' +
-        '<div class="cap" style="margin-top:12px;">上次登录：2022-10-19 22:10</div></div>'
+        '<div class="cap" style="margin-top:14px;">上次登录：2022-10-19 22:10 · IP 10.8.4.72</div></div>'
 };
 
-/* ================= 窗口 ================= */
-function closeWin() {
-  var w = document.querySelector('.win');
-  if (w) w.remove();
-}
-
-function renderWxChat(key) {
-  var c = WX_CHATS[key];
-  var out = '<div class="hdr">' + c.name + '</div><div class="msgs">';
-  c.msgs.forEach(function (m) {
-    out += '<div class="msg' + (m.who === 'm' ? ' me' : '') + '">' +
-      '<div class="av' + (m.who === 'm' ? ' g' : '') + '">' + (m.who === 'm' ? '周' : '刘') + '</div>' +
-      '<div><div class="bubble">' + m.t + '</div>' +
-      (m.draft ? '<div class="draft">（未发送）</div>' : '') + '</div></div>';
+/* ================= 渲染 ================= */
+function wxSide(cur) {
+  var out = '<div class="me"><div class="av big g">周</div><div class="nm">周明</div></div>' +
+    '<div class="searchbox">搜索</div><div class="list">';
+  ['liu', 'chen', 'group'].forEach(function (k) {
+    var c = WX_CHATS[k];
+    out += '<div class="item' + (k === cur ? ' on' : '') + '" data-c="' + k + '">' +
+      '<div class="av ' + c.avc + '">' + c.av + '</div>' +
+      '<div class="tx"><div class="t1">' + c.name + '</div><div class="t2">' + c.preview + '</div></div>' +
+      (c.unread ? '<div class="badge">' + c.unread + '</div>' : '') + '</div>';
   });
-  out += '</div><div class="inputbar">输入消息…</div>';
+  out += '</div>';
   return out;
 }
 
+function wxChat(key) {
+  var c = WX_CHATS[key];
+  var out = '<div class="chathead"><span>' + c.name + '</span><span class="dots">•••</span></div><div class="msgs">' +
+    '<div class="time">今天 22:03</div>';
+  c.msgs.forEach(function (m) {
+    out += '<div class="msg' + (m.who === 'm' ? ' me' : '') + '">' +
+      '<div class="av ' + (m.who === 'm' ? 'g' : '') + '">' + (m.who === 'm' ? '周' : c.av) + '</div>' +
+      '<div><div class="bubble">' + m.t + '</div>' +
+      (m.draft ? '<div class="draft">（未发送）</div>' : '') + '</div></div>';
+  });
+  out += '</div><div class="inputbar"><div class="tools">☺ 🗂 ✂</div>' +
+    '<div class="box2"><div class="fakeinput">输入消息…</div></div>' +
+    '<div class="sendrow"><button>发送(S)</button></div></div>';
+  return out;
+}
+
+/* ================= 窗口 ================= */
+var openCount = 0;
+var dragTarget = null, dragOX = 0, dragOY = 0, dragSX = 0, dragSY = 0;
+
+document.addEventListener('mousemove', function (e) {
+  if (!dragTarget) return;
+  dragTarget.style.left = (dragOX + e.clientX - dragSX) + 'px';
+  dragTarget.style.top = Math.max(0, dragOY + e.clientY - dragSY) + 'px';
+});
+document.addEventListener('mouseup', function () { dragTarget = null; });
+
+function closeWin(w) {
+  var t = w || document.querySelector('.win');
+  if (t) t.remove();
+}
+
+function addTask(title, w) {
+  var box = document.getElementById('tasks');
+  var b = document.createElement('span');
+  b.className = 'task';
+  b.textContent = title;
+  b.addEventListener('click', function () {
+    if (!w.parentNode) return;
+    w.style.zIndex = ++openCount + 10;
+  });
+  box.appendChild(b);
+  w.addEventListener('remove', function () {});
+}
+
 function openWin(k) {
-  closeWin();
   var W = WIN[k];
   var w = document.createElement('div');
   w.className = 'win';
-  w.style.left = (40 + Math.random() * 70) + 'px';
-  w.style.top = (30 + Math.random() * 50) + 'px';
-  w.style.width = (W.w || 360) + 'px';
-  w.innerHTML = '<div class="tb"><span>' + W.t + '</span><span class="x" onclick="closeWin()">✕</span></div>' +
-    '<div class="ct' + (W.app ? ' app' : '') + '">' + W.html + '</div>';
+  var off = (openCount % 6) * 26;
+  w.style.left = Math.min(60 + off, Math.max(20, window.innerWidth - (W.w || 400) - 20)) + 'px';
+  w.style.top = (30 + off) + 'px';
+  w.style.width = (W.w || 380) + 'px';
+  w.style.zIndex = ++openCount + 10;
+
+  var ctrl = '<div class="ctrl"><span>—</span><span>□</span><span class="close">✕</span></div>';
+  w.innerHTML = '<div class="tb ' + (W.tb || '') + '"><span class="tbtxt">' + W.t + '</span>' + ctrl + '</div>' +
+    '<div class="ct' + (W.plain ? ' plain' : '') + '">' + W.html + '</div>';
   document.getElementById('desktop').appendChild(w);
+  w.querySelector('.ctrl .close').addEventListener('click', function () { closeWin(w); });
+
+  var tb = w.querySelector('.tb');
+  tb.addEventListener('mousedown', function (e) {
+    dragTarget = w;
+    dragSX = e.clientX; dragSY = e.clientY;
+    dragOX = parseInt(w.style.left) || 0;
+    dragOY = parseInt(w.style.top) || 0;
+    w.style.zIndex = ++openCount + 10;
+  });
 
   if (k === 'wechat') {
+    var side = w.querySelector('.wx .side');
     var main = w.querySelector('.wx .main2');
-    w.querySelectorAll('.wx .contact').forEach(function (el) {
-      el.addEventListener('click', function () {
-        w.querySelectorAll('.wx .contact').forEach(function (x) { x.classList.remove('on'); });
-        el.classList.add('on');
-        main.innerHTML = renderWxChat(el.getAttribute('data-c'));
-      });
+    side.addEventListener('click', function (e) {
+      var it = e.target.closest ? e.target.closest('.item') : null;
+      if (!it) return;
+      var key = it.getAttribute('data-c');
+      side.innerHTML = wxSide(key);
+      main.innerHTML = wxChat(key);
     });
   }
   if (k === 'qq') {
@@ -289,11 +468,14 @@ function openWin(k) {
         w.querySelectorAll('.qq .grp').forEach(function (x) { x.classList.remove('on'); });
         el.classList.add('on');
         var g = QQ_GROUPS[el.getAttribute('data-g')];
-        var h = '<div class="hdr">' + g.name + '（12）</div><div class="msgs"><div class="sys">— 以下是群聊记录 —</div>';
+        var h = '<div class="chathead"><span>' + g.name + '（' + g.n + '）</span><span class="cap">群资料</span></div>' +
+          '<div class="msgs"><div class="sys">— 以下是群聊记录 —</div>';
         g.msgs.forEach(function (m) {
-          h += '<div class="m"><div class="who2">' + m.who + '</div>' + m.t + '</div>';
+          h += '<div class="m"><div class="av p">' + m.who.slice(-1) + '</div>' +
+            '<div class="tx"><div class="who2">' + m.who + '</div>' + m.t + '</div></div>';
         });
-        h += '</div>';
+        h += '</div><div class="inputbar"><div class="fakeinput">输入消息…</div>' +
+          '<div class="sendrow"><button>发送</button></div></div>';
         main2.innerHTML = h;
       });
     });
@@ -309,15 +491,23 @@ function openWin(k) {
   if (k === 'mail') {
     var prev = w.querySelector('.ml .preview');
     var list = w.querySelector('.ml .list');
+    function showMail(arr, i) {
+      var m = arr[i];
+      prev.innerHTML = '<div class="ph">' + m.subj + '</div>' +
+        '<div class="pm">发件人：' + m.from + '　收件人：' + m.to + '　时间：' + m.date + '</div>' +
+        '<div class="pb">' + m.body.split('\n').join('<br>') + '</div>' +
+        '<div class="acts"><button>回复</button><button>转发</button><button>删除</button></div>';
+    }
     function showFolder(f) {
       var arr = MAILS[f] || [];
       if (!arr.length) {
-        list.innerHTML = '<div class="item"><div class="s">（空）</div></div>';
+        list.innerHTML = '<div class="colhead"><span>邮件</span></div><div class="item"><div class="s1">（空）</div></div>';
         prev.innerHTML = '<div class="cap">该文件夹为空。</div>';
         return;
       }
-      list.innerHTML = arr.map(function (m, i) {
-        return '<div class="item" data-i="' + i + '"><div>' + m.subj + '</div><div class="s">' + m.from + '</div></div>';
+      list.innerHTML = '<div class="colhead"><span>邮件</span><span>日期</span></div>' + arr.map(function (m, i) {
+        return '<div class="item" data-i="' + i + '"><div class="s1">' + m.subj + '</div>' +
+          '<div class="s2"><span>' + m.from + '</span><span>' + m.date.slice(5, 10) + '</span></div></div>';
       }).join('');
       showMail(arr, 0);
       list.querySelectorAll('.item').forEach(function (it, i) {
@@ -327,10 +517,6 @@ function openWin(k) {
           showMail(arr, i);
         });
       });
-    }
-    function showMail(arr, i) {
-      var m = arr[i];
-      prev.innerHTML = '<div class="pm">' + m.from + '　·　' + m.date + '</div><b>' + m.subj + '</b><br><br>' + m.body.replace(/\n/g, '<br>');
     }
     w.querySelectorAll('.ml .folder').forEach(function (el) {
       el.addEventListener('click', function () {
@@ -390,98 +576,109 @@ function openWin(k) {
 
 /* ================= 窗口内容 ================= */
 var WIN = {
-  memo: { t: '我的文档', w: 380, html:
+  memo: { t: '我的文档', w: 380, plain: 1, html:
     '备忘录.txt\n\n' +
     '如果我回不来了，说明被他们发现了。\n\n' +
     '我的工号，工牌上还挂着。\n\n' +
     '别报警。去查。\n' },
 
-  trash: { t: '回收站', w: 400, html:
+  trash: { t: '回收站', w: 400, plain: 1, html:
     '<div id="trashBody">' +
     '<div class="row2"><span class="del">草稿_给陈默.txt</span><button data-restore="1">还原</button></div>' +
     '<div class="row2"><span class="del">体检单_2022.jpg</span><button data-restore="2">还原</button></div>' +
     '<div class="row2"><span class="del">观察室排班.xls</span><button data-restore="3">还原</button></div>' +
     '<div class="cap">共 3 项</div></div>' },
 
-  computer: { t: '我的电脑', w: 480, app: 1, html:
-    '<div class="ex"><div class="bar">地址：C:\\</div><div class="files">' +
-    '<div class="file"><div class="ic2">📁</div>江安</div>' +
-    '<div class="file"><div class="ic2">📁</div>员工资料</div>' +
-    '<div class="file"><div class="ic2">📁</div>备份</div>' +
-    '<div class="file"><div class="ic2">📄</div>readme.txt</div>' +
-    '<div class="file"><div class="ic2">💿</div>本地磁盘 C:</div>' +
-    '</div><div class="bar" style="border-top:1px solid #ccc;border-bottom:none;">5 个对象</div></div>' },
+  computer: { t: '我的电脑', w: 560, html:
+    '<div class="ex">' +
+    '<div class="menu"><span>文件(F)</span><span>编辑(E)</span><span>查看(V)</span><span>收藏(A)</span><span>工具(T)</span><span>帮助(H)</span></div>' +
+    '<div class="toolbar"><span>← 后退</span><span>→</span><span>↑ 向上</span><span>搜索</span><span>文件夹</span></div>' +
+    '<div class="addrbar">地址(D) <div class="path">C:\\</div></div>' +
+    '<div class="body2">' +
+    '<div class="pane"><b>文件和文件夹任务</b><div>· 创建一个新文件夹</div><div>· 将这个文件夹发布到 Web</div>' +
+    '<div>· 共享此文件夹</div><b style="margin-top:10px;">其它位置</b><div>· 我的文档</div><div>· 我的电脑</div></div>' +
+    '<div class="files">' +
+    '<div class="colhead"><span>名称</span><span>大小</span><span>类型</span><span>修改日期</span></div>' +
+    '<div class="row"><span class="ic3">📁</span><span>江安</span><span></span><span>文件夹</span><span>2022-10-18 21:40</span></div>' +
+    '<div class="row"><span class="ic3">📁</span><span>员工资料</span><span></span><span>文件夹</span><span>2022-09-30 10:02</span></div>' +
+    '<div class="row"><span class="ic3">📁</span><span>备份</span><span></span><span>文件夹</span><span>2022-10-19 22:08</span></div>' +
+    '<div class="row"><span class="ic3">📄</span><span>readme.txt</span><span>1 KB</span><span>文本文档</span><span>2022-10-19 22:05</span></div>' +
+    '</div></div>' +
+    '<div class="status">4 个对象　　　　　　　　　　　　　　我的电脑</div>' +
+    '</div>' },
 
-  backup: { t: '江安备份', w: 400, html:
+  backup: { t: '江安备份', w: 420, plain: 1, html:
     '旧版入口.txt\n\n' +
     '「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n' +
     '口令怎么拼，去服务器看口令策略。」\n\n' +
     '<span class="note">※ 便签上写着一台服务器的地址。</span>\n' },
 
-  wechat: { t: '微信', w: 600, app: 1, html:
-    '<div class="wx">' +
-    '<div class="side">' +
-    '<div class="me"><div class="av g">周</div><div>周明</div></div>' +
-    '<div class="search"><div>搜索</div></div>' +
-    '<div class="contact on" data-c="liu"><div class="av">刘</div><div>行政-小刘</div></div>' +
-    '<div class="contact" data-c="chen"><div class="av" style="background:#f0a0a0;">陈</div><div>陈默（外甥）</div></div>' +
-    '</div>' +
-    '<div class="main2">' + renderWxChat('liu') + '</div>' +
-    '</div>' },
+  wechat: { t: '微信', w: 660, tb: 'wx', html:
+    '<div class="wx"><div class="side">' + wxSide('liu') + '</div>' +
+    '<div class="main2">' + wxChat('liu') + '</div></div>' },
 
-  qq: { t: 'QQ', w: 540, app: 1, html:
+  qq: { t: 'QQ', w: 600, tb: 'qq', html:
     '<div class="qq">' +
-    '<div class="side">' +
-    '<div class="head2"><div class="av" style="background:#4a90d9;">周</div><div>周明<br><span style="font-size:10px;color:#6a8aa8;">在线</span></div></div>' +
-    '<div class="grp on" data-g="g">江安医药同事群（12）</div>' +
+    '<div class="top"><div class="av big" style="background:#4a90d9;">周</div>' +
+    '<div><div class="nm">周明</div><div class="st">● 在线</div></div>' +
+    '<div style="margin-left:auto;color:#6a8aa8;font-size:11px;">搜索</div></div>' +
+    '<div class="body2">' +
+    '<div class="side"><div class="gtitle">群 / 联系人</div>' +
+    '<div class="grp on" data-g="g"><div class="av p">群</div><div><div>江安医药同事群</div><div class="cap">12 人</div></div></div>' +
     '</div>' +
     '<div class="main2">' +
-    '<div class="hdr">江安医药同事群（12）</div>' +
+    '<div class="chathead"><span>江安医药同事群（12）</span><span class="cap">群资料</span></div>' +
     '<div class="msgs"><div class="sys">— 以下是群聊记录 —</div>' +
-    '<div class="m"><div class="who2">同事A</div>有人说凌晨三点又被叫去加班吗？</div>' +
-    '<div class="m"><div class="who2">同事B</div>又来了。这个月第几次了。</div>' +
-    '<div class="m"><div class="who2">同事C</div>别问，问就是系统维护。</div>' +
-    '<div class="m"><div class="who2">同事D</div>我听见观察室三号有动静。</div>' +
-    '<div class="m"><div class="who2">同事A</div>闭嘴。</div>' +
+    '<div class="m"><div class="av p">A</div><div class="tx"><div class="who2">同事A</div>有人说凌晨三点又被叫去加班吗？</div></div>' +
+    '<div class="m"><div class="av p">B</div><div class="tx"><div class="who2">同事B</div>又来了。这个月第几次了。</div></div>' +
+    '<div class="m"><div class="av p">C</div><div class="tx"><div class="who2">同事C</div>别问，问就是系统维护。</div></div>' +
+    '<div class="m"><div class="av p">D</div><div class="tx"><div class="who2">同事D</div>我听见观察室三号有动静。</div></div>' +
+    '<div class="m"><div class="av p">A</div><div class="tx"><div class="who2">同事A</div>闭嘴。</div></div>' +
+    '</div><div class="inputbar"><div class="fakeinput">输入消息…</div><div class="sendrow"><button>发送</button></div></div>' +
     '</div></div></div>' },
 
-  browser: { t: '浏览器', w: 620, app: 1, html:
+  browser: { t: '江安医药 内部信息平台 - Windows Internet Explorer', w: 720, tb: 'ie', html:
     '<div class="ie">' +
-    '<div class="chrome"><div class="btn2">←</div><div class="btn2">→</div><div class="btn2">↻</div>' +
-    '<div class="addr">http://portal.jiangan-pharma.com/v194</div></div>' +
-    '<div class="bm"><span data-p="home">江安官网</span><span data-p="news">新闻中心</span>' +
-    '<span data-p="portal">内部系统</span></div>' +
+    '<div class="menu"><span>文件(F)</span><span>编辑(E)</span><span>查看(V)</span><span>收藏(A)</span><span>工具(T)</span><span>帮助(H)</span></div>' +
+    '<div class="tabs"><div class="tab">江安医药 内部信息平台</div></div>' +
+    '<div class="toolbar"><div class="tbtn">←</div><div class="tbtn">→</div><div class="tbtn">✕</div><div class="tbtn">↻</div><div class="tbtn">⌂</div>' +
+    '<div class="addr"><span class="lbl">地址(D)</span><span class="url">http://portal.jiangan-pharma.com/v194</span></div>' +
+    '<button class="go">转到</button></div>' +
+    '<div class="bm">收藏夹：<span data-p="home">江安官网</span><span data-p="news">新闻中心</span><span data-p="portal">内部系统</span></div>' +
     '<div class="page">' + PAGES.portal + '</div>' +
+    '<div class="status"><span>完成</span><span>Internet | 保护模式: 关</span></div>' +
     '</div>' },
 
-  mail: { t: 'QQ邮箱', w: 600, app: 1, html:
+  mail: { t: 'QQ邮箱', w: 720, tb: 'ml', html:
     '<div class="ml">' +
-    '<div class="folders">' +
-    '<div class="folder on" data-f="inbox">收件箱（1）</div>' +
-    '<div class="folder" data-f="draft">草稿箱（1）</div>' +
-    '<div class="folder" data-f="sent">已发送</div>' +
-    '<div class="folder" data-f="trash">垃圾箱</div>' +
+    '<div class="head"><div class="logo">QQ邮箱</div><div class="searchbar">搜索邮件</div></div>' +
+    '<div class="body2">' +
+    '<div class="side"><button class="write">✎ 写邮件</button>' +
+    '<div class="folder on" data-f="inbox"><span>收件箱</span><b>1</b></div>' +
+    '<div class="folder" data-f="draft"><span>草稿箱</span><b>1</b></div>' +
+    '<div class="folder" data-f="sent"><span>已发送</span></div>' +
+    '<div class="folder" data-f="trash"><span>垃圾箱</span></div>' +
     '</div>' +
     '<div class="list"></div>' +
     '<div class="preview"></div>' +
-    '</div>' },
+    '</div></div>' },
 
-  vault: { t: '加密文件夹', w: 380, html:
+  vault: { t: '加密文件夹', w: 380, plain: 1, html:
     '<div id="vaultBody">' +
     '<div>该文件夹已加密。</div>' +
     '<div class="cap">请输入密码：</div>' +
     '<div style="margin-top:8px;"><input id="vaultPw" type="password" style="width:120px;"> <button id="vaultBtn">打开</button></div>' +
     '<div class="cap" id="vaultMsg"></div></div>' },
 
-  cam: { t: '监控截图.jpg', w: 520, html:
+  cam: { t: '监控截图.jpg', w: 520, plain: 1, html:
     '<div style="text-align:center;">' +
     '<img src="images/cam-3f-03.jpg" alt="监控截图" style="width:100%;display:block;border:1px solid #777;background:#000;">' +
     '<div class="cap">CAM 3F-03 · OBSERVATION ROOM / EAST CORRIDOR</div>' +
     '<div class="cap">2022-10-19 22:15:07</div></div>' },
 
-  audio: { t: '录音.mp3', w: 360, html:
+  audio: { t: '录音.mp3', w: 360, plain: 1, html:
     '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
-    '<div id="rec" style="margin-top:10px;line-height:1.9;"></div>' }
+    '<div id="rec" style="margin-top:10px;"></div>' }
 };
 
 document.querySelectorAll('.icon').forEach(function (el) {
