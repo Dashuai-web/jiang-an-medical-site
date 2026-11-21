@@ -409,8 +409,14 @@ document.addEventListener('mouseup', function () { dragTarget = null; });
 
 function closeWin(w) {
   var t = w || document.querySelector('.win');
-  if (t) t.remove();
+  if (!t) return;
+  if (t._task && t._task.parentNode) t._task.remove();
+  t.remove();
 }
+
+var SHORT = { memo: '我的文档', trash: '回收站', computer: '我的电脑', backup: '江安备份',
+  wechat: '微信', qq: 'QQ', browser: '浏览器', mail: 'QQ邮箱',
+  vault: '加密文件夹', cam: '监控截图', audio: '录音' };
 
 function addTask(title, w) {
   var box = document.getElementById('tasks');
@@ -418,11 +424,15 @@ function addTask(title, w) {
   b.className = 'task';
   b.textContent = title;
   b.addEventListener('click', function () {
-    if (!w.parentNode) return;
-    w.style.zIndex = ++openCount + 10;
+    if (w.style.display === 'none') {
+      w.style.display = 'flex';
+      w.style.zIndex = ++openCount + 10;
+    } else {
+      w.style.display = 'none';
+    }
   });
   box.appendChild(b);
-  w.addEventListener('remove', function () {});
+  w._task = b;
 }
 
 function openWin(k) {
@@ -439,6 +449,7 @@ function openWin(k) {
   w.innerHTML = '<div class="tb ' + (W.tb || '') + '"><span class="tbtxt">' + W.t + '</span>' + ctrl + '</div>' +
     '<div class="ct' + (W.plain ? ' plain' : '') + '">' + W.html + '</div>';
   document.getElementById('desktop').appendChild(w);
+  addTask(SHORT[k] || W.t, w);
   w.querySelector('.ctrl .close').addEventListener('click', function () { closeWin(w); });
 
   var tb = w.querySelector('.tb');
