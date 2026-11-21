@@ -35,18 +35,20 @@
   /* ---------- 窗口 ---------- */
   .win { position: absolute; background: #f0f0f0; border: 1px solid #4a4a4a;
          box-shadow: 2px 2px 12px rgba(0,0,0,.5); display: flex; flex-direction: column;
-         max-width: 92vw; z-index: 10; }
-  .win .tb { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 6px;
+         max-width: 92vw; z-index: 10; overflow: hidden; }
+  .win .tb { height: 27px; display: flex; align-items: center; gap: 8px; padding: 0 0 0 10px;
              font-size: 12px; color: #fff; cursor: move; user-select: none;
              background: linear-gradient(#3a6ea5,#24476e); flex: none; }
+  .win.max { left: 0 !important; top: 0 !important; width: 100vw !important; height: calc(100vh - 30px) !important; }
   .win .tb.wx { background: linear-gradient(#3a3a3a,#2b2b2b); }
   .win .tb.qq { background: linear-gradient(#5a9fdc,#2f6fb0); }
   .win .tb.ie { background: linear-gradient(#6a9ad5,#3a6a9a); }
   .win .tb.ml { background: linear-gradient(#3f8ad8,#1f5fa8); }
   .win .tb .tbtxt { font-weight: bold; letter-spacing: 1px; }
-  .win .tb .ctrl { margin-left: auto; display: flex; gap: 2px; }
-  .win .tb .ctrl span { width: 20px; height: 18px; display: flex; align-items: center; justify-content: center;
-                        background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
+  .win .tb .tbtxt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .win .tb .ctrl { flex: none; display: flex; gap: 0; margin-left: 0; }
+  .win .tb .ctrl span { width: 25px; height: 21px; display: flex; align-items: center; justify-content: center;
+                        background: rgba(255,255,255,.16); border-left: 1px solid rgba(255,255,255,.25);
                         font-size: 11px; cursor: pointer; line-height: 1; }
   .win .tb .ctrl span:hover { background: rgba(255,255,255,.35); }
   .win .tb .ctrl span.close { background: #c0392b; }
@@ -225,6 +227,43 @@
 
   .rec { min-height: 18px; line-height: 1.9; }
 
+  /* 服务器（内嵌） */
+  .win .ct.frame { padding: 0; overflow: hidden; }
+  .win .ct.frame iframe { width: 100%; height: 100%; border: 0; display: block; background: #0a0c0e; }
+
+  /* 记事本 */
+  .np { display: flex; flex-direction: column; height: 300px; background: #fff; }
+  .np .menu2 { display: flex; gap: 14px; padding: 3px 10px; background: #f4f4f4; border-bottom: 1px solid #d8d8d8; font-size: 11px; color: #333; flex: none; }
+  .np textarea { flex: 1; border: none; outline: none; resize: none; padding: 8px 10px;
+                 font-family: "Lucida Console", Consolas, monospace; font-size: 12px; line-height: 1.8; color: #222; }
+  .np .status2 { height: 20px; display: flex; align-items: center; justify-content: flex-end; padding: 0 10px;
+                 background: #f4f4f4; border-top: 1px solid #d8d8d8; font-size: 11px; color: #666; flex: none; }
+
+  /* 开始菜单 */
+  #startMenu { position: fixed; left: 6px; bottom: 32px; width: 236px; background: #d4d0c8;
+               border: 1px solid #808080; box-shadow: 2px 2px 8px rgba(0,0,0,.45);
+               display: none; z-index: 60; font-size: 12px; }
+  #startMenu.show { display: flex; }
+  #startMenu .col { flex: 1; padding: 4px 0; }
+  #startMenu .item2 { display: flex; align-items: center; gap: 8px; padding: 7px 12px; cursor: pointer; color: #222; }
+  #startMenu .item2:hover, #startMenu .item2.on { background: #2f5d8a; color: #fff; }
+  #startMenu .sep { height: 1px; background: #b8b4a8; margin: 4px 8px; }
+  #startMenu .band { width: 34px; background: linear-gradient(180deg, #3a6ea5, #24476e); color: #dbe8f5;
+                     display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px;
+                     writing-mode: vertical-rl; font-size: 11px; letter-spacing: 2px; }
+  #smSub { position: fixed; width: 172px; background: #d4d0c8; border: 1px solid #808080;
+           display: none; box-shadow: 2px 2px 8px rgba(0,0,0,.45); z-index: 61; }
+  #smSub.show { display: block; }
+  #smSub .item2 { padding: 6px 12px; cursor: pointer; color: #222; font-size: 12px; }
+  #smSub .item2:hover { background: #2f5d8a; color: #fff; }
+  #shut { position: fixed; inset: 0; background: #000; color: #d8d8d8; display: none;
+          align-items: center; justify-content: center; flex-direction: column; gap: 18px;
+          font-family: "Microsoft YaHei"; z-index: 70; text-align: center; }
+  #shut.show { display: flex; }
+  #shut .big { font-size: 18px; letter-spacing: 2px; }
+  #shut .sm { font-size: 12px; color: #888; }
+  #shut button { font-size: 12px; padding: 4px 14px; }
+
   @media (max-width: 720px) {
     body { -webkit-text-size-adjust: 100%; }
     .icon { width: 62px; }
@@ -243,25 +282,48 @@
 <div id="bios"></div>
 
 <div id="desktop">
-  <div class="icon" style="left:14px;  top:10px;" data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
-  <div class="icon" style="left:100px; top:10px;" data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
-  <div class="icon" style="left:186px; top:10px;" data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
-  <div class="icon" style="left:272px; top:10px;" data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+  <div class="icon" style="left:14px;  top:8px;"   data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
+  <div class="icon" style="left:100px; top:8px;"   data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
+  <div class="icon" style="left:186px; top:8px;"   data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
+  <div class="icon" style="left:272px; top:8px;"   data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
 
-  <div class="icon" style="left:14px;  top:120px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
-  <div class="icon" style="left:100px; top:120px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
-  <div class="icon" style="left:186px; top:120px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
-  <div class="icon" style="left:272px; top:120px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+  <div class="icon" style="left:14px;  top:108px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
+  <div class="icon" style="left:100px; top:108px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
+  <div class="icon" style="left:186px; top:108px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
+  <div class="icon" style="left:272px; top:108px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
 
-  <div class="icon" style="left:14px;  top:230px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
-  <div class="icon" style="left:100px; top:230px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
-  <div class="icon" style="left:186px; top:230px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
+  <div class="icon" style="left:14px;  top:208px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
+  <div class="icon" style="left:100px; top:208px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
+  <div class="icon" style="left:186px; top:208px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
+  <div class="icon" style="left:272px; top:208px;" data-w="server"><div class="img">🖧</div><div class="lb">服务器</div></div>
+
+  <div class="icon" style="left:14px;  top:308px;" data-w="notepad"><div class="img">📝</div><div class="lb">记事本</div></div>
 </div>
 
 <div id="taskbar" style="display:none">
-  <span class="start">开始</span>
+  <span class="start" id="startBtn">开始</span>
   <span class="tasks" id="tasks"></span>
   <span class="clock" id="clock"></span>
+</div>
+
+<div id="startMenu">
+  <div class="col">
+    <div class="item2" id="smProg"><span>📁</span>程序</div>
+    <div class="item2" data-cmd="docs"><span>📄</span>文档</div>
+    <div class="item2" data-cmd="set"><span>⚙️</span>设置</div>
+    <div class="item2" data-cmd="find"><span>🔍</span>搜索</div>
+    <div class="item2" data-cmd="help"><span>❓</span>帮助</div>
+    <div class="item2" data-cmd="run"><span>▶️</span>运行...</div>
+    <div class="sep"></div>
+    <div class="item2" data-cmd="shut"><span>⏻</span>关闭系统...</div>
+  </div>
+  <div class="band">Windows 2000 Professional</div>
+</div>
+<div id="smSub"></div>
+<div id="shut">
+  <div class="big">现在可以安全地关闭计算机了。</div>
+  <div class="sm">如果屏幕没有自动关闭，请手动切断电源。</div>
+  <button onclick="location.reload()">重新启动</button>
 </div>
 
 <script>
@@ -416,7 +478,8 @@ function closeWin(w) {
 
 var SHORT = { memo: '我的文档', trash: '回收站', computer: '我的电脑', backup: '江安备份',
   wechat: '微信', qq: 'QQ', browser: '浏览器', mail: 'QQ邮箱',
-  vault: '加密文件夹', cam: '监控截图', audio: '录音' };
+  vault: '加密文件夹', cam: '监控截图', audio: '录音',
+  server: '服务器', notepad: '记事本' };
 
 function addTask(title, w) {
   var box = document.getElementById('tasks');
@@ -443,14 +506,18 @@ function openWin(k) {
   w.style.left = Math.min(60 + off, Math.max(20, window.innerWidth - (W.w || 400) - 20)) + 'px';
   w.style.top = (30 + off) + 'px';
   w.style.width = (W.w || 380) + 'px';
+  if (W.h) w.style.height = W.h + 'px';
   w.style.zIndex = ++openCount + 10;
 
-  var ctrl = '<div class="ctrl"><span>—</span><span>□</span><span class="close">✕</span></div>';
+  var ctrl = '<div class="ctrl"><span class="min">—</span><span class="max">□</span><span class="close">✕</span></div>';
+  var ctCls = 'ct' + (W.plain ? ' plain' : '') + (W.frame ? ' frame' : '');
   w.innerHTML = '<div class="tb ' + (W.tb || '') + '"><span class="tbtxt">' + W.t + '</span>' + ctrl + '</div>' +
-    '<div class="ct' + (W.plain ? ' plain' : '') + '">' + W.html + '</div>';
+    '<div class="' + ctCls + '">' + W.html + '</div>';
   document.getElementById('desktop').appendChild(w);
   addTask(SHORT[k] || W.t, w);
   w.querySelector('.ctrl .close').addEventListener('click', function () { closeWin(w); });
+  w.querySelector('.ctrl .min').addEventListener('click', function () { w.style.display = 'none'; });
+  w.querySelector('.ctrl .max').addEventListener('click', function () { w.classList.toggle('max'); });
 
   var tb = w.querySelector('.tb');
   tb.addEventListener('mousedown', function (e) {
@@ -562,6 +629,19 @@ function openWin(k) {
     };
     btn.addEventListener('click', open);
     pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') open(); });
+  }
+  if (k === 'notepad') {
+    var ta = w.querySelector('#npText');
+    var stt = w.querySelector('#npStatus');
+    try { ta.value = localStorage.getItem('ja_notes') || ''; } catch (e) {}
+    var upd = function () {
+      var v = ta.value;
+      stt.textContent = '字符数：' + v.length + '　行数：' + (v ? v.split('\n').length : 0);
+      try { localStorage.setItem('ja_notes', v); } catch (e) {}
+    };
+    ta.addEventListener('input', upd);
+    upd();
+    setTimeout(function () { ta.focus(); }, 60);
   }
   if (k === 'audio') {
     var ab = w.querySelector('#audioBtn');
@@ -689,7 +769,17 @@ var WIN = {
 
   audio: { t: '录音.mp3', w: 360, plain: 1, html:
     '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
-    '<div id="rec" style="margin-top:10px;"></div>' }
+    '<div id="rec" style="margin-top:10px;"></div>' },
+
+  server: { t: '服务器 - 远程终端', w: 840, h: 560, frame: 1, html:
+    '<iframe src="server.html" title="服务器"></iframe>' },
+
+  notepad: { t: '无标题 - 记事本', w: 540, html:
+    '<div class="np">' +
+    '<div class="menu2"><span>文件(F)</span><span>编辑(E)</span><span>格式(O)</span><span>查看(V)</span><span>帮助(H)</span></div>' +
+    '<textarea id="npText" spellcheck="false" placeholder="在这里记线索……"></textarea>' +
+    '<div class="status2" id="npStatus">字符数：0　行数：0</div>' +
+    '</div>' }
 };
 
 document.querySelectorAll('.icon').forEach(function (el) {
@@ -700,6 +790,61 @@ function tick() {
   var n = new Date();
   document.getElementById('clock').textContent = n.getHours() + ':' + String(n.getMinutes()).padStart(2, '0');
 }
+
+/* ================= 开始菜单 ================= */
+var START_APPS = [
+  ['wechat', '微信'], ['qq', 'QQ'], ['browser', '浏览器'], ['mail', 'QQ邮箱'],
+  ['notepad', '记事本'], ['computer', '我的电脑'], ['server', '服务器（远程终端）'],
+  ['vault', '加密文件夹'], ['cam', '监控截图'], ['audio', '录音'],
+  ['memo', '我的文档'], ['trash', '回收站']
+];
+
+var startBtn = document.getElementById('startBtn');
+var startMenu = document.getElementById('startMenu');
+var smSub = document.getElementById('smSub');
+var smProg = document.getElementById('smProg');
+
+function hideStart() {
+  startMenu.classList.remove('show');
+  smSub.classList.remove('show');
+}
+function showSub() {
+  smSub.innerHTML = START_APPS.map(function (a) {
+    return '<div class="item2" data-open="' + a[0] + '">' + a[1] + '</div>';
+  }).join('');
+  var r = smProg.getBoundingClientRect();
+  smSub.style.left = (r.right + 2) + 'px';
+  smSub.style.bottom = Math.max(4, window.innerHeight - r.bottom) + 'px';
+  smSub.classList.add('show');
+}
+
+startBtn.addEventListener('click', function (e) {
+  e.stopPropagation();
+  startMenu.classList.toggle('show');
+  if (!startMenu.classList.contains('show')) smSub.classList.remove('show');
+});
+smProg.addEventListener('mouseenter', showSub);
+smProg.addEventListener('click', function (e) { e.stopPropagation(); showSub(); });
+startMenu.addEventListener('mouseleave', function () { smSub.classList.remove('show'); });
+document.addEventListener('click', function (e) {
+  if (!startMenu.contains(e.target) && e.target !== startBtn) hideStart();
+});
+smSub.addEventListener('click', function (e) {
+  var t = e.target.closest('.item2');
+  if (!t) return;
+  openWin(t.getAttribute('data-open'));
+  hideStart();
+});
+startMenu.addEventListener('click', function (e) {
+  var t = e.target.closest('.item2');
+  if (!t || t.id === 'smProg') return;
+  var cmd = t.getAttribute('data-cmd');
+  if (cmd === 'shut') { document.getElementById('shut').classList.add('show'); hideStart(); }
+  else if (cmd === 'docs') { openWin('memo'); hideStart(); }
+  else if (cmd === 'find') { openWin('notepad'); hideStart(); }
+  else if (cmd === 'help') { openWin('notepad'); hideStart(); }
+  else if (cmd === 'run') { openWin('server'); hideStart(); }
+});
 
 bootBios();
 tick();
