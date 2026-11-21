@@ -265,7 +265,7 @@
   #shut button { font-size: 12px; padding: 4px 14px; }
 
   @media (max-width: 720px) {
-    body { -webkit-text-size-adjust: 100%; }
+    body { -webkit-text-size-adjust: 100%; -webkit-touch-callout: none; }
     .icon { width: 62px; }
     .icon .img { font-size: 24px; }
     #bios { padding: 24px 18px; font-size: 11px; }
@@ -274,6 +274,17 @@
     .ie { height: 380px; } .ml { height: 380px; }
     .ml .side { width: 100px; } .ml .list { width: 150px; }
     .ex { height: 320px; } .ex .pane { display: none; }
+    .win { left: 2vw !important; top: 8px !important; width: 96vw !important;
+           max-width: 96vw !important; height: auto !important;
+           max-height: calc(100vh - 46px); }
+    .win .ct { overflow: auto; }
+    .win .ct.frame { height: calc(100vh - 132px); }
+    .win .tb { padding-right: 82px; }
+    .wx { height: 56vh; } .qq { height: 56vh; }
+    .ie { height: 56vh; } .ml { height: 56vh; }
+    #startMenu { width: 208px; left: 4px; }
+    #smSub { left: 4px !important; right: 4px; width: auto; bottom: 38px !important; }
+    #shut .big { font-size: 15px; padding: 0 20px; }
   }
 </style>
 </head>
@@ -407,25 +418,12 @@ var MAILS = {
 };
 
 var PAGES = {
-  home: '<div class="pg-co">' +
-        '<div class="h">江安医药科技有限公司</div>' +
-        '<div class="nav2">首页　|　关于我们　|　新闻中心　|　产品研发　|　临床试验　|　联系我们</div>' +
-        '<div class="bd"><b>专注创新药物研发，守护生命健康</b><br><br>' +
-        '江安医药成立于 2015 年，主营仿制药研发、临床药物试验、健康产品开发。<br><br>' +
-        '<b>公司新闻</b><br>· 2022 年度员工体检安排通知　<span class="cap">2022-09-20</span><br>' +
-        '· 关于开展消防安全演练的通知　<span class="cap">2022-09-15</span><br>' +
-        '· 2022 年中秋节放假安排　<span class="cap">2022-08-25</span></div></div>',
-  news: '<div class="pg-news"><div class="h2">新闻中心</div><ul>' +
-        '<li><span>2022 年度员工体检安排通知</span><span class="d">2022-09-20</span></li>' +
-        '<li><span>关于开展消防安全演练的通知</span><span class="d">2022-09-15</span></li>' +
-        '<li><span>2022 年中秋节放假安排</span><span class="d">2022-08-25</span></li>' +
-        '<li><span>第三季度工作总结会议纪要</span><span class="d">2022-07-05</span></li>' +
-        '</ul></div>',
-  blocked: '<div style="padding:44px 34px;font-family:SimSun,serif;color:#333;">' +
-        '<div style="font-size:18px;margin-bottom:14px;">无法显示该网页</div>' +
-        '<p style="font-size:12px;line-height:2.1;color:#555;margin:0;">你可以尝试以下操作：<br>' +
-        '· 检查网络连接<br>· 确认该地址未被公司内部网络限制<br><br>' +
-        '<span style="color:#888;">此站点仅限公司内网访问，当前网络不可达。</span></p></div>'
+  err: '<div style="padding:46px 34px;font-family:SimSun,serif;color:#333;">' +
+       '<div style="font-size:18px;margin-bottom:14px;">无法打开该网页</div>' +
+       '<p style="font-size:12px;line-height:2.1;color:#555;margin:0;">' +
+       '您的 Internet Explorer 内核版本过旧，无法渲染此页面。<br><br>' +
+       '建议升级浏览器，或使用其他设备访问。</p>' +
+       '<div style="margin-top:20px;font-size:11px;color:#999;">错误代码：IE-KERNEL-OUTDATED</div></div>'
 };
 
 /* ================= 渲染 ================= */
@@ -561,9 +559,12 @@ function openWin(k) {
   }
   if (k === 'browser') {
     var page = w.querySelector('.page');
+    var urlEl = w.querySelector('.addr .url');
     w.querySelectorAll('.bm span').forEach(function (el) {
       el.addEventListener('click', function () {
-        page.innerHTML = PAGES[el.getAttribute('data-p')] || PAGES.home;
+        var u = el.getAttribute('data-u');
+        if (u && urlEl) urlEl.textContent = u;
+        page.innerHTML = PAGES.err;
       });
     });
   }
@@ -736,8 +737,10 @@ var WIN = {
     '<div class="toolbar"><div class="tbtn">←</div><div class="tbtn">→</div><div class="tbtn">✕</div><div class="tbtn">↻</div><div class="tbtn">⌂</div>' +
     '<div class="addr"><span class="lbl">地址(D)</span><span class="url">http://www.jiangan-pharma.com/</span></div>' +
     '<button class="go">转到</button></div>' +
-    '<div class="bm">收藏夹：<span data-p="home">江安官网</span><span data-p="news">新闻中心</span><span data-p="blocked">内部系统</span></div>' +
-    '<div class="page">' + PAGES.home + '</div>' +
+    '<div class="bm">收藏夹：<span data-u="http://www.jiangan-pharma.com/">江安官网</span>' +
+    '<span data-u="http://www.jiangan-pharma.com/news">新闻中心</span>' +
+    '<span data-u="http://portal.jiangan-pharma.com/">内部系统</span></div>' +
+    '<div class="page">' + PAGES.err + '</div>' +
     '<div class="status"><span>完成</span><span>Internet | 保护模式: 关</span></div>' +
     '</div>' },
 
