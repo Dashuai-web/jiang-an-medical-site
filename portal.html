@@ -499,7 +499,7 @@ function buildLog() {
     if (hasFlag(keyFlags[j])) keyCount++;
   }
 
-  var unlocked = (uniqueCount >= 15 && keyCount >= 5);
+  var unlocked = (keyCount >= 5);
 
   if (unlocked) {
     if (HARD) {
