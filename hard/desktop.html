@@ -293,22 +293,19 @@
 <div id="bios"></div>
 
 <div id="desktop">
-  <div class="icon" style="left:14px;  top:8px;"   data-w="memo"><div class="img">📄</div><div class="lb">我的文档</div></div>
+  <div class="icon" style="left:14px;  top:8px;"   data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
   <div class="icon" style="left:100px; top:8px;"   data-w="trash"><div class="img">🗑️</div><div class="lb">回收站</div></div>
-  <div class="icon" style="left:186px; top:8px;"   data-w="computer"><div class="img">🖥️</div><div class="lb">我的电脑</div></div>
-  <div class="icon" style="left:272px; top:8px;"   data-w="backup"><div class="img">📁</div><div class="lb">江安备份</div></div>
+  <div class="icon" style="left:186px; top:8px;"   data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
+  <div class="icon" style="left:272px; top:8px;"   data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
 
-  <div class="icon" style="left:14px;  top:108px;" data-w="wechat"><div class="img">💬</div><div class="lb">微信</div></div>
-  <div class="icon" style="left:100px; top:108px;" data-w="qq"><div class="img">🐧</div><div class="lb">QQ</div></div>
-  <div class="icon" style="left:186px; top:108px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
-  <div class="icon" style="left:272px; top:108px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+  <div class="icon" style="left:14px;  top:108px;" data-w="browser"><div class="img">🌐</div><div class="lb">浏览器</div></div>
+  <div class="icon" style="left:100px; top:108px;" data-w="mail"><div class="img">✉️</div><div class="lb">QQ邮箱</div></div>
+  <div class="icon" style="left:186px; top:108px;" data-w="server"><div class="img">🖧</div><div class="lb">服务器</div></div>
+  <div class="icon" style="left:272px; top:108px;" data-w="notepad"><div class="img">📝</div><div class="lb">记事本</div></div>
 
-  <div class="icon" style="left:14px;  top:208px;" data-w="vault"><div class="img">🔒</div><div class="lb">加密文件夹</div></div>
-  <div class="icon" style="left:100px; top:208px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
-  <div class="icon" style="left:186px; top:208px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
-  <div class="icon" style="left:272px; top:208px;" data-w="server"><div class="img">🖧</div><div class="lb">服务器</div></div>
-
-  <div class="icon" style="left:14px;  top:308px;" data-w="notepad"><div class="img">📝</div><div class="lb">记事本</div></div>
+  <div class="icon" style="left:14px;  top:208px;" data-w="cam"><div class="img">📷</div><div class="lb">监控截图</div></div>
+  <div class="icon" style="left:100px; top:208px;" data-w="audio"><div class="img">🎙️</div><div class="lb">录音.mp3</div></div>
+</div><div class="lb">记事本</div></div>
 </div>
 
 <div id="taskbar" style="display:none">
@@ -475,10 +472,9 @@ function closeWin(w) {
   t.remove();
 }
 
-var SHORT = { memo: '我的文档', trash: '回收站', computer: '我的电脑', backup: '江安备份',
-  wechat: '微信', qq: 'QQ', browser: '浏览器', mail: 'QQ邮箱',
-  vault: '加密文件夹', cam: '监控截图', audio: '录音',
-  server: '服务器', notepad: '记事本' };
+var SHORT = { computer: '我的电脑', trash: '回收站', memo: '备忘录', backup: '旧版入口',
+  vaultnote: '给陈默', readme: 'readme', wechat: '微信', qq: 'QQ', browser: '浏览器',
+  mail: 'QQ邮箱', cam: '监控截图', audio: '录音', server: '服务器', notepad: '记事本' };
 
 function addTask(title, w) {
   var box = document.getElementById('tasks');
@@ -615,22 +611,17 @@ function openWin(k) {
       });
     });
   }
-  if (k === 'vault') {
-    var body = w.querySelector('#vaultBody');
-    var btn = w.querySelector('#vaultBtn');
-    var pw = w.querySelector('#vaultPw');
-    var open = function () {
-      if (pw.value.trim() === '0471') {
-        body.innerHTML = '给陈默.txt\n\n「小陈，如果有一天你看到这个，说明我没能活着回来。\n\n' +
-          '公司有一个『承者簿』，在临床试验中心的服务器里。\n\n' +
-          '记住：日期那一栏，从来不是真的日期。」\n\n' +
-          '<span class="note">—— 舅舅</span>';
-      } else {
-        w.querySelector('#vaultMsg').textContent = '密码错误。';
+  if (k === 'computer') {
+    renderExplorer(w, 'C:\\');
+    w.querySelector('#exUp').addEventListener('click', function () {
+      renderExplorer(w, parentPath(w._path || 'C:\\'));
+    });
+    w.querySelector('#exBack').addEventListener('click', function () {
+      if (w._hist && w._hist.length > 1) {
+        w._hist.pop();
+        renderExplorer(w, w._hist.pop(), true);
       }
-    };
-    btn.addEventListener('click', open);
-    pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') open(); });
+    });
   }
   if (k === 'notepad') {
     var ta = w.querySelector('#npText');
@@ -669,42 +660,36 @@ function openWin(k) {
 
 /* ================= 窗口内容 ================= */
 var WIN = {
-  memo: { t: '我的文档', w: 380, plain: 1, html:
-    '备忘录.txt\n\n' +
-    '如果我回不来了，说明被他们发现了。\n\n' +
-    '我的工号，工牌上还挂着。\n\n' +
-    '别报警。去查。\n' },
+  computer: { t: '我的电脑', w: 660, html:
+    '<div class="ex">' +
+    '<div class="menu"><span>文件(F)</span><span>编辑(E)</span><span>查看(V)</span><span>收藏(A)</span><span>工具(T)</span><span>帮助(H)</span></div>' +
+    '<div class="toolbar"><span id="exBack">← 后退</span><span id="exUp">↑ 向上</span><span>搜索</span><span>文件夹</span></div>' +
+    '<div class="addrbar">地址(D) <div class="path" id="exPath">C:\\</div></div>' +
+    '<div class="body2">' +
+    '<div class="pane"><b>文件和文件夹任务</b><div>· 创建一个新文件夹</div><div>· 将这个文件夹发布到 Web</div><div>· 共享此文件夹</div><b style="margin-top:10px;">其它位置</b><div>· 我的文档</div><div>· 我的电脑</div></div>' +
+    '<div class="files" id="exFiles"></div>' +
+    '</div>' +
+    '<div class="status" id="exStatus">…</div>' +
+    '</div>' },
 
-  trash: { t: '回收站', w: 400, plain: 1, html:
+  trash: { t: '回收站', w: 420, plain: 1, html:
     '<div id="trashBody">' +
     '<div class="row2"><span class="del">草稿_给陈默.txt</span><button data-restore="1">还原</button></div>' +
     '<div class="row2"><span class="del">体检单_2022.jpg</span><button data-restore="2">还原</button></div>' +
     '<div class="row2"><span class="del">观察室排班.xls</span><button data-restore="3">还原</button></div>' +
     '<div class="cap">共 3 项</div></div>' },
 
-  computer: { t: '我的电脑', w: 560, html:
-    '<div class="ex">' +
-    '<div class="menu"><span>文件(F)</span><span>编辑(E)</span><span>查看(V)</span><span>收藏(A)</span><span>工具(T)</span><span>帮助(H)</span></div>' +
-    '<div class="toolbar"><span>← 后退</span><span>→</span><span>↑ 向上</span><span>搜索</span><span>文件夹</span></div>' +
-    '<div class="addrbar">地址(D) <div class="path">C:\\</div></div>' +
-    '<div class="body2">' +
-    '<div class="pane"><b>文件和文件夹任务</b><div>· 创建一个新文件夹</div><div>· 将这个文件夹发布到 Web</div>' +
-    '<div>· 共享此文件夹</div><b style="margin-top:10px;">其它位置</b><div>· 我的文档</div><div>· 我的电脑</div></div>' +
-    '<div class="files">' +
-    '<div class="colhead"><span>名称</span><span>大小</span><span>类型</span><span>修改日期</span></div>' +
-    '<div class="row"><span class="ic3">📁</span><span>江安</span><span></span><span>文件夹</span><span>2022-10-18 21:40</span></div>' +
-    '<div class="row"><span class="ic3">📁</span><span>员工资料</span><span></span><span>文件夹</span><span>2022-09-30 10:02</span></div>' +
-    '<div class="row"><span class="ic3">📁</span><span>备份</span><span></span><span>文件夹</span><span>2022-10-19 22:08</span></div>' +
-    '<div class="row"><span class="ic3">📄</span><span>readme.txt</span><span>1 KB</span><span>文本文档</span><span>2022-10-19 22:05</span></div>' +
-    '</div></div>' +
-    '<div class="status">4 个对象　　　　　　　　　　　　　　我的电脑</div>' +
-    '</div>' },
+  memo: { t: '备忘录.txt - 记事本', w: 440, plain: 1, html:
+    '备忘录.txt\n\n如果我回不来了，说明被他们发现了。\n\n我的工号，工牌上还挂着。\n\n别报警。去查。' },
 
-  backup: { t: '江安备份', w: 420, plain: 1, html:
-    '旧版入口.txt\n\n' +
-    '「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n' +
-    '口令怎么拼，去服务器看口令策略。」\n\n' +
-    '<span class="note">※ 便签上写着一台服务器的地址。</span>\n' },
+  backup: { t: '旧版入口.txt - 记事本', w: 460, plain: 1, html:
+    '旧版入口.txt\n\n「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n口令怎么拼，去服务器看口令策略。」\n\n※ 便签上写着一台服务器的地址。' },
+
+  vaultnote: { t: '给陈默.txt - 记事本', w: 480, plain: 1, html:
+    '给陈默.txt\n\n「小陈，如果有一天你看到这个，说明我没能活着回来。\n\n公司有一个『承者簿』，在临床试验中心的服务器里。\n\n记住：日期那一栏，从来不是真的日期。」\n\n—— 舅舅' },
+
+  readme: { t: 'readme.txt - 记事本', w: 440, plain: 1, html:
+    'readme.txt\n\n这台机器 2015 年配的，只用来写材料。\n\n江安备份 里有一个旧版的入口地址。\n员工资料 已加密，密码是我的工号。\n\n—— 周明' },
 
   wechat: { t: '微信', w: 660, tb: 'wx', html:
     '<div class="wx"><div class="side">' + wxSide('liu') + '</div>' +
@@ -758,20 +743,13 @@ var WIN = {
     '<div class="preview"></div>' +
     '</div></div>' },
 
-  vault: { t: '加密文件夹', w: 380, plain: 1, html:
-    '<div id="vaultBody">' +
-    '<div>该文件夹已加密。</div>' +
-    '<div class="cap">请输入密码：</div>' +
-    '<div style="margin-top:8px;"><input id="vaultPw" type="password" style="width:120px;"> <button id="vaultBtn">打开</button></div>' +
-    '<div class="cap" id="vaultMsg"></div></div>' },
-
   cam: { t: '监控截图.jpg', w: 520, plain: 1, html:
     '<div style="text-align:center;">' +
     '<img src="images/cam-3f-03.jpg" alt="监控截图" style="width:100%;display:block;border:1px solid #777;background:#000;">' +
     '<div class="cap">CAM 3F-03 · OBSERVATION ROOM / EAST CORRIDOR</div>' +
     '<div class="cap">2022-10-19 22:15:07</div></div>' },
 
-  audio: { t: '录音.mp3', w: 360, plain: 1, html:
+  audio: { t: '录音.mp3', w: 380, plain: 1, html:
     '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
     '<div id="rec" style="margin-top:10px;"></div>' },
 
@@ -785,6 +763,91 @@ var WIN = {
     '<div class="status2" id="npStatus">字符数：0　行数：0</div>' +
     '</div>' }
 };
+
+
+/* ================= 我的电脑 · 文件系统 ================= */
+var VFS = {
+  'C:\\': [
+    { n: '我的文档', t: 'dir', go: 'C:\\我的文档', d: '2022-10-19 22:05' },
+    { n: '江安备份', t: 'dir', go: 'C:\\江安备份', d: '2022-10-18 21:40' },
+    { n: '加密文件夹', t: 'dir', go: 'C:\\加密文件夹', lock: '0471', d: '2022-10-19 21:58' },
+    { n: 'readme.txt', t: 'file', open: 'readme', d: '2022-10-19 22:05' },
+    { n: '监控截图.jpg', t: 'file', open: 'cam', d: '2022-10-19 22:16' },
+    { n: '录音.mp3', t: 'file', open: 'audio', d: '2022-10-19 22:18' }
+  ],
+  'C:\\我的文档': [{ n: '备忘录.txt', t: 'file', open: 'memo', d: '2022-10-19 22:05' }],
+  'C:\\江安备份': [{ n: '旧版入口.txt', t: 'file', open: 'backup', d: '2022-10-18 21:40' }],
+  'C:\\加密文件夹': [{ n: '给陈默.txt', t: 'file', open: 'vaultnote', d: '2022-10-19 21:58' }]
+};
+
+function parentPath(p) {
+  if (p === 'C:\\') return 'C:\\';
+  var seg = p.split('\\').filter(function (x) { return x !== ''; });
+  seg.pop();
+  return seg.length <= 1 ? 'C:\\' : seg.join('\\') + '\\';
+}
+
+function renderExplorer(w, path, noPush) {
+  if (!w._hist) w._hist = [];
+  if (!noPush) w._hist.push(path);
+  w._path = path;
+  var files = w.querySelector('#exFiles');
+  var pathEl = w.querySelector('#exPath');
+  var status = w.querySelector('#exStatus');
+  if (!files) return;
+  pathEl.textContent = path;
+  var rows = (VFS[path] || []).slice();
+  var html = '<div class="colhead"><span style="flex:2">名称</span><span>类型</span><span>修改日期</span></div>';  var list = [];
+  if (path !== 'C:\\') list.push({ n: '..', t: 'up' });
+  list = list.concat(rows);
+  list.forEach(function (e, i) {
+    var icon = e.t === 'dir' ? '📁' : (e.t === 'file' ? (e.n.indexOf('.jpg') > 0 ? '🖼️' : (e.n.indexOf('.mp3') > 0 ? '🎵' : '📄')) : '↩');
+    var type = e.t === 'dir' ? (e.lock ? '加密文件夹' : '文件夹') : (e.t === 'file' ? '文件' : '上级目录');
+    html += '<div class="row" data-i="' + i + '"><span class="ic3">' + icon + '</span>' +
+      '<span style="flex:2">' + e.n + '</span><span>' + type + '</span><span>' + (e.d || '') + '</span></div>';
+  });
+  files.innerHTML = html;
+  status.textContent = list.length + ' 个对象　　　　　　　　' + path;
+
+  files.querySelectorAll('.row').forEach(function (row) {
+    row.addEventListener('click', function () {
+      var e = list[+row.getAttribute('data-i')];
+      if (!e) return;
+      if (e.t === 'up') { renderExplorer(w, parentPath(path)); return; }
+      if (e.t === 'dir') {
+        if (e.lock) { askLock(w, e); return; }
+        renderExplorer(w, e.go);
+      } else {
+        openWin(e.open);
+      }
+    });
+  });
+}
+
+function askLock(w, e) {
+  var files = w.querySelector('#exFiles');
+  var status = w.querySelector('#exStatus');
+  status.textContent = '　　　　　　　　　　　　' + e.n;
+  files.innerHTML = '<div style="padding:22px 18px;font-size:12px;">' +
+    '<div style="margin-bottom:12px;">该文件夹已加密。</div>' +
+    '<div class="cap" style="margin-bottom:6px;">请输入密码：</div>' +
+    '<div><input id="exPw" type="password" style="width:140px;padding:3px 6px;"> ' +
+    '<button id="exPwBtn" style="padding:3px 12px;">打开</button></div>' +
+    '<div class="cap" id="exPwMsg" style="margin-top:10px;color:#a33;"></div>' +
+    '<div class="cap" style="margin-top:16px;color:#999;">提示：我的工号。</div>' +
+    '<div style="margin-top:14px;"><button id="exPwBack">返回</button></div></div>';
+  var inp = w.querySelector('#exPw');
+  var btn = w.querySelector('#exPwBtn');
+  var msg = w.querySelector('#exPwMsg');
+  function go() {
+    if (inp.value.trim() === e.lock) renderExplorer(w, e.go);
+    else msg.textContent = '密码错误。';
+  }
+  btn.addEventListener('click', go);
+  inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') go(); });
+  w.querySelector('#exPwBack').addEventListener('click', function () { renderExplorer(w, w._path, true); });
+  setTimeout(function () { inp.focus(); }, 60);
+}
 
 document.querySelectorAll('.icon').forEach(function (el) {
   el.addEventListener('click', function () { openWin(el.getAttribute('data-w')); });
@@ -844,7 +907,7 @@ startMenu.addEventListener('click', function (e) {
   if (!t || t.id === 'smProg') return;
   var cmd = t.getAttribute('data-cmd');
   if (cmd === 'shut') { document.getElementById('shut').classList.add('show'); hideStart(); }
-  else if (cmd === 'docs') { openWin('memo'); hideStart(); }
+  else if (cmd === 'docs') { openWin('computer'); hideStart(); }
   else if (cmd === 'find') { openWin('notepad'); hideStart(); }
   else if (cmd === 'help') { openWin('notepad'); hideStart(); }
   else if (cmd === 'run') { openWin('server'); hideStart(); }
