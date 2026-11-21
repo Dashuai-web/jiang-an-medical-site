@@ -8,13 +8,11 @@
   * { box-sizing: border-box; }
   body { margin: 0; height: 100vh; overflow: hidden; background: #000;
          font-family: "Microsoft YaHei", "SimSun", sans-serif; }
-  /* ---- BIOS 自检 ---- */
   #bios { position: fixed; inset: 0; background: #000; color: #c8c8c8;
           font-family: Consolas, monospace; font-size: 13px; line-height: 1.8;
           padding: 40px 48px; z-index: 50; }
   #bios .ln { opacity: 0; transition: opacity .15s; white-space: pre-wrap; }
   #bios .ok { color: #7fb07f; }
-  /* ---- 桌面 ---- */
   #desktop { position: relative; width: 100%; height: 100%;
              background: linear-gradient(135deg, #3a6ea5 0%, #2f5d8a 100%); padding: 18px;
              display: none; }
@@ -27,34 +25,108 @@
              align-items: center; padding: 0 10px; color: #fff; font-size: 12px; z-index: 20; }
   #taskbar .start { background: #3a8a3a; padding: 4px 14px; border-radius: 3px; font-weight: bold; }
   #taskbar .clock { margin-left: auto; padding: 0 8px; border-left: 1px solid #1a3f66; }
+
   .win { position: absolute; background: #ece9d8; border: 2px solid #0a2a4a;
-         box-shadow: 3px 3px 0 rgba(0,0,0,.3); min-width: 300px; max-width: 440px; z-index: 10; }
+         box-shadow: 3px 3px 0 rgba(0,0,0,.3); min-width: 300px; max-width: 92vw; z-index: 10;
+         display: flex; flex-direction: column; }
   .win .tb { background: #0a2a4a; color: #fff; padding: 4px 8px; font-size: 12px;
-             display: flex; align-items: center; }
+             display: flex; align-items: center; flex: none; }
   .win .tb .x { margin-left: auto; background: #c33; border: 1px solid #fff; padding: 0 7px; cursor: pointer; }
   .win .ct { padding: 12px 14px; font-size: 13px; color: #222; line-height: 1.9; max-height: 340px; overflow: auto; white-space: pre-wrap; }
+  .win .ct.app { padding: 0; white-space: normal; max-height: none; overflow: hidden; }
   .win .ct .note { color: #7a5a00; }
   .win .ct .del { color: #8a2020; }
-  .win .ct .me { color: #1a4a8a; }
-  .chat { border-left: 3px solid #c8c8b8; padding-left: 10px; margin: 8px 0; }
-  .chat .m { margin: 5px 0; }
-  .chat .who { color: #888; font-size: 11px; }
+  .cap { font-size: 11px; color: #888; margin-top: 6px; }
   .win button { font-family: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer;
                 background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080; }
-  .win button:active { border-color: #808080 #f4f1ea #f4f1ea #808080; }
-  .win input { font-family: inherit; font-size: 12px; padding: 3px 6px; width: 120px;
+  .win input { font-family: inherit; font-size: 12px; padding: 3px 6px;
                border: 2px solid #808080; border-top-color: #4a4a4a; border-left-color: #4a4a4a; }
   .row2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dotted #ccc; }
-  .row2:last-child { border-bottom: none; }
-  .cap { font-size: 11px; color: #888; margin-top: 6px; }
-  .rec { min-height: 18px; }
-  .rec .ln { opacity: 0; transition: opacity .25s; }
+
+  /* ============ 微信 ============ */
+  .wx { display: flex; height: 330px; font-size: 12px; background: #f5f5f5; }
+  .wx .side { width: 146px; background: #ededed; border-right: 1px solid #d6d6d6; display: flex; flex-direction: column; flex: none; }
+  .wx .me { display: flex; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid #dcdcdc; }
+  .wx .search { padding: 8px; }
+  .wx .search div { background: #fff; border: 1px solid #dcdcdc; border-radius: 3px; padding: 3px 6px; color: #aaa; font-size: 11px; }
+  .wx .contact { display: flex; align-items: center; gap: 8px; padding: 8px 10px; cursor: pointer; }
+  .wx .contact:hover { background: #e5e5e5; }
+  .wx .contact.on { background: #d4d4d4; }
+  .av { width: 26px; height: 26px; border-radius: 3px; background: #7ab8f0; color: #fff;
+        display: flex; align-items: center; justify-content: center; font-size: 11px; flex: none; }
+  .av.g { background: #8bc34a; }
+  .wx .main2 { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .wx .hdr { padding: 8px 12px; border-bottom: 1px solid #dcdcdc; font-size: 12px; color: #333; background: #f5f5f5; flex: none; }
+  .wx .msgs { flex: 1; overflow: auto; padding: 12px; }
+  .wx .msg { display: flex; gap: 8px; margin-bottom: 12px; }
+  .wx .msg.me { flex-direction: row-reverse; }
+  .wx .bubble { background: #fff; padding: 7px 10px; border-radius: 4px; max-width: 210px; line-height: 1.7; }
+  .wx .msg.me .bubble { background: #95ec69; }
+  .wx .draft { color: #a00; font-size: 11px; margin-top: 4px; }
+  .wx .inputbar { border-top: 1px solid #dcdcdc; height: 34px; display: flex; align-items: center; padding: 0 10px; color: #aaa; font-size: 11px; flex: none; }
+
+  /* ============ QQ ============ */
+  .qq { display: flex; height: 330px; font-size: 12px; background: #f0f6ff; }
+  .qq .side { width: 140px; background: #eaf2ff; border-right: 1px solid #cfe0f5; flex: none; }
+  .qq .head2 { padding: 10px; border-bottom: 1px solid #cfe0f5; display: flex; align-items: center; gap: 8px; }
+  .qq .grp { padding: 7px 10px; cursor: pointer; color: #33557a; }
+  .qq .grp.on { background: #d6e6ff; }
+  .qq .main2 { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .qq .hdr { padding: 8px 12px; border-bottom: 1px solid #cfe0f5; background: #f7fbff; flex: none; }
+  .qq .msgs { flex: 1; overflow: auto; padding: 10px 12px; }
+  .qq .m { margin-bottom: 10px; line-height: 1.7; }
+  .qq .who2 { color: #1a6bb8; font-size: 11px; }
+  .qq .sys { color: #8a9ab0; font-size: 11px; text-align: center; margin: 8px 0; }
+
+  /* ============ 浏览器 ============ */
+  .ie .chrome { background: #efefef; border-bottom: 1px solid #c8c8c8; padding: 4px 6px; display: flex; gap: 6px; align-items: center; flex: none; }
+  .ie .btn2 { width: 20px; height: 20px; border: 1px solid #c0c0c0; background: #f8f8f8; text-align: center; line-height: 18px; color: #666; font-size: 11px; }
+  .ie .addr { flex: 1; background: #fff; border: 1px solid #b0b0b0; padding: 2px 6px; font-size: 11px; color: #333; }
+  .ie .bm { background: #f7f7f7; border-bottom: 1px solid #ddd; padding: 3px 8px; font-size: 11px; display: flex; gap: 12px; flex: none; }
+  .ie .bm span { color: #1a4a8a; cursor: pointer; }
+  .ie .bm span:hover { text-decoration: underline; }
+  .ie .page { background: #fff; height: 268px; overflow: auto; font-size: 12px; }
+
+  .pg-co { font-family: "Microsoft YaHei"; }
+  .pg-co .h { background: #1a6b4a; color: #fff; padding: 12px 16px; font-size: 15px; letter-spacing: 1px; }
+  .pg-co .nav2 { background: #14553a; color: #cfe8d8; padding: 5px 16px; font-size: 11px; }
+  .pg-co .bd { padding: 14px 16px; color: #333; line-height: 1.9; }
+  .pg-login { padding: 26px 30px; }
+  .pg-login label { display: block; font-size: 12px; color: #555; margin: 10px 0 4px; }
+  .pg-login input { width: 100%; padding: 4px 6px; border: 1px solid #bbb; font-size: 12px; }
+  .pg-login .go { margin-top: 16px; background: #1a6b4a; color: #fff; padding: 6px 22px; font-size: 12px; border: none; cursor: pointer; }
+  .pg-news { padding: 12px 16px; }
+  .pg-news li { font-size: 12px; padding: 6px 0; border-bottom: 1px dotted #ddd; list-style: none; }
+  .pg-news ul { margin: 0; padding: 0; }
+
+  /* ============ QQ邮箱 ============ */
+  .ml { display: flex; height: 330px; font-size: 12px; }
+  .ml .folders { width: 112px; background: #fafafa; border-right: 1px solid #e2e2e2; flex: none; }
+  .ml .folder { padding: 7px 10px; color: #444; cursor: pointer; }
+  .ml .folder.on { background: #e8f1fb; color: #1a4a8a; font-weight: bold; }
+  .ml .list { width: 190px; border-right: 1px solid #e2e2e2; overflow: auto; flex: none; }
+  .ml .item { padding: 7px 9px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+  .ml .item:hover { background: #f4f8ff; }
+  .ml .item.on { background: #eef5ff; }
+  .ml .item .s { font-size: 11px; color: #999; }
+  .ml .preview { flex: 1; padding: 12px 14px; overflow: auto; line-height: 1.85; min-width: 0; }
+  .ml .preview .pm { font-size: 11px; color: #888; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 8px; }
+
+  /* ============ 资源管理器 ============ */
+  .ex .bar { background: #f0f0f0; border-bottom: 1px solid #ccc; padding: 3px 8px; font-size: 11px; color: #444; flex: none; }
+  .ex .files { background: #fff; height: 210px; overflow: auto; padding: 10px; }
+  .ex .file { display: inline-block; width: 86px; text-align: center; font-size: 11px; margin: 6px 4px; cursor: pointer; color: #222; }
+  .ex .file .ic2 { font-size: 22px; }
+
   @media (max-width: 720px) {
     body { -webkit-text-size-adjust: 100%; }
     .icon { width: 68px; }
     .icon .img { font-size: 26px; }
-    .win { max-width: 92vw !important; }
     #bios { padding: 24px 18px; font-size: 11px; }
+    .wx, .qq, .ml { height: 300px; }
+    .wx .side { width: 110px; }
+    .ml .list { width: 140px; }
+    .ml .folders { width: 90px; }
   }
 </style>
 </head>
@@ -85,7 +157,7 @@
 </div>
 
 <script>
-/* ================= BIOS 自检 ================= */
+/* ================= BIOS ================= */
 var BIOS_LINES = [
   'JiangAn BIOS v2.03  Copyright (C) 2015',
   'CPU : Intel Pentium III 866MHz',
@@ -97,7 +169,6 @@ var BIOS_LINES = [
   'System time : 2022-10-19 22:10:31',
   'Loading OS ...'
 ];
-
 function bootBios() {
   var box = document.getElementById('bios');
   var i = 0;
@@ -121,106 +192,156 @@ function bootBios() {
   step();
 }
 
-/* ================= 窗口内容 ================= */
-var WIN = {
-  memo: { t: '我的文档', html:
-    '备忘录.txt\n\n' +
-    '如果我回不来了，说明被他们发现了。\n\n' +
-    '我的工号，工牌上还挂着。\n\n' +
-    '别报警。去查。\n' },
-
-  trash: { t: '回收站', html:
-    '<div id="trashBody">' +
-    '<div class="row2"><span class="del">草稿_给陈默.txt</span><button data-restore="1">还原</button></div>' +
-    '<div class="row2"><span class="del">体检单_2022.jpg</span><button data-restore="2">还原</button></div>' +
-    '<div class="row2"><span class="del">观察室排班.xls</span><button data-restore="3">还原</button></div>' +
-    '<div class="cap">共 3 项</div></div>' },
-
-  computer: { t: '我的电脑', html:
-    '本地磁盘 (C:)\n' +
-    '  └ 江安\\\n' +
-    '      ├ 备份\\        ← 见「江安备份」\n' +
-    '      └ 员工资料\\    ← 已加密（见「加密文件夹」）\n\n' +
-    '<span class="note">旧版入口，从服务器里找。</span>\n' },
-
-  backup: { t: '江安备份', html:
-    '旧版入口.txt\n\n' +
-    '「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n' +
-    '口令怎么拼，去服务器看口令策略。」\n\n' +
-    '<span class="note">※ 便签上写着一台服务器的地址。</span>\n' },
-
-  wechat: { t: '微信', html:
-    '<div class="chat"><div class="m"><span class="who">行政-小刘</span></div>' +
-    '<div class="m">周哥，这周体检抽了四管血，往年才两管。</div>' +
-    '<div class="m me">我这也是。说是升级套餐。</div>' +
-    '<div class="m">升级什么了也不说。算了。</div></div>' +
-    '<div class="chat"><div class="m"><span class="who">陈默（外甥）</span></div>' +
-    '<div class="m me">小陈，舅舅可能出事了。我的工号，工牌上还挂着。</div>' +
-    '<div class="m note">（未发送）</div></div>' },
-
-  qq: { t: 'QQ', html:
-    '【江安医药同事群】\n\n' +
-    '有人说凌晨三点又被叫去加班吗？\n\n' +
-    '— 又来了。这个月第几次了。\n' +
-    '— 别问，问就是系统维护。\n' +
-    '— 我听见观察室三号有动静。\n' +
-    '— 闭嘴。\n\n' +
-    '<span class="note">（群消息停在 2022-10-19 之后，再没人说话。）</span>\n' },
-
-  browser: { t: '浏览器', html:
-    '地址栏：http://www.jiangan-pharma.com\n\n' +
-    '收藏夹：\n' +
-    '  · 江安医药官网\n  · 新闻中心\n  · 内部信息平台 v2.0 登录\n  · QQ邮箱\n\n' +
-    '最近访问：\n' +
-    '  2022-10-19 22:10  内部信息平台\n' +
-    '  2022-10-19 22:12  受试者管理系统\n\n' +
-    '<span class="note">※ QQ邮箱里有一封没删的邮件。</span>\n' },
-
-  mail: { t: 'QQ邮箱', html:
-    '收件箱（1）\n\n' +
-    '【江安医药 · 人事】入职体检安排\n' +
-    '「新员工请于 11 月 4 日—22 日前往指定机构体检。\n' +
-    '项目：采血、心电图、生命体征监测。」\n\n' +
-    '草稿箱（1）\n\n' +
-    '【未发出】小陈，如果我出事，去查 10 月 19 日那天的事故。\n' },
-
-  vault: { t: '加密文件夹', html:
-    '<div id="vaultBody">' +
-    '<div>该文件夹已加密。</div>' +
-    '<div class="cap">请输入密码：</div>' +
-    '<div style="margin-top:8px;"><input id="vaultPw" type="password"> <button id="vaultBtn">打开</button></div>' +
-    '<div class="cap" id="vaultMsg"></div></div>' },
-
-  cam: { t: '监控截图.jpg', html:
-    '<div style="text-align:center;">' +
-    '<img src="images/cam-3f-03.jpg" alt="监控截图" ' +
-    'style="width:100%;display:block;border:1px solid #777;background:#000;">' +
-    '<div class="cap">CAM 3F-03 · OBSERVATION ROOM / EAST CORRIDOR</div>' +
-    '<div class="cap">2022-10-19 22:15:07</div></div>' },
-  audio: { t: '录音.mp3', html:
-    '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
-    '<div class="rec" id="rec" style="margin-top:10px;"></div>' }
+/* ================= 数据 ================= */
+var WX_CHATS = {
+  liu: { name: '行政-小刘', msgs: [
+    { who: 'o', t: '周哥，这周体检抽了四管血，往年才两管。' },
+    { who: 'm', t: '我这也是。说是升级套餐。' },
+    { who: 'o', t: '升级什么了也不说。算了。' }
+  ] },
+  chen: { name: '陈默（外甥）', msgs: [
+    { who: 'm', t: '小陈，舅舅可能出事了。我的工号，工牌上还挂着。', draft: true }
+  ] }
 };
 
-/* ================= 窗口系统 ================= */
+var QQ_GROUPS = {
+  g: { name: '江安医药同事群', msgs: [
+    { who: '同事A', t: '有人说凌晨三点又被叫去加班吗？' },
+    { who: '同事B', t: '又来了。这个月第几次了。' },
+    { who: '同事C', t: '别问，问就是系统维护。' },
+    { who: '同事D', t: '我听见观察室三号有动静。' },
+    { who: '同事A', t: '闭嘴。' }
+  ] }
+};
+
+var MAILS = {
+  inbox: [{ from: '江安医药 · 人事', subj: '入职体检安排', date: '2022-09-28',
+    body: '新员工请于 11 月 4 日—22 日前往指定机构体检。\n\n项目：采血、心电图、生命体征监测。\n\n体检报告由行政部统一领取。' }],
+  draft: [{ from: '草稿箱', subj: '未发出', date: '2022-10-19',
+    body: '小陈，如果我出事，去查 10 月 19 日那天的事故。\n\n死亡原因那一栏被人改过。' }],
+  sent: [], trash: []
+};
+
+var PAGES = {
+  home: '<div class="pg-co"><div class="h">江安医药科技有限公司</div>' +
+        '<div class="nav2">首页　关于我们　新闻中心　产品研发　临床试验　联系我们</div>' +
+        '<div class="bd">专注创新药物研发，守护生命健康。<br><br>' +
+        '公司新闻：<br>· 关于新信息系统 v2.0 上线的通知（2024-10-28）<br>' +
+        '· 2024 年度员工体检安排通知<br>· 关于开展消防安全演练的通知</div></div>',
+  news: '<div class="pg-news"><b>新闻中心</b><ul>' +
+        '<li>关于新信息系统 v2.0 上线的通知　<span class="cap">2024-10-28</span></li>' +
+        '<li>2024 年度员工体检安排通知　<span class="cap">2024-10-15</span></li>' +
+        '<li>关于开展消防安全演练的通知　<span class="cap">2024-10-08</span></li>' +
+        '<li>第三季度工作总结会议纪要　<span class="cap">2024-09-28</span></li>' +
+        '</ul></div>',
+  portal: '<div class="pg-login"><b>江安医药 内部信息平台 v1.9.4</b>' +
+        '<label>工号 / 账号</label><input value="zhouming" readonly>' +
+        '<label>密码</label><input type="password" value="00000000" readonly>' +
+        '<button class="go">登 录</button>' +
+        '<div class="cap" style="margin-top:12px;">上次登录：2022-10-19 22:10</div></div>'
+};
+
+/* ================= 窗口 ================= */
 function closeWin() {
   var w = document.querySelector('.win');
   if (w) w.remove();
 }
 
+function renderWxChat(key) {
+  var c = WX_CHATS[key];
+  var out = '<div class="hdr">' + c.name + '</div><div class="msgs">';
+  c.msgs.forEach(function (m) {
+    out += '<div class="msg' + (m.who === 'm' ? ' me' : '') + '">' +
+      '<div class="av' + (m.who === 'm' ? ' g' : '') + '">' + (m.who === 'm' ? '周' : '刘') + '</div>' +
+      '<div><div class="bubble">' + m.t + '</div>' +
+      (m.draft ? '<div class="draft">（未发送）</div>' : '') + '</div></div>';
+  });
+  out += '</div><div class="inputbar">输入消息…</div>';
+  return out;
+}
+
 function openWin(k) {
   closeWin();
-  var d = WIN[k];
+  var W = WIN[k];
   var w = document.createElement('div');
   w.className = 'win';
-  w.style.left = (70 + Math.random() * 90) + 'px';
-  w.style.top = (46 + Math.random() * 70) + 'px';
-  w.innerHTML = '<div class="tb"><span>' + d.t + '</span><span class="x" onclick="closeWin()">✕</span></div>'
-    + '<div class="ct">' + d.html + '</div>';
+  w.style.left = (40 + Math.random() * 70) + 'px';
+  w.style.top = (30 + Math.random() * 50) + 'px';
+  w.style.width = (W.w || 360) + 'px';
+  w.innerHTML = '<div class="tb"><span>' + W.t + '</span><span class="x" onclick="closeWin()">✕</span></div>' +
+    '<div class="ct' + (W.app ? ' app' : '') + '">' + W.html + '</div>';
   document.getElementById('desktop').appendChild(w);
 
+  if (k === 'wechat') {
+    var main = w.querySelector('.wx .main2');
+    w.querySelectorAll('.wx .contact').forEach(function (el) {
+      el.addEventListener('click', function () {
+        w.querySelectorAll('.wx .contact').forEach(function (x) { x.classList.remove('on'); });
+        el.classList.add('on');
+        main.innerHTML = renderWxChat(el.getAttribute('data-c'));
+      });
+    });
+  }
+  if (k === 'qq') {
+    var main2 = w.querySelector('.qq .main2');
+    w.querySelectorAll('.qq .grp').forEach(function (el) {
+      el.addEventListener('click', function () {
+        w.querySelectorAll('.qq .grp').forEach(function (x) { x.classList.remove('on'); });
+        el.classList.add('on');
+        var g = QQ_GROUPS[el.getAttribute('data-g')];
+        var h = '<div class="hdr">' + g.name + '（12）</div><div class="msgs"><div class="sys">— 以下是群聊记录 —</div>';
+        g.msgs.forEach(function (m) {
+          h += '<div class="m"><div class="who2">' + m.who + '</div>' + m.t + '</div>';
+        });
+        h += '</div>';
+        main2.innerHTML = h;
+      });
+    });
+  }
+  if (k === 'browser') {
+    var page = w.querySelector('.page');
+    w.querySelectorAll('.bm span').forEach(function (el) {
+      el.addEventListener('click', function () {
+        page.innerHTML = PAGES[el.getAttribute('data-p')] || PAGES.home;
+      });
+    });
+  }
+  if (k === 'mail') {
+    var prev = w.querySelector('.ml .preview');
+    var list = w.querySelector('.ml .list');
+    function showFolder(f) {
+      var arr = MAILS[f] || [];
+      if (!arr.length) {
+        list.innerHTML = '<div class="item"><div class="s">（空）</div></div>';
+        prev.innerHTML = '<div class="cap">该文件夹为空。</div>';
+        return;
+      }
+      list.innerHTML = arr.map(function (m, i) {
+        return '<div class="item" data-i="' + i + '"><div>' + m.subj + '</div><div class="s">' + m.from + '</div></div>';
+      }).join('');
+      showMail(arr, 0);
+      list.querySelectorAll('.item').forEach(function (it, i) {
+        it.addEventListener('click', function () {
+          list.querySelectorAll('.item').forEach(function (x) { x.classList.remove('on'); });
+          it.classList.add('on');
+          showMail(arr, i);
+        });
+      });
+    }
+    function showMail(arr, i) {
+      var m = arr[i];
+      prev.innerHTML = '<div class="pm">' + m.from + '　·　' + m.date + '</div><b>' + m.subj + '</b><br><br>' + m.body.replace(/\n/g, '<br>');
+    }
+    w.querySelectorAll('.ml .folder').forEach(function (el) {
+      el.addEventListener('click', function () {
+        w.querySelectorAll('.ml .folder').forEach(function (x) { x.classList.remove('on'); });
+        el.classList.add('on');
+        showFolder(el.getAttribute('data-f'));
+      });
+    });
+    showFolder('inbox');
+  }
   if (k === 'trash') {
-    var body = w.querySelector('#trashBody');
     w.querySelectorAll('[data-restore]').forEach(function (b) {
       b.addEventListener('click', function () {
         var row = b.parentNode;
@@ -229,55 +350,139 @@ function openWin(k) {
     });
   }
   if (k === 'vault') {
+    var body = w.querySelector('#vaultBody');
     var btn = w.querySelector('#vaultBtn');
     var pw = w.querySelector('#vaultPw');
     var open = function () {
       if (pw.value.trim() === '0471') {
-        body.innerHTML = '给陈默.txt\n\n' +
-          '「小陈，如果有一天你看到这个，说明我没能活着回来。\n\n' +
+        body.innerHTML = '给陈默.txt\n\n「小陈，如果有一天你看到这个，说明我没能活着回来。\n\n' +
           '公司有一个『承者簿』，在临床试验中心的服务器里。\n\n' +
           '记住：日期那一栏，从来不是真的日期。」\n\n' +
           '<span class="note">—— 舅舅</span>';
       } else {
         w.querySelector('#vaultMsg').textContent = '密码错误。';
-        w.querySelector('#vaultMsg').className = 'cap del';
       }
     };
-    var body = w.querySelector('#vaultBody');
     btn.addEventListener('click', open);
     pw.addEventListener('keydown', function (e) { if (e.key === 'Enter') open(); });
   }
   if (k === 'audio') {
     var ab = w.querySelector('#audioBtn');
     var rec = w.querySelector('#rec');
-    var st = w.querySelector('#audioState');
-    var LINES = [
-      '（杂音）…我是周明…',
-      '（杂音）如果这段录音有人听到…',
-      '三号观察室，那天晚上…',
-      '他们改了我的体检记录…',
-      '…（杂音）…',
-      '不要相信系统里的日期。'
-    ];
+    var st2 = w.querySelector('#audioState');
+    var LINES = ['（杂音）…我是周明…', '（杂音）如果这段录音有人听到…',
+      '三号观察室，那天晚上…', '他们改了我的体检记录…', '…（杂音）…', '不要相信系统里的日期。'];
     ab.addEventListener('click', function () {
-      ab.disabled = true;
-      ab.textContent = '■ 播放中';
-      var i = 0;
-      var sec = 0;
+      ab.disabled = true; ab.textContent = '■ 播放中';
+      var i = 0, sec = 0;
       var timer = setInterval(function () {
-        sec += 1;
-        st.textContent = '00:' + String(sec).padStart(2, '0') + ' / 00:12';
+        sec++;
+        st2.textContent = '00:' + String(sec).padStart(2, '0') + ' / 00:12';
         if (i >= LINES.length) { clearInterval(timer); return; }
         var d2 = document.createElement('div');
-        d2.className = 'ln';
         d2.textContent = LINES[i];
         rec.appendChild(d2);
-        setTimeout(function () { d2.style.opacity = '1'; }, 20);
         i++;
       }, 900);
     });
   }
 }
+
+/* ================= 窗口内容 ================= */
+var WIN = {
+  memo: { t: '我的文档', w: 380, html:
+    '备忘录.txt\n\n' +
+    '如果我回不来了，说明被他们发现了。\n\n' +
+    '我的工号，工牌上还挂着。\n\n' +
+    '别报警。去查。\n' },
+
+  trash: { t: '回收站', w: 400, html:
+    '<div id="trashBody">' +
+    '<div class="row2"><span class="del">草稿_给陈默.txt</span><button data-restore="1">还原</button></div>' +
+    '<div class="row2"><span class="del">体检单_2022.jpg</span><button data-restore="2">还原</button></div>' +
+    '<div class="row2"><span class="del">观察室排班.xls</span><button data-restore="3">还原</button></div>' +
+    '<div class="cap">共 3 项</div></div>' },
+
+  computer: { t: '我的电脑', w: 480, app: 1, html:
+    '<div class="ex"><div class="bar">地址：C:\\</div><div class="files">' +
+    '<div class="file"><div class="ic2">📁</div>江安</div>' +
+    '<div class="file"><div class="ic2">📁</div>员工资料</div>' +
+    '<div class="file"><div class="ic2">📁</div>备份</div>' +
+    '<div class="file"><div class="ic2">📄</div>readme.txt</div>' +
+    '<div class="file"><div class="ic2">💿</div>本地磁盘 C:</div>' +
+    '</div><div class="bar" style="border-top:1px solid #ccc;border-bottom:none;">5 个对象</div></div>' },
+
+  backup: { t: '江安备份', w: 400, html:
+    '旧版入口.txt\n\n' +
+    '「v1.9.4 的入口地址，在服务器 /etc/hosts 里。\n' +
+    '口令怎么拼，去服务器看口令策略。」\n\n' +
+    '<span class="note">※ 便签上写着一台服务器的地址。</span>\n' },
+
+  wechat: { t: '微信', w: 600, app: 1, html:
+    '<div class="wx">' +
+    '<div class="side">' +
+    '<div class="me"><div class="av g">周</div><div>周明</div></div>' +
+    '<div class="search"><div>搜索</div></div>' +
+    '<div class="contact on" data-c="liu"><div class="av">刘</div><div>行政-小刘</div></div>' +
+    '<div class="contact" data-c="chen"><div class="av" style="background:#f0a0a0;">陈</div><div>陈默（外甥）</div></div>' +
+    '</div>' +
+    '<div class="main2">' + renderWxChat('liu') + '</div>' +
+    '</div>' },
+
+  qq: { t: 'QQ', w: 540, app: 1, html:
+    '<div class="qq">' +
+    '<div class="side">' +
+    '<div class="head2"><div class="av" style="background:#4a90d9;">周</div><div>周明<br><span style="font-size:10px;color:#6a8aa8;">在线</span></div></div>' +
+    '<div class="grp on" data-g="g">江安医药同事群（12）</div>' +
+    '</div>' +
+    '<div class="main2">' +
+    '<div class="hdr">江安医药同事群（12）</div>' +
+    '<div class="msgs"><div class="sys">— 以下是群聊记录 —</div>' +
+    '<div class="m"><div class="who2">同事A</div>有人说凌晨三点又被叫去加班吗？</div>' +
+    '<div class="m"><div class="who2">同事B</div>又来了。这个月第几次了。</div>' +
+    '<div class="m"><div class="who2">同事C</div>别问，问就是系统维护。</div>' +
+    '<div class="m"><div class="who2">同事D</div>我听见观察室三号有动静。</div>' +
+    '<div class="m"><div class="who2">同事A</div>闭嘴。</div>' +
+    '</div></div></div>' },
+
+  browser: { t: '浏览器', w: 620, app: 1, html:
+    '<div class="ie">' +
+    '<div class="chrome"><div class="btn2">←</div><div class="btn2">→</div><div class="btn2">↻</div>' +
+    '<div class="addr">http://portal.jiangan-pharma.com/v194</div></div>' +
+    '<div class="bm"><span data-p="home">江安官网</span><span data-p="news">新闻中心</span>' +
+    '<span data-p="portal">内部系统</span></div>' +
+    '<div class="page">' + PAGES.portal + '</div>' +
+    '</div>' },
+
+  mail: { t: 'QQ邮箱', w: 600, app: 1, html:
+    '<div class="ml">' +
+    '<div class="folders">' +
+    '<div class="folder on" data-f="inbox">收件箱（1）</div>' +
+    '<div class="folder" data-f="draft">草稿箱（1）</div>' +
+    '<div class="folder" data-f="sent">已发送</div>' +
+    '<div class="folder" data-f="trash">垃圾箱</div>' +
+    '</div>' +
+    '<div class="list"></div>' +
+    '<div class="preview"></div>' +
+    '</div>' },
+
+  vault: { t: '加密文件夹', w: 380, html:
+    '<div id="vaultBody">' +
+    '<div>该文件夹已加密。</div>' +
+    '<div class="cap">请输入密码：</div>' +
+    '<div style="margin-top:8px;"><input id="vaultPw" type="password" style="width:120px;"> <button id="vaultBtn">打开</button></div>' +
+    '<div class="cap" id="vaultMsg"></div></div>' },
+
+  cam: { t: '监控截图.jpg', w: 520, html:
+    '<div style="text-align:center;">' +
+    '<img src="images/cam-3f-03.jpg" alt="监控截图" style="width:100%;display:block;border:1px solid #777;background:#000;">' +
+    '<div class="cap">CAM 3F-03 · OBSERVATION ROOM / EAST CORRIDOR</div>' +
+    '<div class="cap">2022-10-19 22:15:07</div></div>' },
+
+  audio: { t: '录音.mp3', w: 360, html:
+    '<div><button id="audioBtn">▶ 播放</button> <span class="cap" id="audioState">00:00 / 00:12</span></div>' +
+    '<div id="rec" style="margin-top:10px;line-height:1.9;"></div>' }
+};
 
 document.querySelectorAll('.icon').forEach(function (el) {
   el.addEventListener('click', function () { openWin(el.getAttribute('data-w')); });
