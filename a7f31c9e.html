@@ -121,6 +121,7 @@
 
 <script>
 (function () {
+  if (/[?&]debug=1/.test(location.search)) return;
   try { if (sessionStorage.getItem('ja_spread_done') === '1') return; } catch (e) {}
   location.replace('index.html');
 })();
@@ -312,6 +313,22 @@ function run() {
 
 document.getElementById('hint').textContent = '镜像只回应它认识的词。不认识的，不会给你任何回答。';
 document.getElementById('q').focus();
+</script>
+<script>
+/* ---- 调试入口：?debug=1 直接跳到层级 4 并弹出结局 ---- */
+(function () {
+  if (!/[?&]debug=1/.test(location.search)) return;
+  try {
+    if (typeof stage === 'undefined' || typeof showEnding === 'undefined') return;
+    stage = 4;
+    unlockedLock = true;
+    var sl = document.getElementById('stageLabel');
+    if (sl) sl.textContent = '层级 4';
+    var st = document.getElementById('statusBar') || document.querySelector('.status');
+    if (st) st.innerHTML = '已解密：<b>' + Object.keys(seen).length + '</b> / ' + DATA.length + '　层级：4';
+    if (!finished) { finished = true; showEnding(); }
+  } catch (e) {}
+})();
 </script>
 <script>
 /* ---- 访问保护 ---- */

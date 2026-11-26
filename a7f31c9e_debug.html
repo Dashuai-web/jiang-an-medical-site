@@ -3,100 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>暗网结局 · 调试页</title>
+<title>暗网 · 调试入口</title>
+<meta http-equiv="refresh" content="0;url=a7f31c9e.html?debug=1">
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; background: #e9e3d0; color: #1a1a1a;
-    font-family: SimSun, 宋体, serif; font-size: 13px; line-height: 1.9;
-  }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 30px 18px 80px; }
-  .bar {
-    background: #000080; color: #fff; padding: 5px 10px; font-size: 12px;
-    display: flex; justify-content: space-between; letter-spacing: 1px;
-  }
-  h1 { font-size: 18px; margin: 18px 0 6px; letter-spacing: 2px; }
-  .sub { color: #7a7360; font-size: 12px; margin-bottom: 20px; }
-  .box { background: #fdfbf2; border: 2px solid #8a0000; padding: 16px 18px; margin-bottom: 16px; }
-  .box h3 { margin: 0 0 12px; font-size: 14px; color: #8a0000; }
-  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btns button {
-    flex: 1; min-width: 120px; padding: 10px 12px; font-family: inherit; font-size: 14px;
-    background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080;
-    cursor: pointer;
-  }
-  .btns button:hover { background: #cfc9b8; }
-  .btns button:active { border-color: #808080 #f4f1ea #f4f1ea #808080; }
-  .out { background: #fff; border: 1px solid #c9c3b0; padding: 14px 18px; min-height: 120px; }
-  .out p { margin: 0 0 10px; }
-  .dim { color: #8a8471; }
-  .final { border-top: 2px solid #6b1f1f; margin-top: 16px; padding-top: 12px;
-           color: #6b1f1f; font-size: 15px; line-height: 2; text-align: center; letter-spacing: 1px; }
-  .final small { display: block; font-size: 12px; color: #2f5a45; letter-spacing: 1px; }
-  .hint { font-size: 12px; color: #7a7360; margin-top: 8px; }
-  .reset { margin-top: 12px; }
-  .reset button { font-family: inherit; padding: 6px 16px; font-size: 12px; cursor: pointer;
-                  background: #ece7d8; border: 1px solid #b8b2a0; }
-  .note { background: #fffbe0; border: 1px solid #c9b458; color: #7a5d00; padding: 8px 12px;
-          font-size: 12px; margin-bottom: 16px; }
+  body { margin:0; background:#e9e3d0; font-family:SimSun,serif; color:#333;
+         display:flex; align-items:center; justify-content:center; height:100vh; font-size:14px; }
+  a { color:#000080; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="bar"><span>江安堂 · 内部交流区 [ 存档镜像 ]</span><span>调试模式 · 结局预览</span></div>
-
-  <h1>暗网 · 三个结局</h1>
-  <div class="sub">节点 0x7F ／ 仅供测试，不参与正式存档</div>
-
-  <div class="note">这个页面直接播放三个结局的文本，不用真的打一遍暗网。</div>
-
-  <div class="box">
-    <h3>你已经看完了。现在选。</h3>
-    <div class="btns">
-      <button onclick="play('police')">报 警</button>
-      <button onclick="play('public')">公 开</button>
-      <button onclick="play('enter')">进 入</button>
-    </div>
-    <div class="hint">报警 / 公开 / 进入 三条分支，文本与正式版一致。</div>
-  </div>
-
-  <div class="out" id="out">
-    <p class="dim">（点上面的按钮播放对应结局）</p>
-  </div>
-
-  <div class="reset"><button onclick="reset()">重 置</button></div>
-</div>
-
-<script>
-  var TEXTS = {
-    police:
-      '<p>你拨了 110。</p><p>接线员听完，问你：江安医药，是高新区那个江安吗？</p><p>你说，是。</p>' +
-      '<p class="dim">然后是一段很长的静音。她说：这个号码，登记在我们内部线路上。</p>' +
-      '<p>你挂断了。你记下了她的工号。你把它写进承者簿。</p>',
-    public:
-      '<p>你把镜像打包，发到匿名区。</p><p>三分钟后，帖子标题变成：该用户不存在。</p>' +
-      '<p class="dim">又过了两分钟，你的账号注销了。</p>' +
-      '<p>平台上多了一条新帖：《有没有人认识陈默？》</p>',
-    enter:
-      '<p>你在承者簿第七行，补上了那个空缺的印。</p><p>18。</p>' +
-      '<p class="dim">系统提示：编号 0472 已注销。第 7 次未完成。</p>' +
-      '<p>承者簿翻到第八行，第一栏写着你的名字。</p>'
-  };
-
-  var NAMES = { police: '报警', public: '公开', enter: '进入' };
-
-  function play(k) {
-    var out = document.getElementById('out');
-    out.innerHTML = '<div class="bar" style="margin:-14px -18px 14px;background:#2f5a45;">'
-      + '会话结束 · 镜像已断开 · 选择：' + NAMES[k] + '</div>' + TEXTS[k]
-      + '<div class="final">江安医药 · 第 <span>7</span> 次（未完成）<br>承者：陈默'
-      + '<small>调查者：张青</small></div>';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function reset() {
-    document.getElementById('out').innerHTML = '<p class="dim">（点上面的按钮播放对应结局）</p>';
-  }
-</script>
+  <div>正在进入调试模式…… 如果没有自动跳转，<a href="a7f31c9e.html?debug=1">点这里</a></div>
 </body>
 </html>
