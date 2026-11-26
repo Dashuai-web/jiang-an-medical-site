@@ -79,6 +79,11 @@
     事发小区 3 号楼。本报记者 摄
   </div>
 
+  <div class="figure" id="followup" style="display:none;text-align:left;">
+    <div style="font-family:SimHei,黑体,sans-serif;font-size:13px;color:#333;margin-bottom:6px;">后续报道</div>
+    <a href="ja_daily_2.html" style="color:#1a4a8a;">一家医药公司的「承者簿」（11-26 头版）</a>
+  </div>
+
   <div class="comments" id="cm">
     <h3>网友评论 <span id="cmCount">3 条</span></h3>
     <div id="cmList">
@@ -221,6 +226,8 @@ setTimeout(function () {
     list.appendChild(d);
     var c = document.getElementById('cmCount');
     if (c) c.textContent = '4 条';
+    var fu = document.getElementById('followup');
+    if (fu) fu.style.display = 'block';
   } catch (e) {}
 })();
 </script>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一家医药公司的「承者簿」 - 江安日报</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: "SimSun", "宋体", serif; background: #f4f2ed; color: #222; margin: 0; padding: 0; font-size: 15px; }
+  .paper { max-width: 820px; margin: 0 auto; background: #fff; padding: 26px 40px 60px; box-shadow: 0 0 12px rgba(0,0,0,.08); min-height: 100vh; }
+  .masthead { border-bottom: 3px double #222; padding-bottom: 10px; margin-bottom: 6px; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .masthead .name { font-size: 30px; font-weight: bold; letter-spacing: 8px; font-family: "SimHei", "黑体", sans-serif; }
+  .masthead .meta { font-size: 12px; color: #666; }
+  .navline { font-size: 12px; color: #555; border-bottom: 1px solid #ddd; padding: 6px 0 8px; margin-bottom: 22px; }
+  .navline span { margin-right: 16px; }
+  .navline .cur { color: #a00; }
+  h1 { font-size: 26px; line-height: 1.5; margin: 0 0 10px; font-family: "SimHei", "黑体", sans-serif; letter-spacing: 1px; }
+  .sub { font-size: 15px; color: #555; margin-bottom: 14px; }
+  .byline { font-size: 12px; color: #888; border-bottom: 1px solid #eee; padding-bottom: 12px; margin-bottom: 20px; }
+  .article p { line-height: 2.1; text-indent: 2em; margin: 0 0 14px; text-align: justify; }
+  .article .lead { font-weight: bold; }
+  .figure { margin: 18px 0; padding: 12px; background: #f7f7f7; border: 1px solid #e5e5e5; font-size: 12px; color: #666; text-align: center; }
+  .figure .ph { height: 150px; background: repeating-linear-gradient(45deg, #ececec 0 10px, #f6f6f6 10px 20px); display: flex; align-items: center; justify-content: center; color: #aaa; margin-bottom: 8px; font-size: 12px; }
+  .comments { margin-top: 34px; border-top: 2px solid #222; padding-top: 16px; }
+  .comments h3 { font-size: 16px; margin: 0 0 14px; font-family: "SimHei", "黑体", sans-serif; }
+  .comments h3 span { font-size: 12px; color: #999; font-weight: normal; margin-left: 8px; }
+  .cmt { padding: 12px 0; border-bottom: 1px dotted #ddd; font-size: 14px; line-height: 1.9; }
+  .cmt .who { color: #1a4a8a; font-weight: bold; }
+  .cmt .who .badge { background: #eef3fa; color: #1a4a8a; font-size: 11px; padding: 1px 5px; margin-left: 6px; font-weight: normal; }
+  .cmt .when { color: #aaa; font-size: 12px; margin-left: 8px; }
+  .cmt .txt { margin-top: 4px; color: #333; }
+  .cmt.anon .who { color: #a00; }
+  .cmt.deleted { color: #bbb; font-style: italic; }
+  .cmt a { color: #a00; text-decoration: underline; }
+  .box { margin-top: 18px; border: 1px solid #ddd; background: #fafafa; padding: 12px; }
+  .box .lb { font-size: 12px; color: #888; margin-bottom: 6px; }
+  .box textarea { width: 100%; height: 76px; border: 1px solid #ccc; padding: 8px; font-family: inherit; font-size: 14px; resize: none; background: #fff; outline: none; }
+  .box .row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .box .tip { font-size: 11px; color: #bbb; }
+  .box button { padding: 7px 22px; background: #1a4a8a; color: #fff; border: none; font-family: inherit; font-size: 14px; cursor: pointer; }
+  .box button:disabled { background: #bbb; cursor: default; }
+  .sysline { font-size: 12px; color: #a00; margin-top: 10px; display: none; }
+  .footer { text-align: center; font-size: 11px; color: #aaa; margin-top: 40px; border-top: 1px solid #eee; padding-top: 12px; }
+  @media (max-width: 720px) {
+    .paper { padding: 16px 14px 46px; }
+    .masthead .name { font-size: 22px; letter-spacing: 5px; }
+    h1 { font-size: 20px; }
+    .article p { line-height: 2; }
+    .box textarea { height: 90px; }
+  }
+</style>
+</head>
+<body>
+<div class="paper">
+  <div class="masthead">
+    <div class="name">江安日报</div>
+    <div class="meta">2024年11月26日 星期二 &nbsp;|&nbsp; 第 A01 版 · 头版</div>
+  </div>
+  <div class="navline">
+    <span>首页</span><span>要闻</span><span class="cur">社会</span><span>经济</span><span>民生</span><span>评论</span>
+  </div>
+
+  <h1>一家医药公司的「承者簿」</h1>
+  <div class="sub">一名 22 岁实习生入职前死亡；内部名单显示，员工编号被「回收」后重新分配</div>
+  <div class="byline">本报记者 冯晓 &nbsp;|&nbsp; 2024-11-26 08:30 &nbsp;|&nbsp; 阅读 52,317</div>
+
+  <div class="article">
+    <p class="lead">本报讯 11 月 15 日，本报报道了高新区一名 22 岁大三学生陈某在租住屋内死亡的消息。一周后，一份来自江安医药内部的资料，把这起案件与他就读时最想进入的那家公司连在了一起。</p>
+    <p>资料显示，江安医药科技有限公司临床试验中心内部，长期存在一份名为「承者簿」的名单：七行记录，每行一个员工编号、一个日期、一个「印」。第一行始于 2012 年，最近一行为 2022 年 10 月 19 日，编号 0471。</p>
+    <p>0471 是陈某的舅舅周某的工号。公开记录显示，周某于 2022 年 10 月 19 日晚在公司临床试验中心观察室死亡。公司当时的事故报告写的是「突发意外」；而这份资料附带的系统日志显示，原始记录为「药物不良反应」，报告在两天后的凌晨被修改，操作人是一个名为 NULL 的临时账号。</p>
+    <p>「那个账号不在任何花名册上。」一位不愿具名的公司员工说，「审批链断了，系统就自己生成一个 NULL，替所有人签字。」</p>
+    <p>更让家属无法接受的是编号的去向：2022 年 10 月 21 日，0471 被标记为「可复用」；2024 年 1 月，这个工号分配给一名新入职员工；2024 年 11 月 11 日，该员工被转入受试者名单，系统账号随即注销。四天后的清晨，陈某被发现死于家中。</p>
+    <p>提供资料的江安医药员工张女士（化名）表示，她是在收到陈某生前寄出的信件后开始核实的。「一个牛皮纸信封，里面三样东西：监控截图、录音文字稿、承者簿第 7 条。信是 11 月 14 日夜里寄出的，第二天他就死了。」</p>
+    <p>记者就上述内容联系江安医药，对方回复称「相关情况以有关部门调查为准，公司正全力配合」。截至发稿，高新区警方已对 2022 年 10 月 19 日的死亡事件重新立案，临床试验中心暂停使用。</p>
+    <p>工商资料显示，江安医药临床试验中心的部分外包服务，曾由一家咨询公司承接，该公司登记股东与公司一名前任高管存在亲属关系。相关资金往来是否合规，仍在核查中。</p>
+    <p>「我原本以为把东西寄出去就结束了。」张女士说，「后来发现，寄出去只是开始。」</p>
+    <p>本报将继续关注此案进展。</p>
+  </div>
+
+  <div class="figure">
+    <div class="ph">［资料图］</div>
+    承者簿节选（第 6、7 行）：0471 · 2022-10-19 · 印 9 ／ 0472 · 2024-11-18 · 印 —。资料由受访者提供。
+  </div>
+
+  <div class="figure" style="text-align:left;">
+    <div style="font-family:SimHei,黑体,sans-serif;font-size:13px;color:#333;margin-bottom:6px;">相关报道</div>
+    <a href="ja_daily.html" style="color:#1a4a8a;">我市一名年轻男子被发现死于家中，初步调查为药物中毒（11-15）</a>
+  </div>
+
+<div class="comments" id="cm">
+    <h3>网友评论 <span id="cmCount">5 条</span></h3>
+    <div id="cmList">
+      <div class="cmt">
+        <span class="who">市民王先生</span><span class="when">08:41</span>
+        <div class="txt">前一条新闻我还转过，当时只当是普通的意外。</div>
+      </div>
+      <div class="cmt">
+        <span class="who">匿名用户</span><span class="when">09:02</span>
+        <div class="txt">这个「承者簿」是什么东西？听着不像正经公司的文件。</div>
+      </div>
+      <div class="cmt">
+        <span class="who">匿名用户</span><span class="when">09:15</span>
+        <div class="txt">等警方通报吧，别又反转。</div>
+      </div>
+      <div class="cmt anon">
+        <span class="who">陈某的同学</span><span class="when">09:33</span>
+        <div class="txt">上个月他还问我，认不认识在医药公司上班的人。我当时还笑他。</div>
+      </div>
+      <div class="cmt">
+        <span class="who">张青<span class="badge">江安医药 · 在职</span></span><span class="when">09:40</span>
+        <div class="txt">我会把我知道的都交给警方。</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="lb">发表评论</div>
+      <textarea id="ta" placeholder="说点什么……"></textarea>
+      <div class="row">
+        <div class="tip" id="tip">登录后参与评论</div>
+        <button id="send" disabled>发送</button>
+      </div>
+      <div class="sysline" id="sysline"></div>
+    </div>
+  </div>
+
+  <div class="footer">江安日报社 版权所有 &copy; 2024 &nbsp;|&nbsp; 互联网新闻信息服务许可证：33120190012</div>
+</div>
+
+<script>
+/* 后续报道页：允许直接访问 */
+
+var ta = document.getElementById('ta');
+var send = document.getElementById('send');
+var tip = document.getElementById('tip');
+var typed = '我在江安医药上班。这条新闻里的人，我好像见过。';
+
+function addComment(html) {
+  var d = document.createElement('div');
+  d.innerHTML = html;
+  document.getElementById('cmList').appendChild(d.firstChild);
+  document.getElementById('cmCount').textContent = document.querySelectorAll('#cmList .cmt').length + ' 条';
+}
+
+/* 1. 光标自己跳进输入框 */
+setTimeout(function () {
+  ta.focus();
+  tip.textContent = '正在输入……';
+}, 2600);
+
+/* 2. 一个字一个字打出来，作者是张青 */
+setTimeout(function () {
+  var i = 0;
+  var t = setInterval(function () {
+    ta.value = typed.slice(0, i + 1);
+    i++;
+    ta.scrollTop = ta.scrollHeight;
+    if (i >= typed.length) {
+      clearInterval(t);
+      setTimeout(function () {
+        ta.style.display = 'none';
+        send.style.display = 'none';
+        tip.style.display = 'none';
+        addComment(
+          '<div class="cmt"><span class="who">张青<span class="badge">江安医药 · 在职</span></span>' +
+          '<span class="when">11:58</span><div class="txt">' + typed + '</div></div>'
+        );
+        /* 3. 三秒后，有人回复张青 */
+        setTimeout(function () {
+          addComment(
+            '<div class="cmt anon"><span class="who">匿名用户</span><span class="when">03:14</span>' +
+            '<div class="txt">别问了。你不是在江安上班吗。去查一个叫「第七次」的东西。地址我留在下面：' +
+            '<a href="a7f31c9e.html">镜像 0x7F</a>。查完别回来。</div></div>'
+          );
+          var s = document.getElementById('sysline');
+          s.style.display = 'block';
+          s.textContent = '该回复发布于 03:14:07。';
+        }, 2400);
+      }, 1200);
+    }
+  }, 55);
+}, 4200);
+</script>
+<script>
+/* ---- 访问保护 ---- */
+(function () {
+  var hits = 0, frozen = false;
+  function overlay(msg) {
+    var o = document.getElementById('dwGuard');
+    if (!o) {
+      o = document.createElement('div');
+      o.id = 'dwGuard';
+      o.style.cssText = 'position:fixed;inset:0;background:rgba(24,0,0,.95);color:#e6c4c4;z-index:2147483000;'
+        + 'display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;'
+        + 'font-family:SimSun,宋体,serif;font-size:15px;line-height:2.1;';
+      document.body.appendChild(o);
+    }
+    o.innerHTML = msg;
+  }
+  function mark() {
+    hits++;
+    if (hits === 1) overlay('检测到调试工具。<br>本次会话已被记录。<br><span style="font-size:12px;color:#8a6a6a;">关闭调试工具后刷新页面</span>');
+    if (hits >= 3) { frozen = true; overlay('会话已终止。<br><span style="font-size:12px;color:#8a6a6a;">你已经看得够多了。</span>'); }
+  }
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  document.addEventListener('keydown', function (e) {
+    var k = (e.key || '').toUpperCase();
+    if (k === 'F12'
+      || (e.ctrlKey && e.shiftKey && (k === 'I' || k === 'J' || k === 'C'))
+      || (e.ctrlKey && (k === 'U' || k === 'S'))
+      || (e.metaKey && e.altKey && k === 'I')) {
+      e.preventDefault(); e.stopPropagation(); mark();
+    }
+  }, true);
+  setInterval(function () {
+    if (frozen) return;
+    var t = performance.now();
+    try { (function () { debugger; })(); } catch (e) {}
+    if (performance.now() - t > 150) mark();
+  }, 1500);
+})();
+</script>
+</body>
+</html>
