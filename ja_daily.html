@@ -30,6 +30,7 @@
   .cmt .when { color: #aaa; font-size: 12px; margin-left: 8px; }
   .cmt .txt { margin-top: 4px; color: #333; }
   .cmt.anon .who { color: #a00; }
+  .cmt.pin { background: #fffbe0; border-left: 3px solid #c9b458; padding-left: 10px; margin-bottom: 6px; }
   .cmt.deleted { color: #bbb; font-style: italic; }
   .cmt a { color: #a00; text-decoration: underline; }
   .box { margin-top: 18px; border: 1px solid #ddd; background: #fafafa; padding: 12px; }
@@ -126,6 +127,11 @@ var send = document.getElementById('send');
 var tip = document.getElementById('tip');
 var typed = '我在江安医药上班。这条新闻里的人，我好像见过。';
 
+var DONE = false;
+try {
+  DONE = sessionStorage.getItem('ja_dark_done') === '1' || sessionStorage.getItem('ja_good') === '1';
+} catch (e) {}
+
 function addComment(html) {
   var d = document.createElement('div');
   d.innerHTML = html;
@@ -133,44 +139,58 @@ function addComment(html) {
   document.getElementById('cmCount').textContent = document.querySelectorAll('#cmList .cmt').length + ' 条';
 }
 
-/* 1. 光标自己跳进输入框 */
-setTimeout(function () {
-  ta.focus();
-  tip.textContent = '正在输入……';
-}, 2600);
+if (DONE) {
+  /* 已经查完：不再出现引导去镜像的评论，改为置顶警情通报 */
+  var list = document.getElementById('cmList');
+  var pin = document.createElement('div');
+  pin.className = 'cmt pin';
+  pin.innerHTML = '<span class="who">【置顶】江安日报</span><span class="when">11-27 18:02</span>'
+    + '<div class="txt">警方已就江安医药相关情况发布通报：<a href="jingqing.html">警情通报在此</a></div>';
+  list.insertBefore(pin, list.firstChild);
+  document.getElementById('cmCount').textContent = document.querySelectorAll('#cmList .cmt').length + ' 条';
+  ta.style.display = 'none';
+  send.style.display = 'none';
+  tip.style.display = 'none';
+} else {
+  /* 1. 光标自己跳进输入框（只在未查完时） */
+  setTimeout(function () {
+    ta.focus();
+    tip.textContent = '正在输入……';
+  }, 2600);
 
-/* 2. 一个字一个字打出来，作者是张青 */
-setTimeout(function () {
-  var i = 0;
-  var t = setInterval(function () {
-    ta.value = typed.slice(0, i + 1);
-    i++;
-    ta.scrollTop = ta.scrollHeight;
-    if (i >= typed.length) {
-      clearInterval(t);
-      setTimeout(function () {
-        ta.style.display = 'none';
-        send.style.display = 'none';
-        tip.style.display = 'none';
-        addComment(
-          '<div class="cmt"><span class="who">张青<span class="badge">江安医药 · 在职</span></span>' +
-          '<span class="when">11:58</span><div class="txt">' + typed + '</div></div>'
-        );
-        /* 3. 三秒后，有人回复张青 */
+  /* 2. 一个字一个字打出来，作者是张青 */
+  setTimeout(function () {
+    var i = 0;
+    var t = setInterval(function () {
+      ta.value = typed.slice(0, i + 1);
+      i++;
+      ta.scrollTop = ta.scrollHeight;
+      if (i >= typed.length) {
+        clearInterval(t);
         setTimeout(function () {
+          ta.style.display = 'none';
+          send.style.display = 'none';
+          tip.style.display = 'none';
           addComment(
-            '<div class="cmt anon"><span class="who">匿名用户</span><span class="when">03:14</span>' +
-            '<div class="txt">别问了。你不是在江安上班吗。去查一个叫「第七次」的东西。地址我留在下面：' +
-            '<a href="a7f31c9e.html">镜像 0x7F</a>。查完别回来。</div></div>'
+            '<div class="cmt"><span class="who">张青<span class="badge">江安医药 · 在职</span></span>' +
+            '<span class="when">11:58</span><div class="txt">' + typed + '</div></div>'
           );
-          var s = document.getElementById('sysline');
-          s.style.display = 'block';
-          s.textContent = '该回复发布于 03:14:07。';
-        }, 2400);
-      }, 1200);
-    }
-  }, 55);
-}, 4200);
+          /* 3. 三秒后，有人回复张青 */
+          setTimeout(function () {
+            addComment(
+              '<div class="cmt anon"><span class="who">匿名用户</span><span class="when">03:14</span>' +
+              '<div class="txt">别问了。你不是在江安上班吗。去查一个叫「第七次」的东西。地址我留在下面：' +
+              '<a href="a7f31c9e.html">镜像 0x7F</a>。查完别回来。</div></div>'
+            );
+            var s = document.getElementById('sysline');
+            s.style.display = 'block';
+            s.textContent = '该回复发布于 03:14:07。';
+          }, 2400);
+        }, 1200);
+      }
+    }, 55);
+  }, 4200);
+}
 </script>
 <script>
 /* ---- 访问保护 ---- */

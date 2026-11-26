@@ -269,6 +269,7 @@ function showEnding() {
 }
 
 function finale(a) {
+  try { sessionStorage.setItem('ja_dark_done', '1'); } catch (e) {}
   var txt = '';
   if (a === 'police') {
     txt = '<p>你拨了 110。用公司配的那部手机。</p><p>接线员听完，问你：江安医药，是高新区那个江安吗？</p><p>你说，是。</p>' +
