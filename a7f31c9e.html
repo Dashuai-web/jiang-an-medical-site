@@ -65,6 +65,7 @@
   .lockbox button { background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080; padding: 2px 12px; font-family: inherit; cursor: pointer; margin-left: 4px; }
   .endbox { border: 2px solid #6b1f1f; background: #f7f3e4; padding: 12px; margin-top: 12px; }
   .endbox h3 { margin: 0 0 10px; font-size: 13px; color: #6b1f1f; font-weight: bold; }
+  .endbox button.good { color: #1a6b4a; font-weight: bold; border-color: #9ecdb2 #6aa88a #6aa88a #9ecdb2; }
   .endbox button {
     display: block; width: 100%; margin: 5px 0; padding: 6px 10px; text-align: left;
     background: #d9d4c6; border: 2px solid #f4f1ea; border-right-color: #808080; border-bottom-color: #808080;
@@ -251,10 +252,14 @@ function checkStage() {
 function showEnding() {
   var box = document.createElement('div');
   box.className = 'endbox';
-  box.innerHTML = '<h3>你已经看完了。现在选。</h3>' +
+  var btns = '<h3>你已经看完了。现在选。</h3>' +
     '<button data-a="police">报警</button>' +
     '<button data-a="public">公开</button>' +
     '<button data-a="enter">进入</button>';
+  if (seen['承者簿 · 第 7 条'] && seen['第七位']) {
+    btns += '<button data-a="save" class="good">交给张青</button>';
+  }
+  box.innerHTML = btns;
   document.getElementById('feed').insertBefore(box, document.getElementById('feed').firstChild);
   var btns = box.querySelectorAll('button');
   for (var i = 0; i < btns.length; i++) {
@@ -273,6 +278,14 @@ function finale(a) {
     txt = '<p>你把镜像打包，发到匿名区。</p><p>三分钟后，帖子标题变成：该用户不存在。</p>' +
           '<p class="dim">又过了两分钟，你的账号注销了。</p>' +
           '<p>平台上多了一条新帖：《有没有人认识张青？》</p>';
+  } else if (a === 'save') {
+    txt = '<p>你没有报警，也没有把镜像发出去。</p>' +
+          '<p>你去了趟打印店，把监控截图、录音文字稿、承者簿第 7 条打印出来，装进一个牛皮纸信封。</p>' +
+          '<p class="dim">收件人那一栏，你写的是「张青」。地址是江安医药三楼，临床试验中心。</p>' +
+          '<p>三天后，江安日报的评论区多了一条回复，只有两个字：收到了。</p>' +
+          '<p>一周后，江安医药发布公告：临床试验中心因「内部整改」，暂停三个月。</p>' +
+          '<p>承者簿翻到第八行，第一栏是空的。</p>' +
+          '<p class="dim">这一次，没有人被写上去。</p>';
   } else {
     txt = '<p>你在承者簿第七行，补上了那个空缺的印。</p><p>18。</p>' +
           '<p class="dim">系统提示：编号 0472 已注销。第 7 次未完成。</p>' +
@@ -283,8 +296,13 @@ function finale(a) {
   push(feedHTML('会话结束', '镜像已断开', txt));
   var f = document.createElement('div');
   f.className = 'final';
-  f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：陈默'
-    + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：张青</span>';
+  if (a === 'save') {
+    f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：<span style="letter-spacing:6px;">—</span>（空缺）'
+      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：张青 · 陈默</span>';
+  } else {
+    f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：陈默'
+      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：张青</span>';
+  }
   document.querySelector('.wrap').appendChild(f);
 }
 
@@ -322,6 +340,7 @@ document.getElementById('q').focus();
     if (typeof stage === 'undefined' || typeof showEnding === 'undefined') return;
     stage = 4;
     unlockedLock = true;
+    try { seen['承者簿 · 第 7 条'] = 1; seen['第七位'] = 1; } catch (e) {}
     var sl = document.getElementById('stageLabel');
     if (sl) sl.textContent = '层级 4';
     var st = document.getElementById('statusBar') || document.querySelector('.status');
