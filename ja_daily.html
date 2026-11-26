@@ -206,5 +206,23 @@ setTimeout(function () {
   }, 1500);
 })();
 </script>
+<script>
+/* 好结局「交给张青」之后，评论区多一条回复 */
+(function () {
+  try {
+    if (sessionStorage.getItem('ja_good') !== '1') return;
+    var list = document.getElementById('cmList');
+    if (!list) return;
+    var d = document.createElement('div');
+    d.className = 'cmt';
+    d.innerHTML = '<span class="who">张青<span class="badge">江安医药 · 在职</span></span>'
+      + '<span class="when">11-19 09:12</span>'
+      + '<div class="txt">收到了。剩下的我来。</div>';
+    list.appendChild(d);
+    var c = document.getElementById('cmCount');
+    if (c) c.textContent = '4 条';
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
