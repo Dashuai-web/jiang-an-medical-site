@@ -89,7 +89,7 @@
 <div class="wrap">
   <div class="banner">
     <div class="t1">江安堂 · 内部交流区 <small>[ 存档镜像 ]</small></div>
-    <div class="t2">节点 0x7F ｜ 只读 ｜ 匿名访问 ｜ 访客：未登记 ｜ 会话 <span id="sid"></span></div>
+    <div class="t2">节点 0x7F ｜ 只读 ｜ 访问者：张青（江安医药 · 在职） ｜ 会话 <span id="sid"></span></div>
   </div>
 
   <div class="notice">★ 本页自 2003 年 11 月 7 日后未曾更新。昨日新增记录 3 条。</div>
@@ -257,7 +257,7 @@ function showEnding() {
     '<button data-a="public">公开</button>' +
     '<button data-a="enter">进入</button>';
   if (seen['承者簿 · 第 7 条'] && seen['第七位']) {
-    btns += '<button data-a="save" class="good">交给张青</button>';
+    btns += '<button data-a="save" class="good">寄给记者</button>';
   }
   box.innerHTML = btns;
   document.getElementById('feed').insertBefore(box, document.getElementById('feed').firstChild);
@@ -271,7 +271,7 @@ function showEnding() {
 function finale(a) {
   var txt = '';
   if (a === 'police') {
-    txt = '<p>你拨了 110。</p><p>接线员听完，问你：江安医药，是高新区那个江安吗？</p><p>你说，是。</p>' +
+    txt = '<p>你拨了 110。用公司配的那部手机。</p><p>接线员听完，问你：江安医药，是高新区那个江安吗？</p><p>你说，是。</p>' +
           '<p class="dim">然后是一段很长的静音。她说：这个号码，登记在我们内部线路上。</p>' +
           '<p>你挂断了。你记下了她的工号。你把它写进承者簿。</p>';
   } else if (a === 'public') {
@@ -281,14 +281,11 @@ function finale(a) {
   } else if (a === 'save') {
     try { sessionStorage.setItem('ja_good', '1'); } catch (e) {}
     txt = '<p>你没有报警，也没有把镜像发出去。</p>' +
-          '<p>那天晚上，你去了趟打印店，把监控截图、录音文字稿、承者簿第 7 条打印出来，装进一个牛皮纸信封。</p>' +
-          '<p class="dim">收件人那一栏，你写的是「张青」。地址是江安医药三楼，临床试验中心。</p>' +
-          '<p>11 月 14 日 23:40，你把它投进了邮筒。</p>' +
-          '<p>第二天上午，你在出租屋里没有再醒来。</p>' +
-          '<p class="dim">警方说是药物中毒。电脑还开着，屏幕停在一个检索页上。</p>' +
-          '<p>三天后，那封信到了张青手里。</p>' +
-          '<p>又过了两天，江安日报的评论区多了一条回复，只有两个字：<b>收到了。</b></p>' +
-          '<p>一周后，江安医药发布公告：临床试验中心因「内部整改」，暂停三个月。</p>' +
+          '<p>你把监控截图、录音文字稿、承者簿第 7 条，连同陈默寄来的那封信，一起打印出来，装进一个牛皮纸信封。</p>' +
+          '<p class="dim">收件人那一栏，你写的是「江安日报 · 冯晓」。</p>' +
+          '<p>三天后，冯晓给你回了电话。她问的第一句是：你还在江安上班吗？</p>' +
+          '<p>一周后，江安日报头版：《一家医药公司的「承者簿」》。</p>' +
+          '<p>临床试验中心暂停三个月。警方重新立案。</p>' +
           '<p>承者簿翻到第八行，第一栏是空的。</p>' +
           '<p class="dim">这一次，没有人被写上去。</p>' +
           '<p><a href="ja_daily.html">→ 回江安日报，看那条回复</a></p>';
@@ -304,10 +301,10 @@ function finale(a) {
   f.className = 'final';
   if (a === 'save') {
     f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：<span style="letter-spacing:6px;">—</span>（空缺）'
-      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：张青 · 陈默</span>';
+      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：陈默 · 张青</span>';
   } else {
-    f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：陈默'
-      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：张青</span>';
+    f.innerHTML = '江安医药 · 第 <span class="blink">7</span> 次（未完成）<br>承者：张青'
+      + '<br><span style="font-size:12px;color:#2f5a45;letter-spacing:1px;">调查者：陈默</span>';
   }
   document.querySelector('.wrap').appendChild(f);
 }
