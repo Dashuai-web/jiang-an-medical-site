@@ -30,6 +30,7 @@
   .cmt .when { color: #aaa; font-size: 12px; margin-left: 8px; }
   .cmt .txt { margin-top: 4px; color: #333; }
   .cmt.anon .who { color: #a00; }
+  .cmt.pin { background: #fffbe0; border-left: 3px solid #c9b458; padding-left: 10px; margin-bottom: 6px; }
   .cmt.deleted { color: #bbb; font-style: italic; }
   .cmt a { color: #a00; text-decoration: underline; }
   .box { margin-top: 18px; border: 1px solid #ddd; background: #fafafa; padding: 12px; }
@@ -167,6 +168,25 @@
     try { (function () { debugger; })(); } catch (e) {}
     if (performance.now() - t > 150) mark();
   }, 1500);
+})();
+</script>
+<script>
+/* 查完之后：评论区置顶警情通报 */
+(function () {
+  var done = false;
+  try {
+    done = sessionStorage.getItem('ja_dark_done') === '1' || sessionStorage.getItem('ja_good') === '1';
+  } catch (e) {}
+  if (!done) return;
+  var list = document.getElementById('cmList');
+  if (!list) return;
+  var pin = document.createElement('div');
+  pin.className = 'cmt pin';
+  pin.innerHTML = '<span class="who">【置顶】江安日报</span><span class="when">11-27 18:02</span>'
+    + '<div class="txt">警方已就江安医药相关情况发布通报：<a href="jingqing.html">警情通报在此</a></div>';
+  list.insertBefore(pin, list.firstChild);
+  var c = document.getElementById('cmCount');
+  if (c) c.textContent = document.querySelectorAll('#cmList .cmt').length + ' 条';
 })();
 </script>
 </body>

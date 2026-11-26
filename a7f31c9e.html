@@ -122,7 +122,7 @@
 
 <script>
 (function () {
-  if (/[?&]debug=1/.test(location.search)) return;
+  if (/[?&]debug=1/.test(location.search) || /[?&]stage=4/.test(location.search)) return;
   try { if (sessionStorage.getItem('ja_spread_done') === '1') return; } catch (e) {}
   location.replace('index.html');
 })();
@@ -339,16 +339,24 @@ document.getElementById('q').focus();
 <script>
 /* ---- 调试入口：?debug=1 直接跳到层级 4 并弹出结局 ---- */
 (function () {
-  if (!/[?&]debug=1/.test(location.search)) return;
+  var q = location.search;
+  var isStage4 = /[?&]stage=4/.test(q);
+  var isDebug = /[?&]debug=1/.test(q);
+  if (!isStage4 && !isDebug) return;
   try {
-    if (typeof stage === 'undefined' || typeof showEnding === 'undefined') return;
+    if (typeof stage === 'undefined') return;
     stage = 4;
     unlockedLock = true;
-    try { seen['承者簿 · 第 7 条'] = 1; seen['第七位'] = 1; } catch (e) {}
     var sl = document.getElementById('stageLabel');
     if (sl) sl.textContent = '层级 4';
-    var st = document.getElementById('statusBar') || document.querySelector('.status');
-    if (st) st.innerHTML = '已解密：<b>' + Object.keys(seen).length + '</b> / ' + DATA.length + '　层级：4';
+    if (isStage4) {
+      /* 1:1 复刻「刚进入层级 4」那一屏：只有那行黄色系统提示 */
+      var cntEl = document.getElementById('cnt');
+      if (cntEl) cntEl.textContent = HARD ? 42 : 30;
+      sysMsg('镜像更新：底层目录已开放。<br>可检索：安祭 / 周明 / 0472 / 陈默 / 第七位<br><span class="dim">检索「第七位」查看最终记录。</span>');
+      return;
+    }
+    try { seen['承者簿 · 第 7 条'] = 1; seen['第七位'] = 1; } catch (e) {}
     if (!finished) { finished = true; showEnding(); }
   } catch (e) {}
 })();
